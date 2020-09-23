@@ -5,5 +5,35 @@
   "main": "plugin.js",
   "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
   "author": "Ribose Inc. <open.source@ribose.com>",
+  "scripts": {
+    "build": "rm -r compiled dist; mkdir compiled dist; tsc --outDir compiled; babel compiled --out-dir dist; cp compiled/*.d.ts compiled/*.js.map dist/"
+  },
+  "files": [
+    "README.adoc",
+    "plugin.js",
+    "plugin.js.map",
+    "plugin.d.ts",
+    "RepoView.js",
+    "RepoView.js.map",
+    "RepoView.d.ts",
+    "types.js",
+    "types.js.map",
+    "types.d.ts"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@blueprintjs/core": "^3.28.2",
+    "@blueprintjs/datetime": "^3.18.2",
+    "@blueprintjs/icons": "^3.18.1",
+    "@blueprintjs/select": "^3.13.3",
+    "@emotion/core": "^10.0.35",
+    "@types/node": "^14.11.2",
+    "@types/react": "^16.9.11",
+    "electron": "^10.1.2",
+    "typescript": "^4.0.2",
+    "react": "^16.11.0"
+  },
   "license": "MIT"
 }
