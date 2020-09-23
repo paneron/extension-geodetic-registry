@@ -1,0 +1,9 @@
+{
+  "name": "@riboseinc/plugin-geodetic-registry",
+  "version": "1.0.0-dev",
+  "description": "Geodetic Registry structured data plugin",
+  "main": "plugin.js",
+  "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
+  "author": "Ribose Inc. <open.source@ribose.com>",
+  "license": "MIT"
+}
