@@ -6,7 +6,7 @@
   "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
   "author": "Ribose Inc. <open.source@ribose.com>",
   "scripts": {
-    "build": "rm -r compiled dist; mkdir compiled dist; tsc --outDir compiled; babel compiled --out-dir dist; cp compiled/*.d.ts compiled/*.js.map dist/"
+    "build": "rm -r compiled dist; mkdir compiled dist; tsc --outDir compiled; babel compiled --out-dir dist; cp package.json compiled/*.d.ts compiled/*.js.map dist/"
   },
   "files": [
     "README.adoc",
