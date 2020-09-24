@@ -11,7 +11,7 @@ export interface RepositoryViewProps {
 interface MainPlugin {}
 
 interface RendererPlugin {
-  repositoryView?: Promise<React.FC<RepositoryViewProps>>
+  repositoryView?: Promise<(props: RepositoryViewProps) => any>
 }
 
 export type Plugin = MainPlugin | RendererPlugin;
