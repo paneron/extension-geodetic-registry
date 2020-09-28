@@ -1,4 +1,4 @@
-import { Plugin } from './types';
+import { Plugin } from '@riboseinc/paneron-plugin-kit/types';
 import 'electron';
 
 
@@ -9,7 +9,7 @@ if (process.type === 'browser') {
 
 } else if (process.type === 'renderer') {
   plugin = {
-    repositoryView: import('./RepoView').then(value => value.RepoView),
+    repositoryView: import('./RepoView').then(value => value.RepositoryView),
   };
 
 } else {

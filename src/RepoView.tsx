@@ -1,7 +1,7 @@
 import React from 'react';
-import { RepositoryViewProps } from 'paneron-plugin-kit/types';
-import { RegistryView } from 'paneron-registry-kit/RegistryView';
-import type { Citation, ItemClassConfiguration } from 'paneron-registry-kit/types';
+import { RepositoryViewProps } from '@riboseinc/paneron-plugin-kit/types';
+import { RegistryView } from '@riboseinc/paneron-registry-kit/RegistryView';
+import { Citation, ItemClassConfiguration } from '@riboseinc/paneron-registry-kit/types';
 
 
 interface CommonGRItemData {

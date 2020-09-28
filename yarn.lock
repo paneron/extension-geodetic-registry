@@ -988,9 +988,9 @@
   integrity sha512-TTH2175jNJa1jjz2ryuQCLeAygDuQsNvn+elp6WZVK9m3T1ID0AyMLOw4E/E2GkUGbNucgpH5JPNXMegAP7n4Q==
 
 "@riboseinc/paneron-registry-kit@^1.0.0-dev":
-  version "1.0.0-dev"
-  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-dev.tgz#e3c3c08288d5b3fc954f84e83243e581da792b0a"
-  integrity sha512-1iQZzj79v7VMw2QrFlcFy98GZV4IoBxlgAt+KQ57s6xnbtYRGIKD9HVH8XAeCkP1YM+qP8s/PrLlZtynOGZbYw==
+  version "1.0.0-dev1"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-dev1.tgz#47aa2845972e4c14d268678f1cf56ca4e14c9183"
+  integrity sha512-syeEFtBFtY13mnt8tn+iV7Rz9k06S2jUpGrPQ6jCNuxwgMQO0MO3A9quyjEXJqS5/zszFaLckzDIc2AHiD+ylw==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
