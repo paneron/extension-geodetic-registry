@@ -1,6 +1,6 @@
 {
   "name": "@riboseinc/plugin-geodetic-registry",
-  "version": "1.0.0-dev3",
+  "version": "1.0.0-dev4",
   "description": "Geodetic Registry structured data plugin",
   "main": "plugin.js",
   "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
