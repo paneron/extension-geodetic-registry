@@ -982,6 +982,16 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@riboseinc/paneron-plugin-kit@^1.0.0-dev":
+  version "1.0.0-dev"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-plugin-kit/-/paneron-plugin-kit-1.0.0-dev.tgz#86a5bc6db420c0481a741d260ec882966f48f3f4"
+  integrity sha512-TTH2175jNJa1jjz2ryuQCLeAygDuQsNvn+elp6WZVK9m3T1ID0AyMLOw4E/E2GkUGbNucgpH5JPNXMegAP7n4Q==
+
+"@riboseinc/paneron-registry-kit@^1.0.0-dev":
+  version "1.0.0-dev"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-dev.tgz#e3c3c08288d5b3fc954f84e83243e581da792b0a"
+  integrity sha512-1iQZzj79v7VMw2QrFlcFy98GZV4IoBxlgAt+KQ57s6xnbtYRGIKD9HVH8XAeCkP1YM+qP8s/PrLlZtynOGZbYw==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
