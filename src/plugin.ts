@@ -1,4 +1,5 @@
 import { Plugin } from '@riboseinc/paneron-plugin-kit/types';
+import log from 'electron-log';
 import 'electron';
 
 
@@ -8,9 +9,16 @@ if (process.type === 'browser') {
   plugin = {};
 
 } else if (process.type === 'renderer') {
-  plugin = {
-    repositoryView: import('./RepoView').then(value => value.RepositoryView),
-  };
+  plugin = new Promise((resolve, reject) => {
+    import('./RepoView').then(({ RepositoryView }) => {
+      resolve({
+        repositoryView: RepositoryView,
+      });
+    }).catch((e) => {
+      log.error("Geodetic Registry plugin: Error loading repository view", JSON.stringify(e));
+      reject(e);
+    });
+  });
 
 } else {
   throw new Error("Unsupported process type");

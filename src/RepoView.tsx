@@ -1,3 +1,4 @@
+import log from 'electron-log';
 import React from 'react';
 import { RepositoryViewProps } from '@riboseinc/paneron-plugin-kit/types';
 import { RegistryView } from '@riboseinc/paneron-registry-kit/RegistryView';
@@ -14,7 +15,12 @@ interface TransformationData extends CommonGRItemData {
 
 
 const transformation: ItemClassConfiguration<TransformationData> = {
-  title: "Transformation",
+  meta: {
+    title: "Coordinate Operations/Transformation",
+    description: "Transformation",
+    id: 'coordinate-ops/transformation',
+    alternativeNames: [],
+  },
   defaults: {},
   views: {
     listItemView: () => <>TBD</>,
@@ -24,7 +30,7 @@ const transformation: ItemClassConfiguration<TransformationData> = {
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
-}
+};
 
 
 const itemConfig = {
@@ -33,11 +39,10 @@ const itemConfig = {
 
 
 export const RepositoryView: React.FC<RepositoryViewProps> =
-function ({ title, readObjects, changeObjects }) {
+function (props) {
+  log.debug("Rendering Geodetic Registry view…");
   return <RegistryView
-    title={title}
+    {...props}
     itemClassConfiguration={itemConfig}
-    readObjects={readObjects}
-    changeObjects={changeObjects}
   />
 };
