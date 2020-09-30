@@ -982,15 +982,15 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@riboseinc/paneron-plugin-kit@^1.0.0-dev":
-  version "1.0.0-dev6"
-  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-plugin-kit/-/paneron-plugin-kit-1.0.0-dev6.tgz#94699d722248da6939c63263670be7e74137eabc"
-  integrity sha512-tN4jLuQW5XdXU5qHnVEYa0T5IIUl8NqSxe9g/fiAifCRmPFKvdqBcBIxkJllp22xYDQYnYUZO/7BoJKJFfCtVw==
+"@riboseinc/paneron-plugin-kit@^1.0.0-alpha1":
+  version "1.0.0-alpha1"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-plugin-kit/-/paneron-plugin-kit-1.0.0-alpha1.tgz#9457d55da595e1217b83e4337a7f086896fa7cc9"
+  integrity sha512-Za4h2ZZKdKdUBFuhSvERjVpa33FSgF5egSIJJn6ZbF9K3y7h0dJwRrglKDRW3pP2akoELGtAXH+JPEBeDY9pdg==
 
-"@riboseinc/paneron-registry-kit@^1.0.0-dev":
-  version "1.0.0-dev4"
-  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-dev4.tgz#a546705d17d6c6b19a113361b3d043aa0b3746c2"
-  integrity sha512-pQZ8I+oIQ7Yk5d/YsSEmdhPQckWCbg7WZwTjEiJWc+VxOcwtVamB/sCObfIRcp4MoN+3qigygnuWcb7aXhfyJA==
+"@riboseinc/paneron-registry-kit@^1.0.0-alpha1":
+  version "1.0.0-alpha1"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-alpha1.tgz#0a46c30fcf8ef424af9e2a16a2b82ef8da631528"
+  integrity sha512-Ix6wgNqkM5c9mO4u6T7H2psPACe25tnBeHOIXPEDns03GO1SELsuvFp6QqcKm3JYDYtUf8zfAzhNkJJ4ZCdDyQ==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -1890,6 +1890,11 @@ http-cache-semantics@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-4.1.0.tgz#49e91c5cbf36c9b94bcfcd71c23d5249ec74e390"
   integrity sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==
+
+immutability-helper@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-3.1.1.tgz#2b86b2286ed3b1241c9e23b7b21e0444f52f77b7"
+  integrity sha512-Q0QaXjPjwIju/28TsugCHNEASwoCcJSyJV3uO1sOIQGI0jKgm9f41Lvz0DZj3n46cNCyAZTsEYoY4C2bVRUzyQ==
 
 import-fresh@^3.1.0:
   version "3.2.1"
