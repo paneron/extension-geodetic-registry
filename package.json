@@ -1,6 +1,6 @@
 {
-  "name": "@riboseinc/plugin-geodetic-registry",
-  "version": "1.0.0-alpha1",
+  "name": "@riboseinc/paneron-extension-geodetic-registry",
+  "version": "1.0.0-alpha2",
   "description": "Geodetic Registry structured data plugin",
   "main": "plugin.js",
   "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
@@ -29,7 +29,7 @@
     "@blueprintjs/icons": "^3.18.1",
     "@blueprintjs/select": "^3.13.3",
     "@emotion/core": "^10.0.35",
-    "@riboseinc/paneron-plugin-kit": "^1.0.0-alpha1",
+    "@riboseinc/paneron-extension-kit": "^1.0.0-alpha1",
     "@riboseinc/paneron-registry-kit": "^1.0.0-alpha1",
     "@types/node": "^14.11.2",
     "@types/react": "^16.9.11",
