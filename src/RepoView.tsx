@@ -7,7 +7,7 @@ import { jsx, css } from '@emotion/core';
 import update from 'immutability-helper';
 
 import { ControlGroup, FormGroup, H4, H5, InputGroup, NumericInput, Tag, TextArea } from '@blueprintjs/core';
-import { RepositoryViewProps } from '@riboseinc/paneron-plugin-kit/types';
+import { RepositoryViewProps } from '@riboseinc/paneron-extension-kit/types';
 import { RegistryView } from '@riboseinc/paneron-registry-kit/views';
 import { Citation, ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 

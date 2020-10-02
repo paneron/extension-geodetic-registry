@@ -1,4 +1,4 @@
-import { Plugin } from '@riboseinc/paneron-plugin-kit/types';
+import { Plugin } from '@riboseinc/paneron-extension-kit/types';
 import log from 'electron-log';
 import 'electron';
 
