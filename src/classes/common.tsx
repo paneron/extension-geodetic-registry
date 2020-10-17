@@ -23,6 +23,11 @@ export const DEFAULTS = {
 };
 
 
+export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, 'itemSorter'> = {
+  itemSorter: (a, b) => a.identifier - b.identifier,
+};
+
+
 export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemData, onChange }) {
   function textInputProps
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>

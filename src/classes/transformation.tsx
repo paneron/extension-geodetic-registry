@@ -8,6 +8,7 @@ import { ControlGroup, FormGroup, H5, InputGroup, NumericInput } from '@blueprin
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
   CommonGRItemData,
+  COMMON_PROPERTIES,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
@@ -35,6 +36,7 @@ interface TransformationData extends CommonGRItemData {
 
 
 export const transformation: ItemClassConfiguration<TransformationData> = {
+  ...COMMON_PROPERTIES,
   meta: {
     title: "Coordinate Operations — Transformation",
     description: "Transformation",

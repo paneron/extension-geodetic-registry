@@ -9,6 +9,7 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
+  COMMON_PROPERTIES,
 } from './common';
 
 
@@ -24,6 +25,7 @@ export const CRS_DEFAULTS = {
 
 
 export const geodeticCRS: ItemClassConfiguration<CRSData> = {
+  ...COMMON_PROPERTIES,
   meta: {
     title: "Geodetic CRS",
     description: "Geodetic Coordinate Reference System",
@@ -53,6 +55,7 @@ export const geodeticCRS: ItemClassConfiguration<CRSData> = {
 
 
 export const verticalCRS: ItemClassConfiguration<CRSData> = {
+  ...COMMON_PROPERTIES,
   meta: {
     title: "Vertical CRS",
     description: "Vertical Coordinate Reference System",
