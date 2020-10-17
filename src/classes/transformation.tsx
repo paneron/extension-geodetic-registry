@@ -1,0 +1,189 @@
+/** @jsx jsx */
+
+import { jsx } from '@emotion/core';
+import update from 'immutability-helper';
+
+import { ControlGroup, FormGroup, H5, InputGroup, NumericInput } from '@blueprintjs/core';
+
+import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import {
+  CommonGRItemData,
+  DEFAULTS as SHARED_DEFAULTS,
+  EditView as CommonEditView,
+  ListItemView as CommonListItemView,
+  DetailView as CommonDetailView,
+} from './common';
+
+
+interface Extent {
+  n: number
+  e: number
+  s: number
+  w: number
+  name: string
+}
+
+
+interface TransformationData extends CommonGRItemData {
+  extent: Extent
+  operationVersion: string
+
+  sourceCRS?: { classID: string, itemID: string }
+  targetCRS?: { classID: string, itemID: string }
+  coordOperationMethod?: string
+}
+
+
+export const transformation: ItemClassConfiguration<TransformationData> = {
+  meta: {
+    title: "Coordinate Operations — Transformation",
+    description: "Transformation",
+    id: 'coordinate-ops--transformation',
+    alternativeNames: [],
+  },
+  defaults: {
+    ...SHARED_DEFAULTS,
+    extent: { name: '', n: 0, e: 0, s: 0, w: 0 },
+    operationVersion: '',
+  },
+  views: {
+    listItemView: CommonListItemView as ItemListView<TransformationData>,
+
+    detailView: (props) => {
+      const data = props.itemData;
+      const extent = data.extent;
+
+      // const sourceCRS = data.sourceCRS!;
+      // const targetCRS = data.targetCRS!;
+
+      // const sourceCRSCls = props.getRelatedItemClassConfiguration(sourceCRS.classID);
+      // const targetCRSCls = props.getRelatedItemClassConfiguration(targetCRS.classID);
+
+      // const SourceCRSView = sourceCRSCls.itemView;
+      // const TargetCRSView = targetCRSCls.itemView;
+
+      return (
+        <props.React.Fragment>
+
+          <CommonDetailView {...props} />
+
+          <H5>Operation version</H5>
+          <p>{data.operationVersion || '—'}</p>
+
+          <H5>Extent</H5>
+          {extent
+            ? <p>
+                {extent.name}:
+                &emsp;
+                N={extent.n}
+                &ensp;
+                E={extent.e}
+                &ensp;
+                S={extent.s}
+                &ensp;
+                W={extent.w}
+              </p>
+            : '—'}
+
+          <H5>Source CRS</H5>
+          {/*<SourceCRSView React={React} />*/}
+
+          <H5>Target CRS</H5>
+
+        </props.React.Fragment>
+      );
+    },
+
+    editView: (props) => <props.React.Fragment>
+
+      <CommonEditView
+        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+        React={props.React}
+        itemData={props.itemData}
+        onChange={props.onChange ? (newData: CommonGRItemData) => {
+          if (!props.onChange) { return; }
+          props.onChange({ ...props.itemData, ...newData });
+        } : undefined} />
+
+      <FormGroup label="Operation version:">
+        <InputGroup
+          placeholder="E.g., GA v2"
+          value={props.itemData.operationVersion || ''}
+          disabled={!props.onChange}
+          onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+            props.onChange
+              ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+              : void 0;
+          }}
+        />
+      </FormGroup>
+
+      <FormGroup label="Source CRC:">
+        <InputGroup
+          value={props.itemData.operationVersion || ''}
+          disabled={!props.onChange}
+          onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+            props.onChange
+              ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+              : void 0;
+          }}
+        />
+      </FormGroup>
+
+      <FormGroup label="Extent:">
+        <ControlGroup>
+          <InputGroup
+            placeholder="E.g., World"
+            value={props.itemData.extent?.name || ''}
+            disabled={!props.onChange}
+            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { extent: { name: { $set: evt.currentTarget.value } } }))
+                : void 0;
+            }}
+          />
+          <NumericInput
+            placeholder="N"
+            value={props.itemData.extent?.n || 0}
+            disabled={!props.onChange}
+            onValueChange={(val) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { extent: { n: { $set: val } } }))
+                : void 0;
+            }}
+          />
+          <NumericInput
+            placeholder="E"
+            value={props.itemData.extent?.e || 0}
+            onValueChange={(val) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { extent: { e: { $set: val } } }))
+                : void 0;
+            }}
+          />
+          <NumericInput
+            placeholder="S"
+            value={props.itemData.extent?.s || 0}
+            disabled={!props.onChange}
+            onValueChange={(val) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { extent: { s: { $set: val } } }))
+                : void 0;
+            }}
+          />
+          <NumericInput
+            placeholder="W"
+            value={props.itemData.extent?.w || 0}
+            onValueChange={(val) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { extent: { w: { $set: val } } }))
+                : void 0;
+            }}
+          />
+        </ControlGroup>
+      </FormGroup>
+    </props.React.Fragment>,
+  },
+  validatePayload: async () => true,
+  sanitizePayload: async (t) => t,
+};
