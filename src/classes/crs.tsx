@@ -148,7 +148,7 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
           {data.datum
             ? <GenericRelatedItemView
                 React={props.React}
-                itemRef={{ classID: 'datums--geodetic', itemID: data.datum }}
+                itemRef={{ classID: 'datums--vertical', itemID: data.datum }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />

@@ -151,7 +151,7 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
   meta: {
     title: "Vertical Datum",
     description: "Vertical Reference Frame",
-    id: 'crs--vertical',
+    id: 'datums--vertical',
     alternativeNames: [],
   },
   defaults: {
