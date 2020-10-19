@@ -1,6 +1,7 @@
 /** @jsx jsx */
 
 import { jsx } from '@emotion/core';
+import styled from '@emotion/styled';
 import update from 'immutability-helper';
 
 import { ControlGroup, FormGroup, H5, InputGroup, NumericInput } from '@blueprintjs/core';
@@ -13,16 +14,9 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
+  Extent,
+  ExtentDetail,
 } from './common';
-
-
-interface Extent {
-  n: number
-  e: number
-  s: number
-  w: number
-  name: string
-}
 
 
 interface TransformationData extends CommonGRItemData {
@@ -55,19 +49,12 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       const data = props.itemData;
       const extent = data.extent;
 
-      // const sourceCRS = data.sourceCRS!;
-      // const targetCRS = data.targetCRS!;
-
-      // const sourceCRSCls = props.getRelatedItemClassConfiguration(sourceCRS.classID);
-      // const targetCRSCls = props.getRelatedItemClassConfiguration(targetCRS.classID);
-
-      // const SourceCRSView = sourceCRSCls.itemView;
-      // const TargetCRSView = targetCRSCls.itemView;
+      const GenericRelatedItemView = styled(props.GenericRelatedItemView)`
+        margin-bottom: 1rem;
+      `;
 
       return (
         <props.React.Fragment>
-
-          <CommonDetailView {...props} />
 
           <H5>Operation version</H5>
           <p>{data.operationVersion || '—'}</p>
@@ -75,22 +62,31 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           <H5>Extent</H5>
           {extent
             ? <p>
-                {extent.name}:
-                &emsp;
-                N={extent.n}
-                &ensp;
-                E={extent.e}
-                &ensp;
-                S={extent.s}
-                &ensp;
-                W={extent.w}
+                <ExtentDetail extent={extent} />
               </p>
             : '—'}
 
           <H5>Source CRS</H5>
-          {/*<SourceCRSView React={React} />*/}
+          {data.sourceCRS
+            ? <GenericRelatedItemView
+                React={props.React}
+                itemRef={data.sourceCRS}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            : '—'}
 
           <H5>Target CRS</H5>
+          {data.targetCRS
+            ? <GenericRelatedItemView
+                React={props.React}
+                itemRef={data.targetCRS}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            : '—'}
+
+          <CommonDetailView {...props} />
 
         </props.React.Fragment>
       );
@@ -120,7 +116,19 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
         />
       </FormGroup>
 
-      <FormGroup label="Source CRC:">
+      <FormGroup label="Source CRS:">
+        <InputGroup
+          value={props.itemData.operationVersion || ''}
+          disabled={!props.onChange}
+          onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+            props.onChange
+              ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+              : void 0;
+          }}
+        />
+      </FormGroup>
+
+      <FormGroup label="Target CRS:">
         <InputGroup
           value={props.itemData.operationVersion || ''}
           disabled={!props.onChange}

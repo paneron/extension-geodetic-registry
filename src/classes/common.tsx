@@ -1,9 +1,12 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
 
+import React from 'react';
 import { jsx, css } from '@emotion/core';
 
-import { FormGroup,  H4,  H5,  InputGroup, NumericInput, Tag, TextArea } from '@blueprintjs/core';
+import { FormGroup, H5,  H6,  InputGroup, NumericInput, Tag, TextArea, UL } from '@blueprintjs/core';
 import { Citation, ItemClassConfiguration, ItemDetailView, ItemEditView } from '@riboseinc/paneron-registry-kit/types';
+import { PluginFC } from '@riboseinc/paneron-extension-kit/types';
 
 
 export interface CommonGRItemData {
@@ -11,15 +14,41 @@ export interface CommonGRItemData {
   identifier: number
   description: string
   remarks: string
-  informationSource: Citation[]
+  informationSources: Citation[]
 }
 
 
-export const DEFAULTS = {
+export const DEFAULTS: CommonGRItemData = {
+  name: '',
   identifier: 0,
-  informationSource: [],
+  informationSources: [],
   remarks: '',
   description: '',
+};
+
+
+export interface Extent {
+  n: number
+  e: number
+  s: number
+  w: number
+  name: string
+}
+export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
+export const ExtentDetail: React.FC<{ extent: Extent }> = function ({ extent }) {
+  return (
+    <>
+      {extent.name}:
+      &emsp;
+      N={extent.n}
+      &ensp;
+      E={extent.e}
+      &ensp;
+      S={extent.s}
+      &ensp;
+      W={extent.w}
+    </>
+  );
 };
 
 
@@ -67,12 +96,41 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemD
 
 export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["listItemView"] =
 (props) => (
-  <span css={css`overflow: hidden; text-overflow: ellipsis`}>
+  <span className={props.className} css={css`overflow: hidden; text-overflow: ellipsis`}>
     <Tag minimal>{props.itemData.identifier}</Tag>
     &emsp;
     {props.itemData.name}
   </span>
 );
+
+
+
+const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ React, source }) {
+  const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
+    return <React.Fragment>
+      <dt>{t}</dt>
+      <dd>{d}</dd>
+    </React.Fragment>
+  }
+
+  return (
+    <article>
+      <H6>{source.title}</H6>
+      <dl>
+        {source.edition ? <DLEntry t="Edition" d={source.edition} /> : null}
+        {source.editionDate ? <DLEntry t="Edition" d={source.editionDate?.toLocaleDateString()} /> : null}
+
+        {source.seriesName ? <DLEntry t="Series name" d={source.seriesName} /> : null}
+        {source.seriesIssueID ? <DLEntry t="Series issue ID" d={source.seriesIssueID} /> : null}
+        {source.seriesPage ? <DLEntry t="Series page" d={source.seriesPage} /> : null}
+
+        {source.issn ? <DLEntry t="ISSN" d={source.issn} /> : null}
+        {source.isbn ? <DLEntry t="ISBN" d={source.isbn} /> : null}
+      </dl>
+      {source.otherDetails ? <p>{source.otherDetails}</p> : null}
+    </article>
+  );
+};
 
 
 export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
@@ -81,13 +139,31 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
   return (
     <props.React.Fragment>
 
-      <H4><Tag minimal>{data.identifier}</Tag>&ensp;{data.name}</H4>
+      {data.description
+        ? <props.React.Fragment>
+            <H5>Description</H5>
+            <p>{data.description}</p>
+          </props.React.Fragment>
+        : null}
 
-      <H5>Description</H5>
-      <p>{data.description || '—'}</p>
+      {data.remarks
+        ? <props.React.Fragment>
+            <H5>Remarks</H5>
+            <p>{data.remarks}</p>
+          </props.React.Fragment>
+        : null}
 
-      <H5>Remarks</H5>
-      <p>{data.remarks || '—'}</p>
+      {(data.informationSources || []).length > 0
+        ? <props.React.Fragment>
+            <H5>Information sources</H5>
+            <UL>
+              {data.informationSources.map((s, idx) =>
+                <li key={idx}>
+                  <InformationSourceDetails React={props.React} source={s} />
+                </li>)}
+            </UL>
+          </props.React.Fragment>
+        : null}
 
     </props.React.Fragment>
   );

@@ -7,12 +7,29 @@ import { RegistryView } from '@riboseinc/paneron-registry-kit/views';
 
 import { transformation } from './classes/transformation';
 import { verticalCRS, geodeticCRS } from './classes/crs';
+import { verticalDatum, geodeticDatum } from './classes/datum';
+//import { coordinateSystemAxis } from './classes/coordinate-system-axis';
+//import { primeMeridian } from './classes/prime-meridian';
+//import { ellipsoid } from './classes/ellipsoid';
+//import {
+//  cartesianCoordinateSystem,
+//  verticalCoordinateSystem,
+//  ellipsoidalCoordinateSystem,
+//} from './classes/coordinate-system';
 
 
 const itemConfig = {
   "coordinate-ops--transformation": transformation,
+  "datums--geodetic": geodeticDatum,
+  "datums--vertical": verticalDatum,
   "crs--vertical": verticalCRS,
   "crs--geodetic": geodeticCRS,
+  //"prime-meridian": primeMeridian,
+  //"ellipsoid": ellipsoid,
+  //"coordinate-system-axis": coordinateSystemAxis,
+  //"coordinate-sys--cartesian": cartesianCoordinateSystem,
+  //"coordinate-sys--vertical": verticalCoordinateSystem,
+  //"coordinate-sys--ellipsoidal": ellipsoidalCoordinateSystem,
 };
 
 
