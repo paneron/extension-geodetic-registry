@@ -4,7 +4,7 @@
 import React from 'react';
 import { jsx, css } from '@emotion/core';
 
-import { FormGroup, H5,  H6,  InputGroup, NumericInput, Tag, TextArea, UL } from '@blueprintjs/core';
+import { Colors, FormGroup, H5,  H6,  InputGroup, NumericInput, Tag, TextArea, UL } from '@blueprintjs/core';
 import { Citation, ItemClassConfiguration, ItemDetailView, ItemEditView } from '@riboseinc/paneron-registry-kit/types';
 import { PluginFC } from '@riboseinc/paneron-extension-kit/types';
 
@@ -115,8 +115,19 @@ const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ Rea
 
   return (
     <article>
-      <H6>{source.title}</H6>
-      <dl>
+
+      <H6 style={{ margin: '.5em 0 0 0' }}>{source.title}</H6>
+
+      {source.otherDetails ? <p style={{ margin: '.5em 0 0 0' }}>Citation details: {source.otherDetails}</p> : null}
+
+      <dl css={css`
+          display: flex; flex-flow: row wrap;
+          margin: 0;
+          font-size: 85%;
+          &:not(:empty) { border-bottom: .25em ${Colors.LIGHT_GRAY3} solid; }
+          dt, dd { margin: .25em 0 0 0; flex-basis: 50%; border-top: .25em ${Colors.LIGHT_GRAY3} dotted; }
+          dd { font-style: italic }
+        `}>
         {source.edition ? <DLEntry t="Edition" d={source.edition} /> : null}
         {source.editionDate ? <DLEntry t="Edition" d={source.editionDate?.toLocaleDateString()} /> : null}
 
@@ -127,7 +138,7 @@ const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ Rea
         {source.issn ? <DLEntry t="ISSN" d={source.issn} /> : null}
         {source.isbn ? <DLEntry t="ISBN" d={source.isbn} /> : null}
       </dl>
-      {source.otherDetails ? <p>{source.otherDetails}</p> : null}
+
     </article>
   );
 };
