@@ -60,11 +60,11 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           <p>{data.operationVersion || '—'}</p>
 
           <H5>Extent</H5>
-          {extent
-            ? <p>
-                <ExtentDetail extent={extent} />
-              </p>
-            : '—'}
+          <p>
+            {extent
+              ? <ExtentDetail extent={extent} />
+              : '—'}
+          </p>
 
           <H5>Source CRS</H5>
           {data.sourceCRS

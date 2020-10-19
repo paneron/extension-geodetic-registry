@@ -59,13 +59,13 @@ const DatumDetailView: ItemDetailView<DatumData> = function (props) {
       <p>{data.coordinateReferenceEpoch || '—'}</p>
 
       <H5>Extent</H5>
-      {data.extent ? <p><ExtentDetail extent={data.extent} /></p> : null}
+      {data.extent ? <p><ExtentDetail extent={data.extent} /></p> : <p>—</p>}
 
       <H5>Origin description</H5>
-      <p>{data.originDescription || ''}</p>
+      <p>{data.originDescription || '—'}</p>
 
       <H5>Release date</H5>
-      <p>{data.releaseDate || ''}</p>
+      <p>{data.releaseDate || '—'}</p>
 
     </props.React.Fragment>
   );
