@@ -59,37 +59,37 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
 
           <PropertyDetail title="Inverse flattening">
             <ControlGroup fill>
+              <InputGroup readOnly value={data.inverseFlattening?.toString() || '(no value)'} />
               <RelatedItem
                 React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.inverseFlatteningUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />
-              <InputGroup readOnly value={data.inverseFlattening?.toString() || '(no value)'} />
             </ControlGroup>
           </PropertyDetail>
 
           <PropertyDetail title="Semi-major axis">
             <ControlGroup fill>
+              <InputGroup readOnly value={data.semiMajorAxis?.toString() || '(no value)'} />
               <RelatedItem
                 React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMajorAxisUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />
-              <InputGroup readOnly value={data.semiMajorAxis?.toString() || '(no value)'} />
             </ControlGroup>
           </PropertyDetail>
 
           <PropertyDetail title="Semi-minor axis">
             <ControlGroup fill>
+              <InputGroup readOnly value={data.semiMinorAxis?.toString() || '(no value)'} />
               <RelatedItem
                 React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMinorAxisUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />
-              <InputGroup readOnly value={data.semiMinorAxis?.toString() || '(no value)'} />
             </ControlGroup>
           </PropertyDetail>
 
