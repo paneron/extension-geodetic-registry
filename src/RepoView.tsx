@@ -8,9 +8,11 @@ import { RegistryView } from '@riboseinc/paneron-registry-kit/views';
 import { transformation } from './classes/transformation';
 import { verticalCRS, geodeticCRS } from './classes/crs';
 import { verticalDatum, geodeticDatum } from './classes/datum';
+import { unitOfMeasurement } from './classes/unit-of-measurement';
+import { ellipsoid } from './classes/ellipsoid';
+
 //import { coordinateSystemAxis } from './classes/coordinate-system-axis';
-//import { primeMeridian } from './classes/prime-meridian';
-//import { ellipsoid } from './classes/ellipsoid';
+// import { primeMeridian } from './classes/prime-meridian';
 //import {
 //  cartesianCoordinateSystem,
 //  verticalCoordinateSystem,
@@ -24,8 +26,11 @@ const itemConfig = {
   "datums--vertical": verticalDatum,
   "crs--vertical": verticalCRS,
   "crs--geodetic": geodeticCRS,
+  "ellipsoid": ellipsoid,
+  "unit-of-measurement": unitOfMeasurement,
+
   //"prime-meridian": primeMeridian,
-  //"ellipsoid": ellipsoid,
+
   //"coordinate-system-axis": coordinateSystemAxis,
   //"coordinate-sys--cartesian": cartesianCoordinateSystem,
   //"coordinate-sys--vertical": verticalCoordinateSystem,
