@@ -53,6 +53,10 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
       return (
         <props.React.Fragment>
 
+          <PropertyDetail title="Symbol">
+            <p>{data.symbol || '—'}</p>
+          </PropertyDetail>
+
           {(data.aliases || []).length > 0
             ? <AliasesDetail aliases={data.aliases} />
             : null}
@@ -67,10 +71,6 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
 
           <PropertyDetail title="Numerator">
             <p>{data.numerator?.toString() || '—'}</p>
-          </PropertyDetail>
-
-          <PropertyDetail title="Symbol">
-            <p>{data.symbol || '—'}</p>
           </PropertyDetail>
 
           <CommonDetailView {...props} />
