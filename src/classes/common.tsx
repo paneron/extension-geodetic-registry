@@ -53,10 +53,10 @@ export const ExtentDetail: React.FC<{ extent: Extent }> = function ({ extent }) 
 
 
 export const PropertyDetail: React.FC<{ title: string }> = function ({ title, children }) {
-  return <>
+  return <div css={css`margin-bottom: 1em`}>
     <H5>{title}</H5>
     {children}
-  </>;
+  </div>;
 };
 
 
