@@ -124,9 +124,22 @@ const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ Rea
           display: flex; flex-flow: row wrap;
           margin: 0;
           font-size: 85%;
-          &:not(:empty) { border-bottom: .25em ${Colors.LIGHT_GRAY3} solid; }
-          dt, dd { margin: .25em 0 0 0; flex-basis: 50%; border-top: .25em ${Colors.LIGHT_GRAY3} dotted; }
-          dd { font-style: italic }
+
+          &:not(:empty) {
+            border-bottom: .25em ${Colors.LIGHT_GRAY3} solid;
+          }
+          dt, dd {
+            margin: .25em 0 0 0;
+            border-top: .25em ${Colors.LIGHT_GRAY3} dotted;
+          }
+          dt {
+            flex-basis: 30%;
+          }
+          dd {
+            font-style: italic;
+            flex-basis: 70%;
+            padding-right: 1em;
+          }
         `}>
         {source.edition ? <DLEntry t="Edition" d={source.edition} /> : null}
         {source.editionDate ? <DLEntry t="Edition" d={source.editionDate?.toLocaleDateString()} /> : null}
