@@ -52,6 +52,23 @@ export const ExtentDetail: React.FC<{ extent: Extent }> = function ({ extent }) 
 };
 
 
+export const PropertyDetail: React.FC<{ title: string }> = function ({ title, children }) {
+  return <>
+    <H5>{title}</H5>
+    {children}
+  </>;
+};
+
+
+export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliases }) {
+  return <PropertyDetail title="Aliases">
+    <UL>
+      {aliases.map((a, idx) => <li key={idx}>{a}</li>)}
+    </UL>
+  </PropertyDetail>;
+};
+
+
 export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, 'itemSorter'> = {
   itemSorter: (a, b) => a.identifier - b.identifier,
 };

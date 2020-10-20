@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { H5, UL } from '@blueprintjs/core';
+import { H5 } from '@blueprintjs/core';
 import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
 import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
@@ -15,6 +15,7 @@ import {
   Extent,
   DEFAULT_EXTENT,
   ExtentDetail,
+  AliasesDetail,
 } from './common';
 
 
@@ -44,12 +45,7 @@ const DatumDetailView: ItemDetailView<DatumData> = function (props) {
     <props.React.Fragment>
 
       {(data.aliases || []).length > 0
-        ? <props.React.Fragment>
-            <H5>Aliases</H5>
-            <UL>
-              {data.aliases.map((a, idx) => <li key={idx}>{a}</li>)}
-            </UL>
-          </props.React.Fragment>
+        ? <AliasesDetail aliases={data.aliases} />
         : null}
 
       <H5>Scope</H5>
