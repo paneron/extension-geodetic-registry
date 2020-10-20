@@ -10,9 +10,9 @@ import { verticalCRS, geodeticCRS } from './classes/crs';
 import { verticalDatum, geodeticDatum } from './classes/datum';
 import { unitOfMeasurement } from './classes/unit-of-measurement';
 import { ellipsoid } from './classes/ellipsoid';
+import { primeMeridian } from './classes/prime-meridian';
+import { coordinateSystemAxis } from './classes/coordinate-sys-axis';
 
-//import { coordinateSystemAxis } from './classes/coordinate-system-axis';
-// import { primeMeridian } from './classes/prime-meridian';
 //import {
 //  cartesianCoordinateSystem,
 //  verticalCoordinateSystem,
@@ -28,10 +28,8 @@ const itemConfig = {
   "crs--geodetic": geodeticCRS,
   "ellipsoid": ellipsoid,
   "unit-of-measurement": unitOfMeasurement,
-
-  //"prime-meridian": primeMeridian,
-
-  //"coordinate-system-axis": coordinateSystemAxis,
+  "prime-meridian": primeMeridian,
+  "coordinate-sys-axis": coordinateSystemAxis,
   //"coordinate-sys--cartesian": cartesianCoordinateSystem,
   //"coordinate-sys--vertical": verticalCoordinateSystem,
   //"coordinate-sys--ellipsoidal": ellipsoidalCoordinateSystem,
