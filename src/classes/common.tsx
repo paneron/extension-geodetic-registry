@@ -161,8 +161,8 @@ const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ Rea
         {source.editionDate ? <DLEntry t="Edition" d={source.editionDate?.toLocaleDateString()} /> : null}
 
         {source.seriesName ? <DLEntry t="Series name" d={source.seriesName} /> : null}
-        {source.seriesIssueID ? <DLEntry t="Series issue ID" d={source.seriesIssueID} /> : null}
-        {source.seriesPage ? <DLEntry t="Series page" d={source.seriesPage} /> : null}
+        {source.seriesIssueID ? <DLEntry t="Issue" d={source.seriesIssueID} /> : null}
+        {source.seriesPage ? <DLEntry t="Page(s)" d={source.seriesPage} /> : null}
 
         {source.issn ? <DLEntry t="ISSN" d={source.issn} /> : null}
         {source.isbn ? <DLEntry t="ISBN" d={source.isbn} /> : null}
