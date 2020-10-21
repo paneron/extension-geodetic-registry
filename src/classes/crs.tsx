@@ -2,8 +2,8 @@
 
 import { H5 } from '@blueprintjs/core';
 import { jsx } from '@emotion/core';
-import styled from '@emotion/styled';
 import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
   CommonGRItemData,
@@ -25,15 +25,12 @@ export const CRS_DEFAULTS: CRSData = {
   scope: '',
 }
 
-const CommonCRSDetailView: ItemDetailView<CRSData> = function (props) {
+const CRSDetailView: ItemDetailView<CRSData> = function (props) {
   const data = props.itemData;
 
-  const GenericRelatedItemView = styled(props.GenericRelatedItemView)`
-    margin-bottom: 1rem;
-  `;
-
   return (
-    <props.React.Fragment>
+    <CommonDetailView {...props}>
+      {props.children}
 
       <H5>Coordinate system</H5>
       {data.coordinateSystem
@@ -45,9 +42,7 @@ const CommonCRSDetailView: ItemDetailView<CRSData> = function (props) {
           />
         : '—'}
 
-      <CommonDetailView {...props} />
-
-    </props.React.Fragment>
+    </CommonDetailView>
   );
 };
 
@@ -84,26 +79,22 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
     listItemView: CommonListItemView as ItemListView<GeodeticCRSData>,
     detailView: (props) => {
       const data = props.itemData;
-      const GenericRelatedItemView = styled(props.GenericRelatedItemView)`
-        margin-bottom: 1rem;
-      `;
 
       return (
-        <props.React.Fragment>
+        <CRSDetailView {...props}>
 
-          <H5>Datum</H5>
           {data.datum
-            ? <GenericRelatedItemView
-                React={props.React}
-                itemRef={{ classID: 'datums--geodetic', itemID: data.datum }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
+            ? <PropertyDetailView title="Datum">
+                <GenericRelatedItemView
+                  React={props.React}
+                  itemRef={{ classID: 'datums--geodetic', itemID: data.datum }}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
             : '—'}
 
-          <CommonCRSDetailView {...props} />
-
-        </props.React.Fragment>
+        </CRSDetailView>
       )
     },
     editView: (props) => (
@@ -137,26 +128,22 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
     listItemView: CommonListItemView as ItemListView<VerticalCRSData>,
     detailView: (props) => {
       const data = props.itemData;
-      const GenericRelatedItemView = styled(props.GenericRelatedItemView)`
-        margin-bottom: 1rem;
-      `;
 
       return (
-        <props.React.Fragment>
+        <CRSDetailView {...props}>
 
-          <H5>Datum</H5>
           {data.datum
-            ? <GenericRelatedItemView
-                React={props.React}
-                itemRef={{ classID: 'datums--vertical', itemID: data.datum }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
+            ? <PropertyDetailView title="Datum">
+                <GenericRelatedItemView
+                  React={props.React}
+                  itemRef={{ classID: 'datums--vertical', itemID: data.datum }}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
             : '—'}
 
-          <CommonCRSDetailView {...props} />
-
-        </props.React.Fragment>
+        </CRSDetailView>
       )
     },
     editView: (props) => (

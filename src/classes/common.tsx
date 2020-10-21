@@ -4,8 +4,15 @@
 import React from 'react';
 import { jsx, css } from '@emotion/core';
 
-import { Colors, FormGroup, H5,  H6,  InputGroup, NumericInput, Tag, TextArea, UL } from '@blueprintjs/core';
-import { Citation, ItemClassConfiguration, ItemDetailView, ItemEditView } from '@riboseinc/paneron-registry-kit/types';
+import {
+  Colors, ControlGroup, FormGroup, H6, InputGroup,
+  NumericInput, Tag, TextArea, UL,
+} from '@blueprintjs/core';
+import {
+  Citation, ItemClassConfiguration,
+  ItemDetailView, ItemEditView
+} from '@riboseinc/paneron-registry-kit/types';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import { PluginFC } from '@riboseinc/paneron-extension-kit/types';
 
 
@@ -38,34 +45,26 @@ export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
 export const ExtentDetail: React.FC<{ extent: Extent }> = function ({ extent }) {
   return (
     <>
-      {extent.name}:
-      &emsp;
-      N={extent.n}
-      &ensp;
-      E={extent.e}
-      &ensp;
-      S={extent.s}
-      &ensp;
-      W={extent.w}
+      <ControlGroup fill>
+        <InputGroup readOnly leftIcon={<Tag minimal>N Lat</Tag>} value={extent.n.toLocaleString()} />
+        <InputGroup readOnly leftIcon={<Tag minimal>E Lon</Tag>} value={extent.e.toLocaleString()} />
+        <InputGroup readOnly leftIcon={<Tag minimal>S Lat</Tag>} value={extent.s.toLocaleString()} />
+        <InputGroup readOnly leftIcon={<Tag minimal>W Lon</Tag>} value={extent.w.toLocaleString()} />
+      </ControlGroup>
+      <p css={css`margin-top: .5em; font-size: 90%;`}>
+        {extent.name}
+      </p>
     </>
   );
 };
 
 
-export const PropertyDetail: React.FC<{ title: string }> = function ({ title, children }) {
-  return <div css={css`margin-bottom: 1em`}>
-    <H5>{title}</H5>
-    {children}
-  </div>;
-};
-
-
 export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliases }) {
-  return <PropertyDetail title="Aliases">
+  return <PropertyDetailView title="Aliases">
     <UL>
       {aliases.map((a, idx) => <li key={idx}>{a}</li>)}
     </UL>
-  </PropertyDetail>;
+  </PropertyDetailView>;
 };
 
 
@@ -178,34 +177,42 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
   const data = props.itemData;
 
   return (
-    <props.React.Fragment>
+    <div css={css`
+        position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
+        display: flex; flex-flow: row nowrap; overflow: hidden;
+        & > * { padding: 1rem; }`}>
 
-      {data.description
-        ? <props.React.Fragment>
-            <H5>Description</H5>
-            <p>{data.description}</p>
-          </props.React.Fragment>
-        : null}
+      <div css={css`overflow-y: auto; flex: 1;`}>
+        {props.children}
+      </div>
 
-      {data.remarks
-        ? <props.React.Fragment>
-            <H5>Remarks</H5>
-            <p>{data.remarks}</p>
-          </props.React.Fragment>
-        : null}
+      <aside css={css`
+          overflow-y: auto;
+          flex-basis: 45%; background: ${Colors.LIGHT_GRAY4};`}>
+        {data.description
+          ? <PropertyDetailView title="Description">
+              <p>{data.description}</p>
+            </PropertyDetailView>
+          : null}
 
-      {(data.informationSources || []).length > 0
-        ? <props.React.Fragment>
-            <H5>Information sources</H5>
-            <UL>
-              {data.informationSources.map((s, idx) =>
-                <li key={idx}>
-                  <InformationSourceDetails React={props.React} source={s} />
-                </li>)}
-            </UL>
-          </props.React.Fragment>
-        : null}
+        {data.remarks
+          ? <PropertyDetailView title="Remarks">
+              <p>{data.remarks}</p>
+            </PropertyDetailView>
+          : null}
 
-    </props.React.Fragment>
+        {(data.informationSources || []).length > 0
+          ? <PropertyDetailView title="Information sources">
+              <UL css={css`padding-left: 0; list-style: square;`}>
+                {data.informationSources.map((s, idx) =>
+                  <li key={idx}>
+                    <InformationSourceDetails React={props.React} source={s} />
+                  </li>)}
+              </UL>
+            </PropertyDetailView>
+          : null}
+      </aside>
+
+    </div>
   );
 };

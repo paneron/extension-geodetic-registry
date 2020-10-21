@@ -3,6 +3,7 @@
 import { jsx } from '@emotion/core';
 
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import {
   CommonGRItemData,
   COMMON_PROPERTIES,
@@ -10,7 +11,6 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
-  PropertyDetail,
 } from './common';
 
 
@@ -40,28 +40,26 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
       const data = props.itemData;
 
       return (
-        <props.React.Fragment>
+        <CommonDetailView {...props}>
 
-          <PropertyDetail title="Abbreviation">
-            <p>{data.abbreviation || '—'}</p>
-          </PropertyDetail>
+          <PropertyDetailView title="Abbreviation">
+            {data.abbreviation || '—'}
+          </PropertyDetailView>
 
-          <PropertyDetail title="Direction">
-            <p>{data.direction || '—'}</p>
-          </PropertyDetail>
+          <PropertyDetailView title="Direction">
+            {data.direction || '—'}
+          </PropertyDetailView>
 
-          <PropertyDetail title="Unit of measurement">
-            <props.GenericRelatedItemView
+          <PropertyDetailView title="Unit of measurement">
+            <GenericRelatedItemView
               React={props.React}
               itemRef={{ classID: 'unit-of-measurement', itemID: data.unit }}
               getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
               useRegisterItemData={props.useRegisterItemData}
             />
-          </PropertyDetail>
+          </PropertyDetailView>
 
-          <CommonDetailView {...props} />
-
-        </props.React.Fragment>
+        </CommonDetailView>
       );
     },
 

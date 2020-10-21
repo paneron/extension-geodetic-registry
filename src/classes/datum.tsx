@@ -1,9 +1,8 @@
 /** @jsx jsx */
 
-import { H5 } from '@blueprintjs/core';
 import { jsx } from '@emotion/core';
-import styled from '@emotion/styled';
 import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
   CommonGRItemData,
@@ -42,28 +41,34 @@ const DatumDetailView: ItemDetailView<DatumData> = function (props) {
   const data = props.itemData;
 
   return (
-    <props.React.Fragment>
+    <CommonDetailView {...props}>
+      {props.children}
 
       {(data.aliases || []).length > 0
         ? <AliasesDetail aliases={data.aliases} />
         : null}
 
-      <H5>Scope</H5>
-      <p>{data.scope || ''}</p>
+      <PropertyDetailView inline title="Scope">
+        {data.scope || ''}
+      </PropertyDetailView>
 
-      <H5>Coordinate reference epoch</H5>
-      <p>{data.coordinateReferenceEpoch || '—'}</p>
+      <PropertyDetailView inline title="Coordinate reference epoch">
+        {data.coordinateReferenceEpoch || ''}
+      </PropertyDetailView>
 
-      <H5>Extent</H5>
-      {data.extent ? <p><ExtentDetail extent={data.extent} /></p> : <p>—</p>}
+      <PropertyDetailView title="Extent">
+        {data.extent ? <ExtentDetail extent={data.extent} /> : '—'}
+      </PropertyDetailView>
 
-      <H5>Origin description</H5>
-      <p>{data.originDescription || '—'}</p>
+      <PropertyDetailView title="Origin description">
+        {data.originDescription || ''}
+      </PropertyDetailView>
 
-      <H5>Release date</H5>
-      <p>{data.releaseDate || '—'}</p>
+      <PropertyDetailView title="Release date">
+        {data.releaseDate || ''}
+      </PropertyDetailView>
 
-    </props.React.Fragment>
+    </CommonDetailView>
   );
 };
 
@@ -92,38 +97,32 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
     detailView: (props) => {
       const data = props.itemData;
 
-      const GenericRelatedItemView = styled(props.GenericRelatedItemView)`
-        margin-bottom: 1rem;
-      `;
-
       return (
-        <props.React.Fragment>
+        <DatumDetailView {...props}>
 
-          <DatumDetailView {...props} />
-
-          <H5>Ellipsoid</H5>
           {data.ellipsoid
-            ? <GenericRelatedItemView
-                React={props.React}
-                itemRef={{ classID: 'ellipsoid', itemID: data.ellipsoid }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
+            ? <PropertyDetailView title="Ellipsoid">
+                <GenericRelatedItemView
+                  React={props.React}
+                  itemRef={{ classID: 'ellipsoid', itemID: data.ellipsoid }}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
             : '—'}
 
-          <H5>Prime meridian</H5>
           {data.primeMeridian
-            ? <GenericRelatedItemView
-                React={props.React}
-                itemRef={{ classID: 'prime-meridian', itemID: data.primeMeridian }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
+            ? <PropertyDetailView title="Prime meridian">
+                <GenericRelatedItemView
+                  React={props.React}
+                  itemRef={{ classID: 'prime-meridian', itemID: data.primeMeridian }}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
             : '—'}
 
-          <CommonDetailView {...props} />
-
-        </props.React.Fragment>
+        </DatumDetailView>
       )
     },
     editView: (props) => (

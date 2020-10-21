@@ -2,6 +2,7 @@
 
 import { jsx } from '@emotion/core';
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
   CommonGRItemData,
@@ -11,7 +12,6 @@ import {
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
   AliasesDetail,
-  PropertyDetail,
 } from './common';
 
 
@@ -36,8 +36,8 @@ export const DEFAULTS: UoMData = {
 export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
   ...COMMON_PROPERTIES,
   meta: {
-    title: "Unit of measurement",
-    description: "Unit of measurement",
+    title: "Unit",
+    description: "Unit of Measurement",
     id: 'unit-of-measurement',
     alternativeNames: [],
   },
@@ -51,31 +51,29 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
       const data = props.itemData;
 
       return (
-        <props.React.Fragment>
+        <CommonDetailView {...props}>
 
-          <PropertyDetail title="Symbol">
-            <p>{data.symbol || '—'}</p>
-          </PropertyDetail>
+          <PropertyDetailView inline title="Symbol">
+            {data.symbol || '—'}
+          </PropertyDetailView>
 
           {(data.aliases || []).length > 0
             ? <AliasesDetail aliases={data.aliases} />
             : null}
 
-          <PropertyDetail title="Measure type">
-            <p>{data.measureType}</p>
-          </PropertyDetail>
+          <PropertyDetailView inline title="Measure type">
+            {data.measureType}
+          </PropertyDetailView>
 
-          <PropertyDetail title="Denominator">
-            <p>{data.denominator?.toString() || '—'}</p>
-          </PropertyDetail>
+          <PropertyDetailView inline title="Denominator">
+            {data.denominator?.toString() || '—'}
+          </PropertyDetailView>
 
-          <PropertyDetail title="Numerator">
-            <p>{data.numerator?.toString() || '—'}</p>
-          </PropertyDetail>
+          <PropertyDetailView inline title="Numerator">
+            {data.numerator?.toString() || '—'}
+          </PropertyDetailView>
 
-          <CommonDetailView {...props} />
-
-        </props.React.Fragment>
+        </CommonDetailView>
       )
     },
     editView: (props) => (

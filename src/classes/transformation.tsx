@@ -1,10 +1,9 @@
 /** @jsx jsx */
 
 import { jsx } from '@emotion/core';
-import styled from '@emotion/styled';
 import update from 'immutability-helper';
 
-import { ControlGroup, FormGroup, H5, InputGroup, NumericInput } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, InputGroup, NumericInput } from '@blueprintjs/core';
 
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
@@ -17,6 +16,7 @@ import {
   Extent,
   ExtentDetail,
 } from './common';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
 interface TransformationData extends CommonGRItemData {
@@ -32,8 +32,8 @@ interface TransformationData extends CommonGRItemData {
 export const transformation: ItemClassConfiguration<TransformationData> = {
   ...COMMON_PROPERTIES,
   meta: {
-    title: "Coordinate Operations — Transformation",
-    description: "Transformation",
+    title: "Transformation",
+    description: "Coordinate Operations — Transformation",
     id: 'coordinate-ops--transformation',
     alternativeNames: [],
   },
@@ -49,46 +49,42 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       const data = props.itemData;
       const extent = data.extent;
 
-      const GenericRelatedItemView = styled(props.GenericRelatedItemView)`
-        margin-bottom: 1rem;
-      `;
-
       return (
-        <props.React.Fragment>
+        <CommonDetailView {...props}>
 
-          <H5>Operation version</H5>
-          <p>{data.operationVersion || '—'}</p>
+          {data.sourceCRS
+            ? <PropertyDetailView title="Source CRS">
+                <GenericRelatedItemView
+                  React={props.React}
+                  itemRef={data.sourceCRS}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
+            : '—'}
 
-          <H5>Extent</H5>
-          <p>
+          {data.targetCRS
+            ? <PropertyDetailView title="Target CRS">
+                <GenericRelatedItemView
+                  React={props.React}
+                  itemRef={data.targetCRS}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
+            : '—'}
+
+          <PropertyDetailView title="Extent">
             {extent
               ? <ExtentDetail extent={extent} />
               : '—'}
-          </p>
+          </PropertyDetailView>
 
-          <H5>Source CRS</H5>
-          {data.sourceCRS
-            ? <GenericRelatedItemView
-                React={props.React}
-                itemRef={data.sourceCRS}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            : '—'}
+          <PropertyDetailView title="Operation version" inline>
+            {data.operationVersion || '—'}
+          </PropertyDetailView>
 
-          <H5>Target CRS</H5>
-          {data.targetCRS
-            ? <GenericRelatedItemView
-                React={props.React}
-                itemRef={data.targetCRS}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            : '—'}
-
-          <CommonDetailView {...props} />
-
-        </props.React.Fragment>
+        </CommonDetailView>
       );
     },
 

@@ -1,7 +1,6 @@
 /** @jsx jsx */
 
 import { jsx } from '@emotion/core';
-import styled from '@emotion/styled';
 
 import { Checkbox, ControlGroup, InputGroup } from '@blueprintjs/core';
 
@@ -13,8 +12,8 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
-  PropertyDetail,
 } from './common';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
 interface EllipsoidData extends CommonGRItemData {
@@ -48,54 +47,48 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
     detailView: (props) => {
       const data = props.itemData;
 
-      const RelatedItem = styled(props.GenericRelatedItemView)`
-        margin-bottom: 1rem;
-      `;
-
       return (
-        <props.React.Fragment>
+        <CommonDetailView {...props}>
 
           <Checkbox disabled checked={data.isSphere === true} label="Is sphere" />
 
-          <PropertyDetail title="Inverse flattening">
+          <PropertyDetailView title="Inverse flattening">
             <ControlGroup fill>
               <InputGroup readOnly value={data.inverseFlattening?.toString() || '(no value)'} />
-              <RelatedItem
+              <GenericRelatedItemView
                 React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.inverseFlatteningUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />
             </ControlGroup>
-          </PropertyDetail>
+          </PropertyDetailView>
 
-          <PropertyDetail title="Semi-major axis">
+          <PropertyDetailView title="Semi-major axis">
             <ControlGroup fill>
               <InputGroup readOnly value={data.semiMajorAxis?.toString() || '(no value)'} />
-              <RelatedItem
+              <GenericRelatedItemView
                 React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMajorAxisUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />
             </ControlGroup>
-          </PropertyDetail>
+          </PropertyDetailView>
 
-          <PropertyDetail title="Semi-minor axis">
+          <PropertyDetailView title="Semi-minor axis">
             <ControlGroup fill>
               <InputGroup readOnly value={data.semiMinorAxis?.toString() || '(no value)'} />
-              <RelatedItem
+              <GenericRelatedItemView
                 React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMinorAxisUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
               />
             </ControlGroup>
-          </PropertyDetail>
+          </PropertyDetailView>
 
-          <CommonDetailView {...props} />
-
-        </props.React.Fragment>
+        </CommonDetailView>
       );
     },
 
