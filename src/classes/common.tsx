@@ -19,7 +19,7 @@ import { PluginFC } from '@riboseinc/paneron-extension-kit/types';
 export interface CommonGRItemData {
   name: string
   identifier: number
-  description: string
+  description: string | null
   remarks: string
   informationSources: Citation[]
 }
@@ -104,7 +104,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemD
     </FormGroup>
 
     <FormGroup label="Description:">
-      <TextArea fill required value={itemData.description} {...textInputProps('description')} />
+      <TextArea fill required value={itemData.description || ''} {...textInputProps('description')} />
     </FormGroup>
 
     <FormGroup label="Remarks:">
