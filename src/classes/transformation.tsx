@@ -78,7 +78,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   useRegisterItemData={props.useRegisterItemData}
                 />
               </PropertyDetailView>
-            : '—'}
+            : null}
 
           {data.targetCRS
             ? <PropertyDetailView title="Target CRS">
@@ -89,7 +89,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   useRegisterItemData={props.useRegisterItemData}
                 />
               </PropertyDetailView>
-            : '—'}
+            : null}
 
           <PropertyDetailView title="Extent">
             {extent
