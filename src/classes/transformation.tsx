@@ -1,9 +1,9 @@
 /** @jsx jsx */
 
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import update from 'immutability-helper';
 
-import { ControlGroup, FormGroup, InputGroup, NumericInput } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
@@ -19,9 +19,24 @@ import {
 import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
+interface TransformationParameter {
+  parameter: string // Coordinate operation parameter UUID
+  unitOfMeasurement: string | null // Unit of measurement UUID
+  name: string // Dependent on type? filename?
+  type: string
+  value: string | number | null
+  fileCitation: null
+}
+
+
 interface TransformationData extends CommonGRItemData {
   extent: Extent
   operationVersion: string
+  accuracy: {
+    value: number
+    unitOfMeasurement: string // Unit of measurement UUID
+  }
+  parameters: TransformationParameter[]
 
   sourceCRS?: { classID: string, itemID: string }
   targetCRS?: { classID: string, itemID: string }
@@ -41,6 +56,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     ...SHARED_DEFAULTS,
     extent: { name: '', n: 0, e: 0, s: 0, w: 0 },
     operationVersion: '',
+    parameters: [],
   },
   views: {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
@@ -48,6 +64,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     detailView: (props) => {
       const data = props.itemData;
       const extent = data.extent;
+      const params = data.parameters || [];
 
       return (
         <CommonDetailView {...props}>
@@ -83,6 +100,49 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           <PropertyDetailView title="Operation version" inline>
             {data.operationVersion || '—'}
           </PropertyDetailView>
+
+          <PropertyDetailView title="Accuracy">
+            <ControlGroup>
+              <NumericInput readOnly value={data.accuracy.value} />
+              <GenericRelatedItemView
+                React={props.React}
+                itemRef={{ classID: 'unit-of-measurement', itemID: data.accuracy.unitOfMeasurement }}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            </ControlGroup>
+          </PropertyDetailView>
+
+          <UL css={css`padding-left: 0; list-style: square;`}>
+            {params.map((param, idx) =>
+              <li key={idx}>
+                <PropertyDetailView title={`Parameter ${idx + 1} — ${param.type}`}>
+                  <GenericRelatedItemView
+                    React={props.React}
+                    itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
+                    getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                    useRegisterItemData={props.useRegisterItemData}
+                  />
+                </PropertyDetailView>
+
+                {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
+
+                <PropertyDetailView title="Value">
+                  <ControlGroup>
+                    <InputGroup disabled fill value={param.value?.toString() || '—'} />
+                    {param.unitOfMeasurement
+                      ? <GenericRelatedItemView
+                          React={props.React}
+                          itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement }}
+                          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                          useRegisterItemData={props.useRegisterItemData}
+                        />
+                      : null}
+                  </ControlGroup>
+                </PropertyDetailView>
+              </li>
+            )}
+          </UL>
 
         </CommonDetailView>
       );
