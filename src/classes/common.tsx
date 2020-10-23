@@ -5,6 +5,7 @@ import React from 'react';
 import { jsx, css } from '@emotion/core';
 
 import {
+  Classes,
   Colors, ControlGroup, FormGroup, H6, InputGroup,
   NumericInput, Tag, TextArea, UL,
 } from '@blueprintjs/core';
@@ -186,16 +187,25 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
   return (
     <div css={css`
         position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
+
         display: flex; flex-flow: row nowrap; overflow: hidden;
+
+        @media (max-width: 1000px) {
+          flex-flow: column nowrap;
+        }
+
         & > * { padding: 1rem; }`}>
 
       <div css={css`overflow-y: auto; flex: 1;`}>
         {props.children}
       </div>
 
-      <aside css={css`
-          overflow-y: auto;
-          flex-basis: 45%; background: ${Colors.LIGHT_GRAY4};`}>
+      <aside
+          css={css`
+            overflow-y: auto;
+            flex-basis: 45%; background: ${Colors.LIGHT_GRAY4};
+          `}
+          className={Classes.ELEVATION_1}>
         {data.description
           ? <PropertyDetailView title="Description">
               <p>{data.description}</p>
