@@ -1007,15 +1007,15 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@riboseinc/paneron-extension-kit@^1.0.0-alpha4":
-  version "1.0.0-alpha4"
-  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-extension-kit/-/paneron-extension-kit-1.0.0-alpha4.tgz#c8abfabefc7bf49286ba5b2b12618ee3b7e52684"
-  integrity sha512-ijesbZwOYg8anSOi7S41PiiiYCJZQRszqKxc48nioMtGcdpR01NpIc8nw1+QZQ3YAlh8Ac367dqutF5VX7S8jA==
+"@riboseinc/paneron-extension-kit@^1.0.0-alpha9":
+  version "1.0.0-alpha9"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-extension-kit/-/paneron-extension-kit-1.0.0-alpha9.tgz#8787c5233e21f5e2bd08ff22f399b9fb3e9148ec"
+  integrity sha512-rj5f7Z/tgzH6AYkI+1bcuYHTDxylgt0c5tone6t6AtMgV+w06r8Hn8eeIb+AmBuXijBuDHYvN2Os2DMAUfR9mg==
 
-"@riboseinc/paneron-registry-kit@^1.0.0-alpha10":
-  version "1.0.0-alpha10"
-  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-alpha10.tgz#1b28661e90e44b3b4cba835db50c6378819af1ea"
-  integrity sha512-cAqDIkineyvfk7XPayBTabAZIqCDNUtNAt9L6gBjQtbyVMpIY4q4AKFW3roTiYv17Yy4AyCZG8qkGMhU4f6qRw==
+"@riboseinc/paneron-registry-kit@^1.0.0-alpha11":
+  version "1.0.0-alpha11"
+  resolved "https://registry.yarnpkg.com/@riboseinc/paneron-registry-kit/-/paneron-registry-kit-1.0.0-alpha11.tgz#37cdd8a419aa628001daa60679a39b1b25e129f7"
+  integrity sha512-qdmSqDtisZ9sqocigSbjYLl8K3zN89vv7tgEa6cyfCN/QhftHi4MbOBVY3eNArqjDzZz/5d4Ut1jgTS2NZAe3A==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
