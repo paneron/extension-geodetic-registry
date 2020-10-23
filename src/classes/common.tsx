@@ -117,8 +117,10 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemD
 
 export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["listItemView"] =
 (props) => (
-  <span className={props.className} css={css`overflow: hidden; text-overflow: ellipsis`}>
-    <Tag minimal>{props.itemData.identifier}</Tag>
+  <span className={props.className}>
+    <span css={css`color: ${Colors.GRAY4}; font-family: monospace; font-size: 90%`}>
+      {props.itemData.identifier}
+    </span>
     &emsp;
     {props.itemData.name}
   </span>
