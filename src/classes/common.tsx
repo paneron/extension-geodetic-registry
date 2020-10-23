@@ -89,9 +89,14 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemD
   return <React.Fragment>
 
     <FormGroup label="GR identifier:">
-      <NumericInput required value={itemData.identifier} disabled={!onChange} onValueChange={onChange
-        ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
-        : undefined} />
+      <NumericInput
+        required
+        value={itemData.identifier}
+        disabled={!onChange}
+        onValueChange={onChange
+          ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
+          : undefined}
+       />
     </FormGroup>
 
     <FormGroup label="Name:">
