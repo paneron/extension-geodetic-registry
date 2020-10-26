@@ -3,7 +3,7 @@
 import { css, jsx } from '@emotion/core';
 import update from 'immutability-helper';
 
-import { ControlGroup, FormGroup, InputGroup, NumericInput, UL } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, H3, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
@@ -113,10 +113,14 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             </ControlGroup>
           </PropertyDetailView>
 
+          {params.length > 0
+            ? <H3 css={css`margin-top: 1.5em;`}>Parameters</H3>
+            : null}
+
           <UL css={css`padding-left: 0; list-style: square;`}>
             {params.map((param, idx) =>
-              <li key={idx}>
-                <PropertyDetailView title={`Parameter ${idx + 1} — ${param.type}`}>
+              <li key={idx} css={css`margin-top: 1em;`}>
+                <PropertyDetailView title={`Parameter ${idx + 1}`}>
                   <GenericRelatedItemView
                     React={props.React}
                     itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
