@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import { ControlGroup, FormGroup, H3, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
-import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
   CommonGRItemData,
   COMMON_PROPERTIES,
@@ -15,6 +15,7 @@ import {
   DetailView as CommonDetailView,
   Extent,
   ExtentDetail,
+  InformationSourceDetails,
 } from './common';
 import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
@@ -25,7 +26,7 @@ interface TransformationParameter {
   name: string // Dependent on type? filename?
   type: string
   value: string | number | null
-  fileCitation: null
+  fileCitation: null | Citation
 }
 
 
@@ -144,6 +145,15 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                       : null}
                   </ControlGroup>
                 </PropertyDetailView>
+
+                {param.fileCitation !== null
+                  ? <PropertyDetailView title="Source">
+                      <InformationSourceDetails
+                        React={props.React}
+                        css={css`h6 { font-weight: normal; }`}
+                        source={param.fileCitation} />
+                    </PropertyDetailView>
+                  : null}
               </li>
             )}
           </UL>
