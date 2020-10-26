@@ -132,7 +132,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
                 {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
 
-                <PropertyDetailView title="Value">
+                <PropertyDetailView title="Value" secondaryTitle={param.type}>
                   <ControlGroup>
                     <InputGroup disabled fill value={param.value?.toString() || '—'} />
                     {param.unitOfMeasurement
