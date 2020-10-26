@@ -129,7 +129,11 @@ export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["li
 
 
 
-const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ React, source }) {
+export const InformationSourceDetails: PluginFC<{
+  source: Citation
+  className?: string
+}> = function ({ React, source, className }) {
+
   const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
     return <React.Fragment>
       <dt>{t}</dt>
@@ -138,7 +142,7 @@ const InformationSourceDetails: PluginFC<{ source: Citation }> = function ({ Rea
   }
 
   return (
-    <article>
+    <article className={className}>
 
       <H6 style={{ margin: '.5em 0 0 0' }}>{source.title}</H6>
 
