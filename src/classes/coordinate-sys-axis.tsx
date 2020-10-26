@@ -16,8 +16,8 @@ import {
 
 interface CoordinateSystemAxisData extends CommonGRItemData {
   abbreviation: string
-  direction: string
-  unit: string
+  orientation: string
+  unitOfMeasurement: string
 }
 
 
@@ -46,14 +46,14 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
             {data.abbreviation || '—'}
           </PropertyDetailView>
 
-          <PropertyDetailView title="Direction">
-            {data.direction || '—'}
+          <PropertyDetailView title="Orientation">
+            {data.orientation || '—'}
           </PropertyDetailView>
 
           <PropertyDetailView title="Unit of measurement">
             <GenericRelatedItemView
               React={props.React}
-              itemRef={{ classID: 'unit-of-measurement', itemID: data.unit }}
+              itemRef={{ classID: 'unit-of-measurement', itemID: data.unitOfMeasurement }}
               getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
               useRegisterItemData={props.useRegisterItemData}
             />
