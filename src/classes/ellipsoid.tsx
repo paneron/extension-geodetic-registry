@@ -1,4 +1,7 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
+
+import React from 'react';
 
 import { jsx } from '@emotion/core';
 
@@ -56,7 +59,6 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
             <ControlGroup fill>
               <InputGroup readOnly value={data.inverseFlattening?.toString() || '(no value)'} />
               <GenericRelatedItemView
-                React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.inverseFlatteningUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
@@ -68,7 +70,6 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
             <ControlGroup fill>
               <InputGroup readOnly value={data.semiMajorAxis?.toString() || '(no value)'} />
               <GenericRelatedItemView
-                React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMajorAxisUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
@@ -80,7 +81,6 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
             <ControlGroup fill>
               <InputGroup readOnly value={data.semiMinorAxis?.toString() || '(no value)'} />
               <GenericRelatedItemView
-                React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMinorAxisUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
@@ -92,16 +92,15 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
       );
     },
 
-    editView: (props) => <props.React.Fragment>
+    editView: (props) => <>
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
         } : undefined} />
-    </props.React.Fragment>,
+    </>,
   },
 
   validatePayload: async () => true,

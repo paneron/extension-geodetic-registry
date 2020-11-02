@@ -74,7 +74,7 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
 };
 
 
-export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemData, onChange }) {
+export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, onChange }) {
   function textInputProps
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
   (fieldName: F) {
@@ -87,7 +87,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemD
     }
   }
 
-  return <React.Fragment>
+  return <>
 
     <FormGroup label="GR identifier:">
       <NumericInput
@@ -112,7 +112,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ React, itemD
       <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
     </FormGroup>
 
-  </React.Fragment>;
+  </>;
 };
 
 
@@ -132,13 +132,13 @@ export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["li
 export const InformationSourceDetails: PluginFC<{
   source: Citation
   className?: string
-}> = function ({ React, source, className }) {
+}> = function ({ source, className }) {
 
   const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
-    return <React.Fragment>
+    return <>
       <dt>{t}</dt>
       <dd>{d}</dd>
-    </React.Fragment>
+    </>
   }
 
   return (
@@ -163,8 +163,7 @@ export const InformationSourceDetails: PluginFC<{
           dt {
             flex-basis: 30%;
           }
-          dd {
-            font-style: italic;
+          dd style: italic;
             flex-basis: 70%;
             padding-right: 1em;
           }
@@ -227,7 +226,7 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
               <UL css={css`padding-left: 0; list-style: square;`}>
                 {data.informationSources.map((s, idx) =>
                   <li key={idx}>
-                    <InformationSourceDetails React={props.React} source={s} />
+                    <InformationSourceDetails source={s} />
                   </li>)}
               </UL>
             </PropertyDetailView>

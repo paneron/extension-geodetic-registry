@@ -1,4 +1,7 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
+
+import React from 'react';
 
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import { jsx } from '@emotion/core';
@@ -44,7 +47,6 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
             <ControlGroup fill>
               <InputGroup readOnly value={data.longitudeFromGreenwich.toString()} />
               <GenericRelatedItemView
-                React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.longitudeFromGreenwichUoM }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
@@ -55,16 +57,15 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
       );
     },
 
-    editView: (props) => <props.React.Fragment>
+    editView: (props) => <>
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
         } : undefined} />
-    </props.React.Fragment>,
+    </>,
   },
 
   validatePayload: async () => true,

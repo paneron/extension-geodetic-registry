@@ -35,7 +35,6 @@ const CRSDetailView: ItemDetailView<CRSData> = function (props) {
       <H5>Coordinate system</H5>
       {data.coordinateSystem
         ? <GenericRelatedItemView
-            React={props.React}
             itemRef={data.coordinateSystem}
             getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
             useRegisterItemData={props.useRegisterItemData}
@@ -86,7 +85,6 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
           {data.datum
             ? <PropertyDetailView title="Datum">
                 <GenericRelatedItemView
-                  React={props.React}
                   itemRef={{ classID: 'datums--geodetic', itemID: data.datum }}
                   getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                   useRegisterItemData={props.useRegisterItemData}
@@ -100,7 +98,6 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
     editView: (props) => (
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
@@ -135,7 +132,6 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
           {data.datum
             ? <PropertyDetailView title="Datum">
                 <GenericRelatedItemView
-                  React={props.React}
                   itemRef={{ classID: 'datums--vertical', itemID: data.datum }}
                   getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                   useRegisterItemData={props.useRegisterItemData}
@@ -149,7 +145,6 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
     editView: (props) => (
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }

@@ -79,7 +79,6 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
     editView: (props) => (
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }

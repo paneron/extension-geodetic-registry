@@ -1,5 +1,7 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
 
+import React from 'react';
 import { css, jsx } from '@emotion/core';
 import update from 'immutability-helper';
 
@@ -73,7 +75,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           {data.sourceCRS
             ? <PropertyDetailView title="Source CRS">
                 <GenericRelatedItemView
-                  React={props.React}
                   itemRef={data.sourceCRS}
                   getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                   useRegisterItemData={props.useRegisterItemData}
@@ -84,7 +85,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           {data.targetCRS
             ? <PropertyDetailView title="Target CRS">
                 <GenericRelatedItemView
-                  React={props.React}
                   itemRef={data.targetCRS}
                   getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                   useRegisterItemData={props.useRegisterItemData}
@@ -106,7 +106,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             <ControlGroup>
               <NumericInput readOnly value={data.accuracy.value} />
               <GenericRelatedItemView
-                React={props.React}
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.accuracy.unitOfMeasurement }}
                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                 useRegisterItemData={props.useRegisterItemData}
@@ -123,7 +122,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               <li key={idx} css={css`margin-top: 1em;`}>
                 <PropertyDetailView title={`Parameter ${idx + 1}`}>
                   <GenericRelatedItemView
-                    React={props.React}
                     itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
                     getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                     useRegisterItemData={props.useRegisterItemData}
@@ -137,7 +135,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                     <InputGroup disabled fill value={param.value?.toString() || '—'} />
                     {param.unitOfMeasurement
                       ? <GenericRelatedItemView
-                          React={props.React}
                           itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement }}
                           getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                           useRegisterItemData={props.useRegisterItemData}
@@ -149,7 +146,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 {param.fileCitation !== null
                   ? <PropertyDetailView title="Source">
                       <InformationSourceDetails
-                        React={props.React}
                         css={css`h6 { font-weight: normal; }`}
                         source={param.fileCitation} />
                     </PropertyDetailView>
@@ -162,11 +158,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       );
     },
 
-    editView: (props) => <props.React.Fragment>
+    editView: (props) => <>
 
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
@@ -262,7 +257,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           />
         </ControlGroup>
       </FormGroup>
-    </props.React.Fragment>,
+    </>,
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,

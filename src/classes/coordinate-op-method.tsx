@@ -55,7 +55,6 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
             ? <PropertyDetailView title="Parameters">
                 {data.parameters.map(paramID =>
                   <GenericRelatedItemView
-                    React={props.React}
                     css={css`margin-bottom: 1em;`}
                     getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                     itemRef={{ classID: 'coordinate-op-parameter', itemID: paramID }}
@@ -71,7 +70,6 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
     editView: (props) => (
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }

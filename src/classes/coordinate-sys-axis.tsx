@@ -1,4 +1,7 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
+
+import React from 'react';
 
 import { jsx } from '@emotion/core';
 
@@ -52,7 +55,6 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
 
           <PropertyDetailView title="Unit of measurement">
             <GenericRelatedItemView
-              React={props.React}
               itemRef={{ classID: 'unit-of-measurement', itemID: data.unitOfMeasurement }}
               getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
               useRegisterItemData={props.useRegisterItemData}
@@ -63,16 +65,15 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
       );
     },
 
-    editView: (props) => <props.React.Fragment>
+    editView: (props) => <>
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
         } : undefined} />
-    </props.React.Fragment>,
+    </>,
   },
 
   validatePayload: async () => true,

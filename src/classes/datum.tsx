@@ -103,7 +103,6 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
           {data.ellipsoid
             ? <PropertyDetailView title="Ellipsoid">
                 <GenericRelatedItemView
-                  React={props.React}
                   itemRef={{ classID: 'ellipsoid', itemID: data.ellipsoid }}
                   getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                   useRegisterItemData={props.useRegisterItemData}
@@ -114,7 +113,6 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
           {data.primeMeridian
             ? <PropertyDetailView title="Prime meridian">
                 <GenericRelatedItemView
-                  React={props.React}
                   itemRef={{ classID: 'prime-meridian', itemID: data.primeMeridian }}
                   getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
                   useRegisterItemData={props.useRegisterItemData}
@@ -128,7 +126,6 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
     editView: (props) => (
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
@@ -158,7 +155,6 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
     editView: (props) => (
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        React={props.React}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
