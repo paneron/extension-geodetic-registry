@@ -96,10 +96,12 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
       <CommonEditView
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
+        onChange={props.onChange
+          ? (newData: CommonGRItemData) => {
+            if (!props.onChange) { return; }
+            props.onChange({ ...props.itemData, ...newData });
+          }
+          : undefined} />
     </>,
   },
 
