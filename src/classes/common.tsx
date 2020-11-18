@@ -14,7 +14,6 @@ import {
   ItemDetailView, ItemEditView
 } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import { PluginFC } from '@riboseinc/paneron-extension-kit/types';
 
 
 export interface CommonGRItemData {
@@ -129,7 +128,7 @@ export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["li
 
 
 
-export const InformationSourceDetails: PluginFC<{
+export const InformationSourceDetails: React.FC<{
   source: Citation
   className?: string
 }> = function ({ source, className }) {

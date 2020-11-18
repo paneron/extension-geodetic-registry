@@ -2,7 +2,6 @@
 
 import { jsx} from '@emotion/core';
 
-import { RepositoryViewProps } from '@riboseinc/paneron-extension-kit/types';
 import { RegistryView } from '@riboseinc/paneron-registry-kit/views';
 
 import { transformation } from './classes/transformation';
@@ -40,10 +39,12 @@ const itemConfig = {
 };
 
 
-export const RepositoryView: React.FC<RepositoryViewProps> =
+const RepositoryView: React.FC<Record<never, never>> =
 function (props) {
   return <RegistryView
     {...props}
     itemClassConfiguration={itemConfig}
   />
 };
+
+export default RepositoryView;
