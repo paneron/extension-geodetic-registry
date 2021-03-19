@@ -14,11 +14,11 @@ import { coordinateSystemAxis } from './classes/coordinate-sys-axis';
 import { coordinateOpMethod } from './classes/coordinate-op-method';
 import { coordinateOpParameter } from './classes/coordinate-op-parameter';
 
-//import {
-//  cartesianCoordinateSystem,
-//  verticalCoordinateSystem,
-//  ellipsoidalCoordinateSystem,
-//} from './classes/coordinate-system';
+import {
+  cartesianCoordinateSystem,
+  verticalCoordinateSystem,
+  ellipsoidalCoordinateSystem,
+} from './classes/coordinate-systems';
 
 
 const itemConfig = {
@@ -33,9 +33,9 @@ const itemConfig = {
   "coordinate-sys-axis": coordinateSystemAxis,
   "coordinate-op-method": coordinateOpMethod,
   "coordinate-op-parameter": coordinateOpParameter,
-  //"coordinate-sys--cartesian": cartesianCoordinateSystem,
-  //"coordinate-sys--vertical": verticalCoordinateSystem,
-  //"coordinate-sys--ellipsoidal": ellipsoidalCoordinateSystem,
+  "coordinate-sys--cartesian": cartesianCoordinateSystem,
+  "coordinate-sys--vertical": verticalCoordinateSystem,
+  "coordinate-sys--ellipsoidal": ellipsoidalCoordinateSystem,
 };
 
 
