@@ -1,20 +1,48 @@
 /** @jsx jsx */
-/** @jsxFrag React.Fragment */
 
-import React from 'react';
-import { jsx } from '@emotion/core';
-import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { H3, UL } from '@blueprintjs/core';
+import { jsx, css } from '@emotion/core';
+import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import {
   DEFAULTS as COMMON_DEFAULTS,
   COMMON_PROPERTIES,
   ListItemView as CommonListItemView,
   EditView as CommonEditView,
+  DetailView as CommonDetailView,
   CommonGRItemData,
 } from './common';
 
 
 interface CoordinateSystemData extends CommonGRItemData {
+  coordinateSystemAxes: string[]
 }
+
+
+const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = (props) => {
+  const data = props.itemData;
+  const axes = data.coordinateSystemAxes ?? [];
+
+  return (
+    <CommonDetailView {...props}>
+      <H3>Axes</H3>
+
+      <UL css={css`padding-left: 0; list-style: square;`}>
+        {axes.map((axis, idx) =>
+          <li key={idx} css={css`margin-top: 1em;`}>
+            <PropertyDetailView title={`Axis ${idx + 1}`}>
+              <GenericRelatedItemView
+                itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            </PropertyDetailView>
+          </li>
+        )}
+      </UL>
+    </CommonDetailView>
+  );
+};
 
 
 export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemData> = {
@@ -30,8 +58,10 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
+    detailView: CoordinateSystemDetailView,
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
@@ -39,7 +69,6 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
           props.onChange({ ...props.itemData, ...newData });
         } : undefined} />
     ),
-    detailView: () => <>TBD</>,
   },
 
   validatePayload: async () => true,
@@ -60,8 +89,10 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
+    detailView: CoordinateSystemDetailView,
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
@@ -69,7 +100,6 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
           props.onChange({ ...props.itemData, ...newData });
         } : undefined} />
     ),
-    detailView: () => <>TBD</>,
   },
 
   validatePayload: async () => true,
@@ -90,8 +120,10 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
+    detailView: CoordinateSystemDetailView,
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
@@ -99,7 +131,6 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
           props.onChange({ ...props.itemData, ...newData });
         } : undefined} />
     ),
-    detailView: () => <>TBD</>,
   },
 
   validatePayload: async () => true,
