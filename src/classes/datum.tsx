@@ -13,7 +13,7 @@ import {
   COMMON_PROPERTIES,
   Extent,
   DEFAULT_EXTENT,
-  ExtentDetail,
+  ExtentEdit,
   AliasesDetail,
 } from './common';
 
@@ -57,7 +57,7 @@ const DatumDetailView: ItemDetailView<DatumData> = function (props) {
       </PropertyDetailView>
 
       <PropertyDetailView title="Extent">
-        {data.extent ? <ExtentDetail extent={data.extent} /> : '—'}
+        {data.extent ? <ExtentEdit extent={data.extent} /> : '—'}
       </PropertyDetailView>
 
       <PropertyDetailView title="Origin description">

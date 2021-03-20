@@ -16,8 +16,9 @@ import {
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
   Extent,
-  ExtentDetail,
+  ExtentEdit,
   InformationSourceDetails,
+  DEFAULT_EXTENT,
 } from './common';
 import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
@@ -94,7 +95,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
           <PropertyDetailView title="Extent">
             {extent
-              ? <ExtentDetail extent={extent} />
+              ? <ExtentEdit extent={extent} />
               : '—'}
           </PropertyDetailView>
 
@@ -207,56 +208,12 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       </FormGroup>
 
       <FormGroup label="Extent:">
-        <ControlGroup>
-          <InputGroup
-            placeholder="E.g., World"
-            value={props.itemData.extent?.name || ''}
-            disabled={!props.onChange}
-            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { extent: { name: { $set: evt.currentTarget.value } } }))
-                : void 0;
-            }}
-          />
-          <NumericInput
-            placeholder="N"
-            value={props.itemData.extent?.n || 0}
-            disabled={!props.onChange}
-            onValueChange={(val) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { extent: { n: { $set: val } } }))
-                : void 0;
-            }}
-          />
-          <NumericInput
-            placeholder="E"
-            value={props.itemData.extent?.e || 0}
-            onValueChange={(val) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { extent: { e: { $set: val } } }))
-                : void 0;
-            }}
-          />
-          <NumericInput
-            placeholder="S"
-            value={props.itemData.extent?.s || 0}
-            disabled={!props.onChange}
-            onValueChange={(val) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { extent: { s: { $set: val } } }))
-                : void 0;
-            }}
-          />
-          <NumericInput
-            placeholder="W"
-            value={props.itemData.extent?.w || 0}
-            onValueChange={(val) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { extent: { w: { $set: val } } }))
-                : void 0;
-            }}
-          />
-        </ControlGroup>
+        <ExtentEdit
+          extent={props.itemData.extent ?? DEFAULT_EXTENT}
+          onChange={props.onChange
+            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+            : undefined}
+        />
       </FormGroup>
     </>,
   },

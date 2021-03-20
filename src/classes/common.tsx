@@ -42,7 +42,8 @@ export interface Extent {
   name: string
 }
 export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
-export const ExtentDetail: React.FC<{ extent: Extent }> = function ({ extent }) {
+export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
+function ({ extent, onChange }) {
   return (
     <>
       <ControlGroup fill>
@@ -51,9 +52,11 @@ export const ExtentDetail: React.FC<{ extent: Extent }> = function ({ extent }) 
         <InputGroup readOnly leftIcon={<Tag minimal>S Lat</Tag>} value={extent.s.toLocaleString()} />
         <InputGroup readOnly leftIcon={<Tag minimal>W Lon</Tag>} value={extent.w.toLocaleString()} />
       </ControlGroup>
-      <p css={css`margin-top: .5em; font-size: 90%;`}>
-        {extent.name}
-      </p>
+      <TextArea
+        disabled
+        value={extent.name ?? ''}
+        css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
+      />
     </>
   );
 };
