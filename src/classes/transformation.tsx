@@ -67,7 +67,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     detailView: (props) => {
       const data = props.itemData;
       const extent = data.extent;
-      const params = data.parameters || [];
+      const params = data.parameters ?? [];
 
       return (
         <CommonDetailView {...props}>
