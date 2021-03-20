@@ -125,6 +125,7 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
     },
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
@@ -154,6 +155,7 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
     detailView: DatumDetailView as ItemDetailView<DatumData>,
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {

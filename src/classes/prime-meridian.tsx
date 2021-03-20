@@ -59,6 +59,7 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
 
     editView: (props) => <>
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {

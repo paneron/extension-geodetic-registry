@@ -94,6 +94,7 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
 
     editView: (props) => <>
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange

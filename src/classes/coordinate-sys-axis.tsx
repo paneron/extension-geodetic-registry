@@ -67,6 +67,7 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
 
     editView: (props) => <>
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {

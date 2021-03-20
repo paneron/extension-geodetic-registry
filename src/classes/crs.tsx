@@ -97,6 +97,7 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
     },
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
@@ -144,6 +145,7 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
     },
     editView: (props) => (
       <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
