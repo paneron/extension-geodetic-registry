@@ -27,8 +27,8 @@ interface CoordinateSystemAxisData extends CommonGRItemData {
 export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisData> = {
   ...COMMON_PROPERTIES,
   meta: {
-    title: "Coordinate system axis",
-    description: "Coordinate system axis",
+    title: "Coordinate System Axis",
+    description: "Coordinate System Axis",
     id: 'coordinate-sys-axis',
     alternativeNames: [],
   },

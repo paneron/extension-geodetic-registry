@@ -27,8 +27,8 @@ interface PrimeMeridianData extends CommonGRItemData {
 export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
   ...COMMON_PROPERTIES,
   meta: {
-    title: "Prime meridian",
-    description: "Prime meridian",
+    title: "Prime Meridian",
+    description: "Prime Meridian",
     id: 'prime-meridian',
     alternativeNames: [],
   },
