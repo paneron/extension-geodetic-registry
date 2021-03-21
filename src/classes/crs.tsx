@@ -139,7 +139,7 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
         <EditView {...props}>
           <PropertyDetailView title="Datum (geodetic)">
             <GenericRelatedItemView
-              itemRef={props.itemData.coordinateSystem}
+              itemRef={{ itemID: props.itemData.datum, classID: 'datums--geodetic' }}
               availableClassIDs={['datums--geodetic']}
               onClear={props.onChange
                 ? () => props.onChange!(update(props.itemData, { $unset: ['datum'] }))
@@ -201,7 +201,7 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
         <EditView {...props}>
           <PropertyDetailView title="Datum (vertical)">
             <GenericRelatedItemView
-              itemRef={props.itemData.coordinateSystem}
+              itemRef={{ itemID: props.itemData.datum, classID: 'datums--vertical' }}
               availableClassIDs={['datums--vertical']}
               onClear={props.onChange
                 ? () => props.onChange!(update(props.itemData, { $unset: ['datum'] }))
