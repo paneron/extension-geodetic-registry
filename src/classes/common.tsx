@@ -294,6 +294,14 @@ export const InformationSourceDetails: React.FC<{
     </>
   }
 
+  let editionDate: string;
+  try {
+    editionDate = source.editionDate?.toLocaleDateString() ?? '';
+  } catch (e) {
+    editionDate = '';
+  }
+
+
   return (
     <article className={className}>
 
@@ -322,7 +330,7 @@ export const InformationSourceDetails: React.FC<{
           }
         `}>
         {source.edition ? <DLEntry t="Edition" d={source.edition} /> : null}
-        {source.editionDate ? <DLEntry t="Edition" d={source.editionDate?.toLocaleDateString()} /> : null}
+        {source.editionDate ? <DLEntry t="Edition date" d={editionDate} /> : null}
 
         {source.seriesName ? <DLEntry t="Series name" d={source.seriesName} /> : null}
         {source.seriesIssueID ? <DLEntry t="Issue" d={source.seriesIssueID} /> : null}
