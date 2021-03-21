@@ -162,59 +162,61 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     editView: (props) => <>
 
       <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
+          useRegisterItemData={props.useRegisterItemData}
+          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          itemData={props.itemData}
+          onChange={props.onChange ? (newData: CommonGRItemData) => {
+            if (!props.onChange) { return; }
+            props.onChange({ ...props.itemData, ...newData });
+          } : undefined}>
 
-      <FormGroup label="Operation version:">
-        <InputGroup
-          placeholder="E.g., GA v2"
-          value={props.itemData.operationVersion || ''}
-          disabled={!props.onChange}
-          onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-            props.onChange
-              ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-              : void 0;
-          }}
-        />
-      </FormGroup>
+        <FormGroup label="Operation version:">
+          <InputGroup
+            placeholder="E.g., GA v2"
+            value={props.itemData.operationVersion || ''}
+            disabled={!props.onChange}
+            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+                : void 0;
+            }}
+          />
+        </FormGroup>
 
-      <FormGroup label="Source CRS:">
-        <InputGroup
-          value={props.itemData.operationVersion || ''}
-          disabled={!props.onChange}
-          onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-            props.onChange
-              ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-              : void 0;
-          }}
-        />
-      </FormGroup>
+        <FormGroup label="Source CRS:">
+          <InputGroup
+            value={props.itemData.operationVersion || ''}
+            disabled={!props.onChange}
+            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+                : void 0;
+            }}
+          />
+        </FormGroup>
 
-      <FormGroup label="Target CRS:">
-        <InputGroup
-          value={props.itemData.operationVersion || ''}
-          disabled={!props.onChange}
-          onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-            props.onChange
-              ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-              : void 0;
-          }}
-        />
-      </FormGroup>
+        <FormGroup label="Target CRS:">
+          <InputGroup
+            value={props.itemData.operationVersion || ''}
+            disabled={!props.onChange}
+            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+                : void 0;
+            }}
+          />
+        </FormGroup>
 
-      <FormGroup label="Extent:">
-        <ExtentEdit
-          extent={props.itemData.extent ?? DEFAULT_EXTENT}
-          onChange={props.onChange
-            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
-            : undefined}
-        />
-      </FormGroup>
+        <FormGroup label="Extent:">
+          <ExtentEdit
+            extent={props.itemData.extent ?? DEFAULT_EXTENT}
+            onChange={props.onChange
+              ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+              : undefined}
+          />
+        </FormGroup>
+
+      </CommonEditView>
     </>,
   },
   validatePayload: async () => true,

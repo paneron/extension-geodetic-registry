@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
-import React, { useState } from 'react';
+import React, { ReactChildren, ReactNode, useState } from 'react';
 import { jsx, css } from '@emotion/core';
 
 import {
@@ -135,7 +135,7 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
 };
 
 
-export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, onChange }) {
+export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, onChange, children }) {
   function textInputProps
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
   (fieldName: F) {
@@ -148,32 +148,39 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, on
     }
   }
 
-  return <>
+  return (
+    <SplitView
+        aside={<>
 
-    <FormGroup label="GR identifier:">
-      <NumericInput
-        required
-        value={itemData.identifier}
-        disabled={!onChange}
-        onValueChange={onChange
-          ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
-          : undefined}
-       />
-    </FormGroup>
+          <FormGroup label="Description:">
+            <TextArea fill required value={itemData.description ?? ''} {...textInputProps('description')} />
+          </FormGroup>
 
-    <FormGroup label="Name:">
-      <InputGroup required value={itemData.name} {...textInputProps('name')} />
-    </FormGroup>
+          <FormGroup label="Remarks:">
+            <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
+          </FormGroup>
 
-    <FormGroup label="Description:">
-      <TextArea fill required value={itemData.description ?? ''} {...textInputProps('description')} />
-    </FormGroup>
+        </>}>
 
-    <FormGroup label="Remarks:">
-      <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
-    </FormGroup>
+      <FormGroup label="GR identifier:">
+        <NumericInput
+          required
+          value={itemData.identifier}
+          disabled={!onChange}
+          onValueChange={onChange
+            ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
+            : undefined}
+        />
+      </FormGroup>
 
-  </>;
+      <FormGroup label="Name:">
+        <InputGroup required value={itemData.name} {...textInputProps('name')} />
+      </FormGroup>
+
+      {children}
+
+    </SplitView>
+  );
 };
 
 
@@ -249,6 +256,41 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
   const data = props.itemData;
 
   return (
+    <SplitView
+        aside={<>
+          {data.description
+            ? <PropertyDetailView title="Description">
+                <p>{data.description}</p>
+              </PropertyDetailView>
+            : null}
+
+          {data.remarks
+            ? <PropertyDetailView title="Remarks">
+                <p>{data.remarks}</p>
+              </PropertyDetailView>
+            : null}
+
+          {(data.informationSources || []).length > 0
+            ? <PropertyDetailView title="Information sources">
+                <UL css={css`padding-left: 0; list-style: square;`}>
+                  {data.informationSources.map((s, idx) =>
+                    <li key={idx}>
+                      <InformationSourceDetails source={s} />
+                    </li>)}
+                </UL>
+              </PropertyDetailView>
+            : null}
+        </>}>
+      {props.children}
+    </SplitView>
+  )
+};
+
+
+const SplitView: React.FC<{
+  aside?: ReactChildren | ReactNode
+}> = function ({ children, aside }) {
+  return (
     <div css={css`
         position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
 
@@ -261,7 +303,7 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
         & > * { padding: 1rem; }`}>
 
       <div css={css`overflow-y: auto; flex: 1;`}>
-        {props.children}
+        {children}
       </div>
 
       <aside
@@ -270,30 +312,8 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
             flex-basis: 45%; background: ${Colors.LIGHT_GRAY4};
           `}
           className={Classes.ELEVATION_1}>
-        {data.description
-          ? <PropertyDetailView title="Description">
-              <p>{data.description}</p>
-            </PropertyDetailView>
-          : null}
-
-        {data.remarks
-          ? <PropertyDetailView title="Remarks">
-              <p>{data.remarks}</p>
-            </PropertyDetailView>
-          : null}
-
-        {(data.informationSources || []).length > 0
-          ? <PropertyDetailView title="Information sources">
-              <UL css={css`padding-left: 0; list-style: square;`}>
-                {data.informationSources.map((s, idx) =>
-                  <li key={idx}>
-                    <InformationSourceDetails source={s} />
-                  </li>)}
-              </UL>
-            </PropertyDetailView>
-          : null}
+        {aside}
       </aside>
-
     </div>
   );
-};
+}
