@@ -1,8 +1,9 @@
 /** @jsx jsx */
 
-import { H5 } from '@blueprintjs/core';
+import update from 'immutability-helper';
 import { jsx } from '@emotion/core';
-import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { H5 } from '@blueprintjs/core';
+import { ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
@@ -43,6 +44,42 @@ const CRSDetailView: ItemDetailView<CRSData> = function (props) {
         : '—'}
 
     </CommonDetailView>
+  );
+};
+
+
+const CRSEditView: ItemEditView<CRSData> = function (props) {
+  return (
+    <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
+        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+        itemData={props.itemData}
+        onChange={props.onChange ? (newData: CommonGRItemData) => {
+          if (!props.onChange) { return; }
+          props.onChange({ ...props.itemData, ...newData });
+        } : undefined}>
+
+      {props.children}
+
+      <PropertyDetailView title="Coordinate system">
+        <GenericRelatedItemView
+          itemRef={props.itemData.coordinateSystem}
+          availableClassIDs={['coordinate-sys--cartesian', 'coordinate-sys--ellipsoidal', 'coordinate-sys--vertical']}
+          onClear={props.onChange
+            ? () => props.onChange!(update(props.itemData, { $unset: ['coordinateSystem'] }))
+            : undefined}
+          onChange={props.onChange
+            ? (itemRef) => {
+                props.onChange!(update(props.itemData, { coordinateSystem: { $set: itemRef } }))
+              }
+            : undefined}
+          itemSorter={COMMON_PROPERTIES.itemSorter}
+          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          useRegisterItemData={props.useRegisterItemData}
+        />
+      </PropertyDetailView>
+
+    </CommonEditView>
   );
 };
 
@@ -96,16 +133,30 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
         </CRSDetailView>
       )
     },
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: (props) => {
+      const EditView = CRSEditView as ItemEditView<GeodeticCRSData>;
+      return (
+        <EditView {...props}>
+          <PropertyDetailView title="Datum (geodetic)">
+            <GenericRelatedItemView
+              itemRef={props.itemData.coordinateSystem}
+              availableClassIDs={['datums--geodetic']}
+              onClear={props.onChange
+                ? () => props.onChange!(update(props.itemData, { $unset: ['datum'] }))
+                : undefined}
+              onChange={props.onChange
+                ? (itemRef) => {
+                    props.onChange!(update(props.itemData, { datum: { $set: itemRef.itemID } }))
+                  }
+                : undefined}
+              itemSorter={COMMON_PROPERTIES.itemSorter}
+              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+              useRegisterItemData={props.useRegisterItemData}
+            />
+          </PropertyDetailView>
+        </EditView>
+      );
+    },
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
@@ -144,16 +195,30 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
         </CRSDetailView>
       )
     },
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: (props) => {
+      const EditView = CRSEditView as ItemEditView<VerticalCRSData>;
+      return (
+        <EditView {...props}>
+          <PropertyDetailView title="Datum (vertical)">
+            <GenericRelatedItemView
+              itemRef={props.itemData.coordinateSystem}
+              availableClassIDs={['datums--vertical']}
+              onClear={props.onChange
+                ? () => props.onChange!(update(props.itemData, { $unset: ['datum'] }))
+                : undefined}
+              onChange={props.onChange
+                ? (itemRef) => {
+                    props.onChange!(update(props.itemData, { datum: { $set: itemRef.itemID } }))
+                  }
+                : undefined}
+              itemSorter={COMMON_PROPERTIES.itemSorter}
+              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+              useRegisterItemData={props.useRegisterItemData}
+            />
+          </PropertyDetailView>
+        </EditView>
+      );
+    },
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
