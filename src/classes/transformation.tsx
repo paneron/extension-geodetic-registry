@@ -301,6 +301,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   secondaryTitle={<Button
                     outlined
                     small
+                    disabled={!props.onChange}
                     onClick={() => props.onChange!(update(props.itemData, { parameters: { $splice: [[ idx, 1 ]] } }))}
                   >Delete</Button>}>
                 <GenericRelatedItemView
@@ -374,6 +375,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
         <Button
             outlined
+            disabled={!props.onChange}
             onClick={() => props.onChange!(update(props.itemData, { parameters: { $push: [getParameterStub()] } }))}
             icon="add">
           Append parameter
