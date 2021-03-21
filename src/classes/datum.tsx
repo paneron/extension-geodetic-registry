@@ -1,7 +1,8 @@
 /** @jsx jsx */
 
+import update from 'immutability-helper';
 import { jsx } from '@emotion/core';
-import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
@@ -73,6 +74,32 @@ const DatumDetailView: ItemDetailView<DatumData> = function (props) {
   );
 };
 
+const DatumEditView: ItemEditView<DatumData> = function (props) {
+  return (
+    <CommonEditView
+        useRegisterItemData={props.useRegisterItemData}
+        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+        itemData={props.itemData}
+        onChange={props.onChange ? (newData: CommonGRItemData) => {
+          if (!props.onChange) { return; }
+          props.onChange({ ...props.itemData, ...newData });
+        } : undefined}>
+
+      {props.children}
+
+      <PropertyDetailView title="Extent">
+        <ExtentEdit
+          extent={props.itemData.extent ?? DEFAULT_EXTENT}
+          onChange={props.onChange
+            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+            : undefined}
+        />
+      </PropertyDetailView>
+
+    </CommonEditView>
+  );
+};
+
 
 interface GeodeticDatumData extends DatumData {
   ellipsoid: string
@@ -124,16 +151,47 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
         </DatumDetailView>
       )
     },
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: (props) => {
+      const EditView = DatumEditView as ItemEditView<GeodeticDatumData>;
+      return (
+        <EditView {...props}>
+          <PropertyDetailView title="Ellipsoid">
+            <GenericRelatedItemView
+              itemRef={{ classID: 'ellipsoid', itemID: props.itemData.ellipsoid }}
+              availableClassIDs={['ellipsoid']}
+              onClear={props.onChange
+                ? () => props.onChange!(update(props.itemData, { $unset: ['ellipsoid'] }))
+                : undefined}
+              onChange={props.onChange
+                ? (itemRef) => {
+                    props.onChange!(update(props.itemData, { ellipsoid: { $set: itemRef.itemID } }))
+                  }
+                : undefined}
+              itemSorter={COMMON_PROPERTIES.itemSorter}
+              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+              useRegisterItemData={props.useRegisterItemData}
+            />
+          </PropertyDetailView>
+          <PropertyDetailView title="Prime meridian">
+            <GenericRelatedItemView
+              itemRef={{ classID: 'prime-meridian', itemID: props.itemData.primeMeridian }}
+              availableClassIDs={['prime-meridian']}
+              onClear={props.onChange
+                ? () => props.onChange!(update(props.itemData, { $unset: ['primeMeridian'] }))
+                : undefined}
+              onChange={props.onChange
+                ? (itemRef) => {
+                    props.onChange!(update(props.itemData, { primeMeridian: { $set: itemRef.itemID } }))
+                  }
+                : undefined}
+              itemSorter={COMMON_PROPERTIES.itemSorter}
+              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+              useRegisterItemData={props.useRegisterItemData}
+            />
+          </PropertyDetailView>
+        </EditView>
+      );
+    },
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
@@ -154,16 +212,12 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
   views: {
     listItemView: CommonListItemView as ItemListView<DatumData>,
     detailView: DatumDetailView as ItemDetailView<DatumData>,
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: (props) => {
+      const EditView = DatumEditView as ItemEditView<DatumData>;
+      return (
+        <EditView {...props} />
+      );
+    },
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
