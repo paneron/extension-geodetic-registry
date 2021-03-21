@@ -1,17 +1,20 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
+import update from 'immutability-helper';
 import React, { ReactChildren, ReactNode, useState } from 'react';
 import { jsx, css } from '@emotion/core';
 
 import {
+  Button,
   Classes,
-  Colors, ControlGroup, FormGroup, H6, InputGroup,
+  Colors, ControlGroup, FormGroup, H4, H6, InputGroup,
   NumericInput, Tag, TextArea, UL,
 } from '@blueprintjs/core';
 import {
   Citation, ItemClassConfiguration,
-  ItemDetailView, ItemEditView
+  ItemDetailView,
+  ItemEditView,
 } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
@@ -32,6 +35,21 @@ export const DEFAULTS: CommonGRItemData = {
   remarks: '',
   description: '',
 };
+
+
+function getInformationSourceStub(): Citation {
+  return {
+    title: '',
+    seriesIssueID: null,
+    seriesName: null,
+    seriesPage: null,
+    edition: null,
+    editionDate: null,
+    otherDetails: '',
+    isbn: null,
+    issn: null,
+  };
+}
 
 
 export interface Extent {
@@ -160,6 +178,42 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, on
             <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
           </FormGroup>
 
+          {itemData.informationSources.length > 0
+            ? <H4 css={css`margin-top: 1.5em;`}>
+                Information sources
+              </H4>
+            : null}
+
+          <UL css={css`padding-left: 0; list-style: square;`}>
+            {itemData.informationSources.map((infoSource, idx) =>
+              <li key={idx} css={css`margin-top: 1em;`}>
+                <FormGroup
+                    label={`Source ${idx + 1}:`}
+                    labelInfo={<Button
+                        small
+                        disabled={!onChange}
+                        onClick={() => onChange!(update(itemData, { informationSources: { $splice: [[ idx, 1 ]] } }))}>
+                      Delete
+                    </Button>}>
+                  <InformationSourceEdit
+                    citation={infoSource}
+                    onChange={onChange
+                      ? (infoSource) => onChange!(update(itemData, { informationSources: { [idx]: { $set: infoSource } } }))
+                      : undefined}
+                  />
+                </FormGroup>
+              </li>
+            )}
+          </UL>
+
+          <Button
+              outlined
+              disabled={!onChange}
+              onClick={() => onChange!(update(itemData, { informationSources: { $push: [getInformationSourceStub()] } }))}
+              icon="add">
+            Append source
+          </Button>
+
         </>}>
 
       <FormGroup label="GR identifier:">
@@ -180,6 +234,37 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, on
       {children}
 
     </SplitView>
+  );
+};
+
+
+const SimpleField: React.FC<{ val: string, label: string, onChange?: (newVal: string) => void }> =
+function ({ val, label, onChange }) {
+  return (
+    <FormGroup label={`${label}:`}>
+      <InputGroup
+        readOnly={!onChange}
+        value={val}
+        onChange={(evt: React.FormEvent<HTMLInputElement>) => onChange!(evt.currentTarget.value)}
+      />
+    </FormGroup>
+  );
+};
+
+
+const InformationSourceEdit: React.FC<{ citation: Citation, onChange?: (newCitation: Citation) => void }> =
+function ({ citation, onChange }) {
+  return (
+    <>
+      <SimpleField label="Title" val={citation.title} onChange={onChange ? (title) => onChange!({ ...citation, title }) : undefined} />
+      <SimpleField label="Series issue ID" val={citation.seriesIssueID ?? ''} onChange={onChange ? (seriesIssueID) => onChange!({ ...citation, seriesIssueID }) : undefined} />
+      <SimpleField label="Series name" val={citation.seriesName ?? ''} onChange={onChange ? (seriesName) => onChange!({ ...citation, seriesName }) : undefined} />
+      <SimpleField label="Series page" val={citation.seriesPage ?? ''} onChange={onChange ? (seriesPage) => onChange!({ ...citation, seriesPage }) : undefined} />
+      <SimpleField label="Edition" val={citation.edition ?? ''} onChange={onChange ? (edition) => onChange!({ ...citation, edition }) : undefined} />
+      <SimpleField label="Other details" val={citation.otherDetails ?? ''} onChange={onChange ? (otherDetails) => onChange!({ ...citation, otherDetails }) : undefined} />
+      <SimpleField label="ISBN" val={citation.isbn ?? ''} onChange={onChange ? (isbn) => onChange!({ ...citation, isbn }) : undefined} />
+      <SimpleField label="ISSN" val={citation.issn ?? ''} onChange={onChange ? (issn) => onChange!({ ...citation, issn }) : undefined} />
+    </>
   );
 };
 
