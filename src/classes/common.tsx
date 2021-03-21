@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { jsx, css } from '@emotion/core';
 
 import {
@@ -44,22 +44,81 @@ export interface Extent {
 export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
 export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
 function ({ extent, onChange }) {
+  function extentInput(side: 'n' | 'e' | 's' | 'w') {
+    const nm = side === 'n' || side === 's' ? 'Lat' : 'Lon';
+
+    return (
+      <CoordInput
+        key={side}
+        onChange={onChange
+          ? (val) => onChange!({ ...extent, [side]: val })
+          : undefined}
+        leftIcon={<Tag minimal>{side.toUpperCase()} {nm}</Tag>}
+        value={extent[side] ?? 0}
+      />
+    );
+  }
   return (
     <>
       <ControlGroup fill>
-        <InputGroup readOnly leftIcon={<Tag minimal>N Lat</Tag>} value={extent.n.toLocaleString()} />
-        <InputGroup readOnly leftIcon={<Tag minimal>E Lon</Tag>} value={extent.e.toLocaleString()} />
-        <InputGroup readOnly leftIcon={<Tag minimal>S Lat</Tag>} value={extent.s.toLocaleString()} />
-        <InputGroup readOnly leftIcon={<Tag minimal>W Lon</Tag>} value={extent.w.toLocaleString()} />
+        {extentInput('n')}
+        {extentInput('e')}
+        {extentInput('s')}
+        {extentInput('w')}
       </ControlGroup>
       <TextArea
-        disabled
+        disabled={!onChange}
+        onChange={(evt) => onChange!({ ...extent, name: evt.currentTarget.value })}
         value={extent.name ?? ''}
         css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
       />
     </>
   );
 };
+
+
+const CoordInput: React.FC<{
+  value: number
+  onChange?: (newVal: number) => void
+  leftIcon?: JSX.Element
+}> =
+function ({ value, leftIcon, onChange }) {
+
+  const [editedVal, editVal] = useState<string | null>(value.toLocaleString());
+  const [valid, setValid] = useState(true);
+
+  function handleChange(val: string) {
+    if (!onChange) {
+      return;
+    }
+    let normalizedVal: string = val.trim();
+    try {
+      const candidate = parseFloat(normalizedVal);
+      if (!isNaN(candidate) && candidate.toLocaleString() === normalizedVal) {
+        setValid(true);
+        onChange(candidate);
+        editVal(null);
+      } else {
+        editVal(normalizedVal);
+        setValid(false);
+      }
+    } catch (e) {
+      editVal(normalizedVal);
+      setValid(false);
+    }
+  }
+
+  return (
+    <InputGroup
+      readOnly={!onChange}
+      onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+        handleChange(evt.currentTarget.value)}
+      leftIcon={leftIcon}
+      css={css`.bp3-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`}
+      value={editedVal ?? value.toLocaleString()}
+    />
+  );
+}
 
 
 export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliases }) {
