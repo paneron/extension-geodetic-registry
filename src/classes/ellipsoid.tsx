@@ -16,7 +16,8 @@ import {
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
 } from './common';
-import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 
 interface EllipsoidData extends CommonGRItemData {

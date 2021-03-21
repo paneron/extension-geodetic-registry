@@ -3,7 +3,8 @@
 import { H3, UL } from '@blueprintjs/core';
 import { jsx, css } from '@emotion/core';
 import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
-import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
   DEFAULTS as COMMON_DEFAULTS,
   COMMON_PROPERTIES,
