@@ -19,7 +19,7 @@ interface CoordinateSystemData extends CommonGRItemData {
 }
 
 
-const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = (props) => {
+const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = function (props) {
   const data = props.itemData;
   const axes = data.coordinateSystemAxes ?? [];
 
