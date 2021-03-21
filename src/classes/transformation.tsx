@@ -5,9 +5,11 @@ import React from 'react';
 import { css, jsx } from '@emotion/core';
 import update from 'immutability-helper';
 
-import { ControlGroup, FormGroup, H3, InputGroup, NumericInput, UL } from '@blueprintjs/core';
+import { Button, ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
 import { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
   CommonGRItemData,
   COMMON_PROPERTIES,
@@ -20,16 +22,34 @@ import {
   InformationSourceDetails,
   DEFAULT_EXTENT,
 } from './common';
-import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+
+
+
+const parameterTypes = [
+  'parameter file name',
+  'measure (w/ UoM)',
+] as const;
 
 
 interface TransformationParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
   name: string // Dependent on type? filename?
-  type: string
+  type: typeof parameterTypes[number]
   value: string | number | null
   fileCitation: null | Citation
+}
+
+
+function getParameterStub(): TransformationParameter {
+  return {
+    parameter: '',
+    unitOfMeasurement: null,
+    name: '',
+    type: parameterTypes[0],
+    value: null,
+    fileCitation: null,
+  };
 }
 
 
@@ -104,7 +124,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           </PropertyDetailView>
 
           <PropertyDetailView title="Accuracy">
-            <ControlGroup>
+            <ControlGroup vertical>
               <NumericInput readOnly value={data.accuracy.value} />
               <GenericRelatedItemView
                 itemRef={{ classID: 'unit-of-measurement', itemID: data.accuracy.unitOfMeasurement }}
@@ -132,8 +152,8 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
 
                 <PropertyDetailView title="Value" secondaryTitle={param.type}>
-                  <ControlGroup>
-                    <InputGroup disabled fill value={param.value?.toString() || '—'} />
+                  <ControlGroup vertical>
+                    <InputGroup disabled fill css={css`margin-bottom: .5rem;`} value={param.value?.toString() || '—'} />
                     {param.unitOfMeasurement
                       ? <GenericRelatedItemView
                           itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement }}
@@ -170,25 +190,47 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             props.onChange({ ...props.itemData, ...newData });
           } : undefined}>
 
-        {props.itemData.sourceCRS
-          ? <FormGroup label="Source CRS:" labelInfo="(editing functionality coming soon)">
-              <GenericRelatedItemView
-                itemRef={props.itemData.sourceCRS}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </FormGroup>
-          : null}
+        <FormGroup label="Source CRS:" labelInfo="(editing functionality coming soon)">
+          <GenericRelatedItemView
+            itemRef={props.itemData.sourceCRS}
+            availableClassIDs={['crs--vertical', 'crs--geodetic']}
+            onClear={props.onChange
+              ? () => props.onChange!(update(props.itemData, { $unset: ['sourceCRS'] }))
+              : undefined}
+            onChange={props.onChange
+              ? (itemRef) => {
+                  if (itemRef.classID.startsWith('crs--')) {
+                    props.onChange!(update(props.itemData, { sourceCRS: { $set: itemRef } }))
+                  }
+                }
+              : undefined}
 
-        {props.itemData.targetCRS
-          ? <FormGroup label="Target CRS:" labelInfo="(editing functionality coming soon)">
-              <GenericRelatedItemView
-                itemRef={props.itemData.targetCRS}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </FormGroup>
-          : null}
+            itemSorter={COMMON_PROPERTIES.itemSorter}
+            getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+            useRegisterItemData={props.useRegisterItemData}
+          />
+        </FormGroup>
+
+        <FormGroup label="Target CRS:" labelInfo="(editing functionality coming soon)">
+          <GenericRelatedItemView
+            itemRef={props.itemData.targetCRS}
+            availableClassIDs={['crs--vertical', 'crs--geodetic']}
+            onClear={props.onChange
+              ? () => props.onChange!(update(props.itemData, { $unset: ['targetCRS'] }))
+              : undefined}
+            onChange={props.onChange
+              ? (itemRef) => {
+                  if (itemRef.classID.startsWith('crs--')) {
+                    props.onChange!(update(props.itemData, { targetCRS: { $set: itemRef } }))
+                  }
+                }
+              : undefined}
+
+            itemSorter={COMMON_PROPERTIES.itemSorter}
+            getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+            useRegisterItemData={props.useRegisterItemData}
+          />
+        </FormGroup>
 
         <FormGroup label="Extent:">
           <ExtentEdit
@@ -211,6 +253,131 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             }}
           />
         </FormGroup>
+
+        <FormGroup label="Accuracy:">
+          <ControlGroup vertical>
+            <NumericInput
+              fill
+              css={css`margin-bottom: .5em;`}
+              readOnly={!props.onChange}
+              onValueChange={props.onChange
+                ? (valueAsNumber) => props.onChange!(update(props.itemData, { accuracy: { value: { $set: valueAsNumber } } }))
+                : undefined}
+              value={props.itemData.accuracy.value} />
+            <GenericRelatedItemView
+              itemRef={{
+                classID: 'unit-of-measurement',
+                itemID: props.itemData.accuracy.unitOfMeasurement,
+              }}
+              availableClassIDs={['unit-of-measurement']}
+              onClear={props.onChange
+                ? () => props.onChange!(update(props.itemData, { accuracy: { unitOfMeasurement: { $set: '' } } }))
+                : undefined}
+              onChange={props.onChange
+                ? (itemRef) => {
+                    if (itemRef.classID === 'unit-of-measurement' && itemRef.subregisterID === undefined) {
+                      props.onChange!(update(props.itemData, { accuracy: { unitOfMeasurement: { $set: itemRef.itemID } } }))
+                    }
+                  }
+                : undefined}
+              itemSorter={COMMON_PROPERTIES.itemSorter}
+              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+              useRegisterItemData={props.useRegisterItemData}
+            />
+          </ControlGroup>
+        </FormGroup>
+
+        {props.itemData.parameters.length > 0
+          ? <H3 css={css`margin-top: 1.5em;`}>
+              Parameters
+            </H3>
+          : null}
+
+        <UL css={css`padding-left: 0; list-style: square;`}>
+          {props.itemData.parameters.map((param, idx) =>
+            <li key={idx} css={css`margin-top: 1em;`}>
+              <PropertyDetailView
+                  title={`Parameter ${idx + 1}`}
+                  secondaryTitle={<Button
+                    outlined
+                    small
+                    onClick={() => props.onChange!(update(props.itemData, { parameters: { $splice: [[ idx, 1 ]] } }))}
+                  >Delete</Button>}>
+                <GenericRelatedItemView
+                  itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+
+                  availableClassIDs={['coordinate-op-parameter']}
+                  onClear={props.onChange
+                    ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: '' } } } }))
+                    : undefined}
+                  onChange={props.onChange
+                    ? (itemRef) => {
+                        if (itemRef.classID === 'coordinate-op-parameter') {
+                          props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: itemRef.itemID }} } }))
+                        }
+                      }
+                    : undefined}
+                />
+              </PropertyDetailView>
+
+              {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
+
+              <PropertyDetailView title="Value" secondaryTitle={param.type}>
+                <ControlGroup vertical css={css`margin-bottom: .5rem;`}>
+                  <HTMLSelect
+                    value={param.type}
+                    options={parameterTypes.map(param => ({ value: param, label: param }))}
+                    onChange={(evt) =>
+                      props.onChange!(update(props.itemData, { parameters: { [idx]: { type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } } } }))
+                    }
+                  />
+                  <InputGroup
+                    disabled={!props.onChange}
+                    fill
+                    value={param.value?.toString() ?? '—'}
+                    onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+                      () => props.onChange!(update(props.itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
+                  />
+                </ControlGroup>
+
+                {param.unitOfMeasurement || param.type === 'measure (w/ UoM)'
+                  ? <GenericRelatedItemView
+                      itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
+                      getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                      useRegisterItemData={props.useRegisterItemData}
+
+                      availableClassIDs={['unit-of-measurement']}
+                      onClear={props.onChange
+                        ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: null } } } }))
+                        : undefined}
+                      onChange={props.onChange
+                        ? (itemRef) => {
+                            props.onChange!(update(props.itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: itemRef.itemID } } } }))
+                          }
+                        : undefined}
+                    />
+                  : null}
+              </PropertyDetailView>
+
+              {param.fileCitation !== null
+                ? <PropertyDetailView title="Source">
+                    <InformationSourceDetails
+                      css={css`h6 { font-weight: normal; }`}
+                      source={param.fileCitation} />
+                  </PropertyDetailView>
+                : null}
+            </li>
+          )}
+        </UL>
+
+        <Button
+            outlined
+            onClick={() => props.onChange!(update(props.itemData, { parameters: { $push: [getParameterStub()] } }))}
+            icon="add">
+          Append parameter
+        </Button>
 
       </CommonEditView>
     </>,
