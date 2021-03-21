@@ -12,7 +12,7 @@
     "title": "ISO Geodetic Registry",
     "iconURL": "https://isotc211.geolexica.org/assets/logo-iso-noninverted.svg",
     "featured": true,
-    "requiredHostAppVersion": "1.0.0-alpha19"
+    "requiredHostAppVersion": "1.0.0-alpha20"
   },
   "files": [
     "README.adoc",
