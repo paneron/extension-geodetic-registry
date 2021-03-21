@@ -183,29 +183,25 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           />
         </FormGroup>
 
-        <FormGroup label="Source CRS:">
-          <InputGroup
-            value={props.itemData.operationVersion || ''}
-            disabled={!props.onChange}
-            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-                : void 0;
-            }}
-          />
-        </FormGroup>
+        {props.itemData.sourceCRS
+          ? <FormGroup label="Source CRS:" labelInfo="(editing functionality coming soon)">
+              <GenericRelatedItemView
+                itemRef={props.itemData.sourceCRS}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            </FormGroup>
+          : null}
 
-        <FormGroup label="Target CRS:">
-          <InputGroup
-            value={props.itemData.operationVersion || ''}
-            disabled={!props.onChange}
-            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-                : void 0;
-            }}
-          />
-        </FormGroup>
+        {props.itemData.targetCRS
+          ? <FormGroup label="Target CRS:" labelInfo="(editing functionality coming soon)">
+              <GenericRelatedItemView
+                itemRef={props.itemData.targetCRS}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            </FormGroup>
+          : null}
 
         <FormGroup label="Extent:">
           <ExtentEdit
