@@ -81,6 +81,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     extent: { name: '', n: 0, e: 0, s: 0, w: 0 },
     operationVersion: '',
     parameters: [],
+    accuracy: {
+      value: 0,
+      unitOfMeasurement: '',
+    },
   },
   views: {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
