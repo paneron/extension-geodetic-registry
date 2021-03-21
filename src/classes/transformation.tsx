@@ -170,19 +170,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             props.onChange({ ...props.itemData, ...newData });
           } : undefined}>
 
-        <FormGroup label="Operation version:">
-          <InputGroup
-            placeholder="E.g., GA v2"
-            value={props.itemData.operationVersion || ''}
-            disabled={!props.onChange}
-            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-                : void 0;
-            }}
-          />
-        </FormGroup>
-
         {props.itemData.sourceCRS
           ? <FormGroup label="Source CRS:" labelInfo="(editing functionality coming soon)">
               <GenericRelatedItemView
@@ -209,6 +196,19 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             onChange={props.onChange
               ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
               : undefined}
+          />
+        </FormGroup>
+
+        <FormGroup label="Operation version:">
+          <InputGroup
+            placeholder="E.g., GA v2"
+            value={props.itemData.operationVersion ?? ''}
+            disabled={!props.onChange}
+            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+              props.onChange
+                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+                : void 0;
+            }}
           />
         </FormGroup>
 
