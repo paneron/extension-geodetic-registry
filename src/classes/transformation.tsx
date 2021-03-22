@@ -343,7 +343,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                     fill
                     value={param.value?.toString() ?? '—'}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                      () => props.onChange!(update(props.itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
+                      props.onChange!(update(props.itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
                   />
                 </ControlGroup>
 
