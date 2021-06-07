@@ -350,6 +350,7 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
 
   return (
     <SplitView
+        className={props.className}
         aside={<>
           {data.description
             ? <PropertyDetailView title="Description">
@@ -382,7 +383,8 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
 
 const SplitView: React.FC<{
   aside?: ReactChildren | ReactNode
-}> = function ({ children, aside }) {
+  className?: string
+}> = function ({ children, aside, className }) {
   return (
     <div css={css`
         position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
@@ -393,7 +395,7 @@ const SplitView: React.FC<{
           flex-flow: column nowrap;
         }
 
-        & > * { padding: 1rem; }`}>
+        & > * { padding: 1rem; }`} className={className}>
 
       <div css={css`overflow-y: auto; flex: 1;`}>
         {children}
