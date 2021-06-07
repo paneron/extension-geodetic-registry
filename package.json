@@ -34,7 +34,7 @@
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "@riboseinc/paneron-extension-kit": "2.0.0-dev30",
-    "@riboseinc/paneron-registry-kit": "2.0.0-dev22",
+    "@riboseinc/paneron-registry-kit": "2.0.0-dev23",
     "@types/node": "^14.11.2",
     "@types/react": "^16.9.11",
     "electron": "^10.1.2",
