@@ -35,6 +35,8 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
   },
   defaults: {
     ...SHARED_DEFAULTS,
+    longitudeFromGreenwich: 0,
+    longitudeFromGreenwichUoM: '',
   },
   views: {
     listItemView: CommonListItemView as ItemListView<PrimeMeridianData>,
