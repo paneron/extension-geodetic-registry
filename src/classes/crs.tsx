@@ -111,6 +111,7 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
   },
   defaults: {
     ...CRS_DEFAULTS,
+    ...GEODETIC_DEFAULTS,
   },
   views: {
     listItemView: CommonListItemView as ItemListView<GeodeticCRSData>,
@@ -173,6 +174,7 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
   },
   defaults: {
     ...CRS_DEFAULTS,
+    ...VERTICAL_DEFAULTS,
   },
   views: {
     listItemView: CommonListItemView as ItemListView<VerticalCRSData>,
