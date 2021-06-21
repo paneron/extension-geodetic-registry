@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { jsx, css } from '@emotion/core';
+import { jsx, css } from '@emotion/react';
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';

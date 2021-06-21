@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { NumericInput } from '@blueprintjs/core';
-import { jsx } from '@emotion/core';
+import { jsx } from '@emotion/react';
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 

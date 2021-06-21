@@ -4,7 +4,7 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { Button, ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
 import { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
