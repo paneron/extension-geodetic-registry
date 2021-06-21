@@ -1,10 +1,10 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
-import React from 'react';
-import { css, jsx } from '@emotion/core';
 import update from 'immutability-helper';
 
+import React from 'react';
+import { css, jsx } from '@emotion/core';
 import { Button, ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
 import { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
