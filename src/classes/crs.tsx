@@ -38,7 +38,7 @@ const CRSDetailView: ItemDetailView<CRSData> = function (props) {
   return (
     <CommonDetailView {...props}>
       <PropertyDetailView title="Extent">
-        {props.itemData.extent ? <ExtentEdit extent={props.itemData.extent} /> : '—'}
+        {data.extent ? <ExtentEdit extent={data.extent} /> : '—'}
       </PropertyDetailView>
 
       {props.children}
