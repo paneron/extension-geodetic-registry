@@ -13,17 +13,22 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
+  Extent,
+  DEFAULT_EXTENT,
+  ExtentEdit,
   COMMON_PROPERTIES,
 } from './common';
 
 
 export interface CRSData extends CommonGRItemData {
   scope: string
+  extent: Extent
   coordinateSystem?: { classID: string, itemID: string }
 }
 
 export const CRS_DEFAULTS: CRSData = {
   ...SHARED_DEFAULTS,
+  extent: DEFAULT_EXTENT,
   scope: '',
 }
 
@@ -32,6 +37,10 @@ const CRSDetailView: ItemDetailView<CRSData> = function (props) {
 
   return (
     <CommonDetailView {...props}>
+      <PropertyDetailView title="Extent">
+        {props.itemData.extent ? <ExtentEdit extent={props.itemData.extent} /> : '—'}
+      </PropertyDetailView>
+
       {props.children}
 
       <H5>Coordinate system</H5>
@@ -58,6 +67,15 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
         } : undefined}>
+
+      <PropertyDetailView title="Extent">
+        <ExtentEdit
+          extent={props.itemData.extent ?? DEFAULT_EXTENT}
+          onChange={props.onChange
+            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+            : undefined}
+        />
+      </PropertyDetailView>
 
       {props.children}
 
