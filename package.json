@@ -40,7 +40,7 @@
     "@riboseinc/paneron-registry-kit": "2.0.0-dev26",
     "@types/node": "^14.11.2",
     "@types/react": "^16.9.11",
-    "electron": "^10.1.2",
+    "electron": "^12.2.2",
     "electron-log": "^4.2.4",
     "immutability-helper": "^3.1.1",
     "react": "^16.11.0",
