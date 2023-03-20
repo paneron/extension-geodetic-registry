@@ -1,6 +1,6 @@
 {
   "name": "@riboseinc/paneron-extension-geodetic-registry",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Geodetic Registry structured data plugin",
   "main": "plugin.js",
   "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
@@ -15,7 +15,7 @@
     "title": "ISO Geodetic Registry",
     "iconURL": "https://isotc211.geolexica.org/assets/logo-iso-noninverted.svg",
     "featured": true,
-    "requiredHostAppVersion": "^1.0.0-beta1"
+    "requiredHostAppVersion": "^2.0.0"
   },
   "files": [
     "README.adoc",
