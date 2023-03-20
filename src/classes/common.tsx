@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update from 'immutability-helper';
-import React, { ReactChildren, ReactNode, useState } from 'react';
+import React, { ReactChildren, ReactNode, useState, useContext } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
@@ -11,11 +11,13 @@ import {
   Colors, ControlGroup, FormGroup, H4, H6, InputGroup,
   NumericInput, Tag, TextArea, UL,
 } from '@blueprintjs/core';
-import {
+import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
+import type {
   Citation, ItemClassConfiguration,
   ItemDetailView,
   ItemEditView,
 } from '@riboseinc/paneron-registry-kit/types';
+import { incompleteItemRefToItemPathPrefix } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
@@ -153,7 +155,9 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
 };
 
 
-export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, onChange, children }) {
+export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, itemRef, onChange, children }) {
+  const { getMapReducedData, performOperation, operationKey } = useContext(DatasetContext);
+
   function textInputProps
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
   (fieldName: F) {
@@ -163,6 +167,30 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, on
         if (!onChange) { return; }
         onChange({ ...itemData, [fieldName]: evt.currentTarget.value })
       },
+    }
+  }
+
+  async function handleGetNewID() {
+    if (onChange) {
+      const { subregisterID, classID } = itemRef;
+      const itemPath = incompleteItemRefToItemPathPrefix({ subregisterID, classID });
+      const newIDResult = await getMapReducedData({
+        chains: {
+          maxID: {
+            mapFunc: `
+              if (key.startsWith("${itemPath}")) { emit(value?.data?.identifier ?? 0); }
+            `,
+            reduceFunc: `
+              return (value > accumulator) ? (value + 1) : accumulator;
+            `,
+          },
+        },
+      });
+      const newID: number = newIDResult.maxID;
+      console.debug("Want to specify new ID", newID);
+      onChange({ ...itemData, identifier: newID });
+    } else {
+      throw new Error("Dataset is read-only");
     }
   }
 
@@ -217,14 +245,24 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, on
         </>}>
 
       <FormGroup label="GR identifier:">
-        <NumericInput
-          required
-          value={itemData.identifier}
-          disabled={!onChange}
-          onValueChange={onChange
-            ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
-            : undefined}
-        />
+        <ControlGroup>
+          <NumericInput
+            required
+            value={itemData.identifier}
+            disabled={!onChange}
+            onValueChange={onChange
+              ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
+              : undefined}
+          />
+          {onChange
+            ? <Button
+                icon='reset'
+                title="Suggest latest ID"
+                disabled={operationKey !== undefined}
+                onClick={performOperation('obtaining new ID', handleGetNewID)}
+              />
+            : null}
+        </ControlGroup>
       </FormGroup>
 
       <FormGroup label="Name:">
