@@ -188,6 +188,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       <CommonEditView
           useRegisterItemData={props.useRegisterItemData}
           getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          itemRef={props.itemRef}
           itemData={props.itemData}
           onChange={props.onChange ? (newData: CommonGRItemData) => {
             if (!props.onChange) { return; }

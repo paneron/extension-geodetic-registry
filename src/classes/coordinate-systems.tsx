@@ -65,6 +65,7 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
         useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
+        itemRef={props.itemRef}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
@@ -96,6 +97,7 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
         useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
+        itemRef={props.itemRef}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
@@ -127,6 +129,7 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
         useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
+        itemRef={props.itemRef}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
