@@ -151,6 +151,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
         useRegisterItemData={props.useRegisterItemData}
         getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
         itemData={props.itemData}
+        itemRef={props.itemRef}
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
