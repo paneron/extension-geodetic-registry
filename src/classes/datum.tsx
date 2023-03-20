@@ -222,3 +222,29 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
 };
+
+
+export const engineeringDatum: ItemClassConfiguration<DatumData> = {
+  ...COMMON_PROPERTIES,
+  meta: {
+    title: "Engineering Datum",
+    description: "Engineering Reference Frame",
+    id: 'datums--engineering',
+    alternativeNames: [],
+  },
+  defaults: {
+    ...DATUM_DEFAULTS,
+  },
+  views: {
+    listItemView: CommonListItemView as ItemListView<DatumData>,
+    detailView: DatumDetailView as ItemDetailView<DatumData>,
+    editView: (props) => {
+      const EditView = DatumEditView as ItemEditView<DatumData>;
+      return (
+        <EditView {...props} />
+      );
+    },
+  },
+  validatePayload: async () => true,
+  sanitizePayload: async (t) => t,
+};

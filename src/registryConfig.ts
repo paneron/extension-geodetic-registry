@@ -1,8 +1,9 @@
 import { ItemClassConfiguration } from '@riboseinc/paneron-registry-kit/types';
 
 import { transformation } from './classes/transformation';
-import { verticalCRS, geodeticCRS } from './classes/crs';
-import { verticalDatum, geodeticDatum } from './classes/datum';
+import { conversion } from './classes/conversion';
+import { verticalCRS, geodeticCRS, projectedCRS, compoundCRS, engineeringCRS } from './classes/crs';
+import { verticalDatum, geodeticDatum, engineeringDatum } from './classes/datum';
 import { unitOfMeasurement } from './classes/unit-of-measurement';
 import { ellipsoid } from './classes/ellipsoid';
 import { primeMeridian } from './classes/prime-meridian';
@@ -18,11 +19,16 @@ import {
 
 
 export const itemClassConfiguration: Record<string, ItemClassConfiguration<any>> = {
+  "coordinate-ops--conversion": conversion,
   "coordinate-ops--transformation": transformation,
   "datums--geodetic": geodeticDatum,
   "datums--vertical": verticalDatum,
+  "datums--engineering": engineeringDatum,
   "crs--vertical": verticalCRS,
   "crs--geodetic": geodeticCRS,
+  "crs--projected": projectedCRS,
+  "crs--engineering": engineeringCRS,
+  "crs--compound": compoundCRS,
   "ellipsoid": ellipsoid,
   "unit-of-measurement": unitOfMeasurement,
   "prime-meridian": primeMeridian,
