@@ -61,7 +61,13 @@ export interface Extent {
   w: number
   name: string
 }
+/** Placeholder/stub extent value. */
 export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
+
+/**
+ * A widget for editing extent data.
+ * There is no “detail” extent widget; simply use this one without `onChange()`.
+ */
 export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
 function ({ extent, onChange }) {
   function extentInput(side: 'n' | 'e' | 's' | 'w') {
@@ -97,6 +103,13 @@ function ({ extent, onChange }) {
 };
 
 
+/**
+ * Blueprint’s `InputGroup` minimally wrapped for entering coordinates.
+ *
+ * - Does not fire `onChange()` unless a valid value is provided.
+ * - If `onChange()` is provided, value validity is indicated by background tint
+ *   and extra icon.
+ */
 const CoordInput: React.FC<{
   value: number
   onChange?: (newVal: number) => void
