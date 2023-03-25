@@ -134,7 +134,7 @@ function ({ value, leftIcon, onChange }) {
       onChange={(evt: React.FormEvent<HTMLInputElement>) =>
         handleChange(evt.currentTarget.value)}
       leftIcon={leftIcon}
-      css={css`.bp3-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`}
+      css={css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`}
       value={editedVal ?? value.toLocaleString()}
     />
   );
