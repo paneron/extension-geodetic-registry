@@ -2,16 +2,17 @@
 /** @jsxFrag React.Fragment */
 
 import update from 'immutability-helper';
-import React, { ReactChildren, ReactNode, useState, useContext } from 'react';
+import React, { ReactChildren, ReactNode, useContext } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
   Button,
   Classes,
   Colors, ControlGroup, FormGroup, H4, H6, InputGroup,
-  NumericInput, Tag, TextArea, UL,
-  Icon,
+  NumericInput, TextArea, UL,
 } from '@blueprintjs/core';
+
+
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
   Citation, ItemClassConfiguration,
@@ -20,6 +21,11 @@ import type {
 } from '@riboseinc/paneron-registry-kit/types';
 import { incompleteItemRefToItemPathPrefix } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+
+
+// For backwards compatibility
+import { Extent, ExtentEdit, DEFAULT_EXTENT } from './extent';
+export { Extent, ExtentEdit, DEFAULT_EXTENT };
 
 
 export interface CommonGRItemData {
@@ -52,118 +58,6 @@ function getInformationSourceStub(): Citation {
     isbn: null,
     issn: null,
   };
-}
-
-
-export interface Extent {
-  n: number
-  e: number
-  s: number
-  w: number
-  name: string
-}
-/** Placeholder/stub extent value. */
-export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
-
-/**
- * A widget for editing extent data.
- * There is no “detail” extent widget; simply use this one without `onChange()`.
- */
-export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
-function ({ extent, onChange }) {
-  function extentInput(side: 'n' | 'e' | 's' | 'w') {
-    const nm = side === 'n' || side === 's' ? 'Lat' : 'Lon';
-
-    return (
-      <CoordInput
-        key={side}
-        onChange={onChange
-          ? (val) => onChange!({ ...extent, [side]: val })
-          : undefined}
-        label={<>{side.toUpperCase()}&ensp;<Tag minimal round>{nm}</Tag></>}
-        value={extent[side] ?? 0}
-      />
-    );
-  }
-  return (
-    <>
-      <ControlGroup fill>
-        {extentInput('n')}
-        {extentInput('e')}
-        {extentInput('s')}
-        {extentInput('w')}
-      </ControlGroup>
-      <TextArea
-        disabled={!onChange}
-        onChange={(evt) => onChange!({ ...extent, name: evt.currentTarget.value })}
-        placeholder={onChange ? "Extent description goes here" : undefined}
-        value={extent.name ?? ''}
-        css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
-      />
-    </>
-  );
-};
-
-
-/**
- * Blueprint’s `InputGroup` minimally wrapped for entering coordinates.
- *
- * - Does not fire `onChange()` unless a valid value is provided.
- * - If `onChange()` is provided, value validity is indicated by background tint
- *   and extra icon.
- */
-const CoordInput: React.FC<{
-  value: number
-  onChange?: (newVal: number) => void
-  label?: JSX.Element
-}> =
-function ({ value, label, onChange }) {
-
-  const [editedVal, editVal] = useState<string | null>(value.toLocaleString());
-  const [valid, setValid] = useState(true);
-
-  function handleChange(val: string) {
-    if (!onChange) {
-      return;
-    }
-    let normalizedVal: string = val.trim();
-    try {
-      const candidate = parseFloat(normalizedVal);
-      if (!isNaN(candidate) && candidate.toLocaleString() === normalizedVal) {
-        setValid(true);
-        onChange(candidate);
-        editVal(null);
-      } else {
-        editVal(normalizedVal);
-        setValid(false);
-      }
-    } catch (e) {
-      editVal(normalizedVal);
-      setValid(false);
-    }
-  }
-
-  return (
-    <FormGroup
-        label={label}
-        css={css`margin: 0;`}
-        labelInfo={onChange && !valid
-          ? <Icon icon='warning-sign' title="Invalid value" />
-          : undefined}
-        intent={onChange && !valid
-          ? 'warning'
-          : undefined}>
-      <InputGroup
-        readOnly={!onChange}
-        onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-          handleChange(evt.currentTarget.value)}
-        css={onChange
-          ? css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`
-          : undefined}
-        value={editedVal ?? value.toLocaleString()}
-      />
-    </FormGroup>
-  );
 }
 
 
