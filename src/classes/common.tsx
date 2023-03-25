@@ -10,6 +10,7 @@ import {
   Classes,
   Colors, ControlGroup, FormGroup, H4, H6, InputGroup,
   NumericInput, Tag, TextArea, UL,
+  Icon,
 } from '@blueprintjs/core';
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
@@ -146,8 +147,17 @@ function ({ value, leftIcon, onChange }) {
       readOnly={!onChange}
       onChange={(evt: React.FormEvent<HTMLInputElement>) =>
         handleChange(evt.currentTarget.value)}
-      leftIcon={leftIcon}
-      css={css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`}
+      leftIcon={onChange
+        ? <>
+            {leftIcon}
+            {valid
+              ? null
+              : <Icon icon='warning-sign' title="Invalid value" />}
+          </>
+        : leftIcon}
+      css={onChange
+        ? css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`
+        : undefined}
       value={editedVal ?? value.toLocaleString()}
     />
   );
