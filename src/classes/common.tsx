@@ -80,7 +80,7 @@ function ({ extent, onChange }) {
         onChange={onChange
           ? (val) => onChange!({ ...extent, [side]: val })
           : undefined}
-        leftIcon={<Tag minimal>{side.toUpperCase()} {nm}</Tag>}
+        label={<>{side.toUpperCase()}&ensp;<Tag minimal round>{nm}</Tag></>}
         value={extent[side] ?? 0}
       />
     );
@@ -115,9 +115,9 @@ function ({ extent, onChange }) {
 const CoordInput: React.FC<{
   value: number
   onChange?: (newVal: number) => void
-  leftIcon?: JSX.Element
+  label?: JSX.Element
 }> =
-function ({ value, leftIcon, onChange }) {
+function ({ value, label, onChange }) {
 
   const [editedVal, editVal] = useState<string | null>(value.toLocaleString());
   const [valid, setValid] = useState(true);
@@ -144,23 +144,25 @@ function ({ value, leftIcon, onChange }) {
   }
 
   return (
-    <InputGroup
-      readOnly={!onChange}
-      onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-        handleChange(evt.currentTarget.value)}
-      leftIcon={onChange
-        ? <>
-            {leftIcon}
-            {valid
-              ? null
-              : <Icon icon='warning-sign' title="Invalid value" />}
-          </>
-        : leftIcon}
-      css={onChange
-        ? css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`
-        : undefined}
-      value={editedVal ?? value.toLocaleString()}
-    />
+    <FormGroup
+        label={label}
+        css={css`margin: 0;`}
+        labelInfo={onChange && !valid
+          ? <Icon icon='warning-sign' title="Invalid value" />
+          : undefined}
+        intent={onChange && !valid
+          ? 'warning'
+          : undefined}>
+      <InputGroup
+        readOnly={!onChange}
+        onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+          handleChange(evt.currentTarget.value)}
+        css={onChange
+          ? css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`
+          : undefined}
+        value={editedVal ?? value.toLocaleString()}
+      />
+    </FormGroup>
   );
 }
 
