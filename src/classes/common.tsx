@@ -96,6 +96,7 @@ function ({ extent, onChange }) {
       <TextArea
         disabled={!onChange}
         onChange={(evt) => onChange!({ ...extent, name: evt.currentTarget.value })}
+        placeholder={onChange ? "Extent description goes here" : undefined}
         value={extent.name ?? ''}
         css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
       />
