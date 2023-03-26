@@ -9,12 +9,13 @@
  */
 
 import { jsx, css, ClassNames } from '@emotion/react';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
-  MenuItem, Tag, Icon,
+  MenuItem, Tag, Icon, ProgressBar,
 } from '@blueprintjs/core';
 import { Select2 as Select, ItemRenderer } from '@blueprintjs/select';
+import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import useDebounce from '@riboseinc/paneron-extension-kit/useDebounce';
 
@@ -41,7 +42,6 @@ function isExtent(val: any): val is Extent {
 /** Placeholder/stub extent value. */
 export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
 
-// const IMPORTABLE_EXTENT_FILTER_QUERY_MIN_CHARS = 3;
 
 /**
  * A widget for editing extent data.
@@ -50,14 +50,11 @@ export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
 export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
 function ({ extent, onChange }) {
   const isStub = JSON.stringify(extent) === JSON.stringify(DEFAULT_EXTENT);
-  const { getMapReducedData, operationKey } = useContext(DatasetContext);
+  const { getMapReducedData } = useContext(DatasetContext);
+  const [_allImportableExtents, setAllImportableExtents] = useState<SuggestedExtentListItem[] | undefined>(undefined);
 
-  const isBusy = operationKey !== undefined;
-
-  const [importableExtentFilterQuery, setImportableExtentFilterQuery] = useState<string>('');
-  const [allImportableExtents, setAllImportableExtents] = useState<SuggestedExtentListItem[]>([]);
-  const importableExtentFilterQueryDebounced = useDebounce(importableExtentFilterQuery, 500);
-  //const hasExtentQuery = importableExtentFilterQuery.trim().length >= IMPORTABLE_EXTENT_FILTER_QUERY_MIN_CHARS;
+  const allImportableExtents = useDebounce(_allImportableExtents, 400);
+  const extentsAreLoading = allImportableExtents === undefined;
 
   async function loadImportableExtents() {
     const data = await getMapReducedData({ chains: { extents: {
@@ -73,23 +70,14 @@ function ({ extent, onChange }) {
     }
   }
 
-  useEffect(() => {
-    let cancelled = false;
-    if (!cancelled && !isBusy && onChange &&
-        //importableExtentFilterQueryDebounced.trim().length >= IMPORTABLE_EXTENT_FILTER_QUERY_MIN_CHARS &&
-        allImportableExtents.length < 1) {
-      loadImportableExtents().
-      then((
-        (extents) => {
-          if (!cancelled) { setAllImportableExtents(extents); }
-        }), (
-          () => { setImportableExtentFilterQuery('') }
-        ));
+  async function handleImportExtentTriggerClick() {
+    setAllImportableExtents(undefined);
+    try {
+      setAllImportableExtents(await loadImportableExtents());
+    } catch (e) {
+      setAllImportableExtents([]);
     }
-    return () => {
-      cancelled = true;
-    };
-  }, [importableExtentFilterQueryDebounced, allImportableExtents.length < 1]);
+  }
 
   function handleImportSuggestedExtent(item: SuggestedExtentListItem) {
     if (onChange && isExtent(item.extentData)) {
@@ -129,9 +117,14 @@ function ({ extent, onChange }) {
             {onChange
               ? isStub
                 ? <Select<SuggestedExtentListItem>
-                      items={allImportableExtents}
+                      items={allImportableExtents ?? []}
                       itemPredicate={extentMatchesQuery}
                       itemRenderer={renderSuggestedExtent}
+                      noResults={<MenuItem
+                        disabled
+                        text={extentsAreLoading ? <ProgressBar /> : "No extents to show."}
+                      />}
+                      filterable={allImportableExtents && allImportableExtents.length > 7}
                       onItemSelect={handleImportSuggestedExtent}
                       popoverProps={{
                         minimal: true,
@@ -139,6 +132,7 @@ function ({ extent, onChange }) {
                       }}>
                     <Button
                       title="Load extent data from a pre-existing item"
+                      onClick={handleImportExtentTriggerClick}
                       css={css`
                         padding: 0 20px;
                         /* Otherwise it gets compressed (due to fill presumably) */
@@ -265,16 +259,25 @@ function extentMatchesQuery(query: string, item: SuggestedExtentListItem) {
 const renderSuggestedExtent: ItemRenderer<SuggestedExtentListItem> =
 function (item, { handleClick, handleFocus, modifiers, query }) {
   if (modifiers.matchesPredicate) {
-    return <MenuItem
-      css={css`overflow: hidden; text-overflow: ellipsis; max-width: 500px;`}
-      text={item.extentData.name?.trim() || '(unnamed extent)'}
-      title={`${item.extentData.name} — from item ${item.registerItemDescription}`}
-      disabled={modifiers.disabled}
-      active={modifiers.active}
-      onClick={handleClick}
-      onFocus={handleFocus}
-      roleStructure='listoption'
-      key={item.extentData.name}
+    return <Tooltip
+      placement='left'
+      content={`From ${item.registerItemDescription}`}
+      hoverOpenDelay={0}
+      transitionDuration={0}
+      renderTarget={({ isOpen, ref, ...targetProps }) =>
+        <MenuItem
+          {...targetProps}
+          elementRef={ref}
+          css={css`overflow: hidden; text-overflow: ellipsis; max-width: 500px;`}
+          text={item.extentData.name?.trim() || '(unnamed extent)'}
+          title={`${item.extentData.name} — from item ${item.registerItemDescription}`}
+          disabled={modifiers.disabled}
+          active={modifiers.active}
+          onClick={handleClick}
+          onFocus={handleFocus}
+          roleStructure='listoption'
+          key={item.extentData.name}
+        />}
     />;
   } else {
     return null;
@@ -285,7 +288,7 @@ const EXTENT_MAP_FUNC = `
   if (value?.data?.extent) {
     emit({
       extentData: value.data.extent,
-      registerItemDescription: 'Item with ID ' + value.data.identifier + '',
+      registerItemDescription: '#' + value.data.identifier + ' (' + (value.data.name ?? 'unknown name') + ')',
       searchableString: [
         value.data.name ?? '',
         value.data.description ?? '',
