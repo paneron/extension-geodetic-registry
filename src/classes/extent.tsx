@@ -143,7 +143,8 @@ function ({ extent, onChange }) {
                         padding: 0 20px;
                         /* Otherwise it gets compressed (due to fill presumably) */
                       `}
-                      icon="folder-open" />
+                      icon='folder-open'
+                    />
                   </Select>
                 : <Button
                     title="Clear extent data. If you want to import another extent, use this first"
