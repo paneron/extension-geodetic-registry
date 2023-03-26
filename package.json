@@ -1,6 +1,6 @@
 {
   "name": "@riboseinc/paneron-extension-geodetic-registry",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Geodetic Registry structured data plugin",
   "main": "plugin.js",
   "repository": "https://github.com/riboseinc/plugin-geodetic-registry",
