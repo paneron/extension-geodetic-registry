@@ -1,11 +1,13 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
+import update from 'immutability-helper';
+
 import React from 'react';
 
 import { jsx } from '@emotion/react';
 
-import { Checkbox, ControlGroup, InputGroup } from '@blueprintjs/core';
+import { Checkbox, ControlGroup, ControlGroupProps, InputGroup } from '@blueprintjs/core';
 
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
@@ -14,7 +16,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
 } from './common';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
@@ -22,13 +23,13 @@ import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/Generi
 
 interface EllipsoidData extends CommonGRItemData {
   inverseFlattening: number | null
-  inverseFlatteningUoM: string
+  inverseFlatteningUoM: string | null
 
   semiMajorAxis: number | null
-  semiMajorAxisUoM: string
+  semiMajorAxisUoM: string | null
 
-  semiMinorAxis: number
-  semiMinorAxisUoM: string
+  semiMinorAxis: number | null
+  semiMinorAxisUoM: string | null
 
   isSphere: boolean
 }
@@ -48,66 +49,110 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
   views: {
     listItemView: CommonListItemView as ItemListView<EllipsoidData>,
 
-    detailView: (props) => {
-      const data = props.itemData;
-
-      return (
-        <CommonDetailView {...props}>
-
-          <Checkbox disabled checked={data.isSphere === true} label="Is sphere" />
-
-          <PropertyDetailView title="Inverse flattening">
-            <ControlGroup fill>
-              <InputGroup readOnly value={data.inverseFlattening?.toString() || '(no value)'} />
-              <GenericRelatedItemView
-                itemRef={{ classID: 'unit-of-measurement', itemID: data.inverseFlatteningUoM }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </ControlGroup>
-          </PropertyDetailView>
-
-          <PropertyDetailView title="Semi-major axis">
-            <ControlGroup fill>
-              <InputGroup readOnly value={data.semiMajorAxis?.toString() || '(no value)'} />
-              <GenericRelatedItemView
-                itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMajorAxisUoM }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </ControlGroup>
-          </PropertyDetailView>
-
-          <PropertyDetailView title="Semi-minor axis">
-            <ControlGroup fill>
-              <InputGroup readOnly value={data.semiMinorAxis?.toString() || '(no value)'} />
-              <GenericRelatedItemView
-                itemRef={{ classID: 'unit-of-measurement', itemID: data.semiMinorAxisUoM }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </ControlGroup>
-          </PropertyDetailView>
-
-        </CommonDetailView>
-      );
-    },
-
-    editView: (props) => <>
+    editView: ({ itemData, onChange, itemRef, ...props }) => <>
       <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange
-          ? (newData: CommonGRItemData) => {
-            if (!props.onChange) { return; }
-            props.onChange({ ...props.itemData, ...newData });
-          }
-          : undefined} />
+          useRegisterItemData={props.useRegisterItemData}
+          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          itemData={itemData}
+          itemRef={itemRef}
+          onChange={onChange
+            ? (newData: CommonGRItemData) => {
+              onChange?.({ ...itemData, ...newData });
+            }
+            : undefined}>
+
+        <Checkbox
+          disabled={!onChange}
+          checked={itemData.isSphere === true}
+          label="Is sphere"
+          onChange={e => onChange!(update(itemData, { isSphere: { $set: e.currentTarget.checked } }))}
+        />
+
+        <PropertyDetailView title="Inverse flattening">
+          <FloatWithUoM
+            fill
+            val={[
+              itemData.inverseFlattening,
+              itemData.inverseFlatteningUoM,
+            ]}
+            onChange={onChange
+              ? ([num, uom]) => onChange!(update(itemData, {
+                  inverseFlattening: { $set: num },
+                  inverseFlatteningUoM: { $set: uom },
+                }))
+              : undefined}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView title="Semi-major axis">
+          <FloatWithUoM
+            fill
+            val={[
+              itemData.semiMajorAxis,
+              itemData.semiMajorAxisUoM,
+            ]}
+            onChange={onChange
+              ? ([num, uom]) => onChange!(update(itemData, {
+                  semiMajorAxis: { $set: num },
+                  semiMajorAxisUoM: { $set: uom },
+                }))
+              : undefined}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView title="Semi-minor axis">
+          <FloatWithUoM
+            fill
+            val={[
+              itemData.semiMinorAxis,
+              itemData.semiMinorAxisUoM,
+            ]}
+            onChange={onChange
+              ? ([num, uom]) => onChange!(update(itemData, {
+                  semiMinorAxis: { $set: num },
+                  semiMinorAxisUoM: { $set: uom },
+                }))
+              : undefined}
+          />
+        </PropertyDetailView>
+      </CommonEditView>
     </>,
   },
 
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
+};
+
+
+/**
+ * Shows a float value with an accompanying unit of measurement related item
+ * as a control group.
+ */
+const FloatWithUoM: React.FC<{
+  val: [num: number | null, uom: string | null],
+  onChange?: (newVal: [number | null, string | null]) => void,
+  fill?: ControlGroupProps["fill"],
+  controlGroupProps?: ControlGroupProps,
+  className?: string,
+}> = function ({ val, onChange, fill, controlGroupProps, className }) {
+  return (
+    <ControlGroup fill={fill} className={className} {...controlGroupProps}>
+      <InputGroup
+        readOnly={!onChange}
+        onChange={evt => {
+          try {
+            onChange!([parseFloat(evt.currentTarget.value), val[1]])
+          } catch (e) {}
+        }}
+        value={val[0]?.toString() || '(no value)'}
+      />
+      <GenericRelatedItemView
+        itemRef={val[1] ? { classID: 'unit-of-measurement', itemID: val[1] } : undefined}
+        availableClassIDs={['unit-of-measurement']}
+        onChange={onChange
+          ? ref => ref.classID === 'unit-of-measurement' && onChange!([val[0], ref.itemID])
+          : undefined}
+      />
+    </ControlGroup>
+  );
 };
