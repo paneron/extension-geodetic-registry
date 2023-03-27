@@ -2,6 +2,7 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
+import { TextArea, InputGroup, ControlGroup, Button } from '@blueprintjs/core';
 import { ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
@@ -88,12 +89,99 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       {props.children}
 
+      <PropertyDetailView title="Scope">
+        <InputGroup
+          fill
+          required
+          value={props.itemData.originDescription ?? ''}
+          readOnly={!props.onChange}
+          onChange={evt => props.onChange!({
+            ...props.itemData,
+            originDescription: evt.currentTarget.value,
+          })}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Release date">
+        <InputGroup
+          fill
+          required
+          value={props.itemData.releaseDate ?? ''}
+          readOnly={!props.onChange}
+          onChange={evt => props.onChange!({
+            ...props.itemData,
+            releaseDate: evt.currentTarget.value,
+          })}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Coordinate reference epoch">
+        <InputGroup
+          fill
+          required
+          value={props.itemData.coordinateReferenceEpoch ?? ''}
+          readOnly={!props.onChange}
+          onChange={evt => props.onChange!({
+            ...props.itemData,
+            coordinateReferenceEpoch: evt.currentTarget.value,
+          })}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Aliases">
+        <ControlGroup vertical>
+          {props.itemData.aliases.map((alias, idx) =>
+            <InputGroup
+              key={idx}
+              fill
+              required
+              value={alias}
+              readOnly={!props.onChange}
+              rightElement={props.onChange
+                ? <Button
+                    icon='cross'
+                    onClick={() => props.onChange!(update(
+                      props.itemData,
+                      { aliases: { $splice: [[ idx, 1 ]] } }
+                    ))}
+                  />
+                : undefined}
+              onChange={evt => props.onChange!(update(
+                props.itemData,
+                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
+              ))}
+            />
+          )}
+          {props.onChange
+            ? <Button icon='add' onClick={() => props.onChange!(update(
+                props.itemData,
+                { aliases: { $push: [''] } },
+              ))}>
+                Add alias
+              </Button>
+            : undefined}
+        </ControlGroup>
+      </PropertyDetailView>
+
       <PropertyDetailView title="Extent">
         <ExtentEdit
           extent={props.itemData.extent ?? DEFAULT_EXTENT}
           onChange={props.onChange
             ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
             : undefined}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Origin description">
+        <TextArea
+          fill
+          required
+          value={props.itemData.originDescription ?? ''}
+          readOnly={!props.onChange}
+          onChange={evt => props.onChange!({
+            ...props.itemData,
+            originDescription: evt.currentTarget.value,
+          })}
         />
       </PropertyDetailView>
 
