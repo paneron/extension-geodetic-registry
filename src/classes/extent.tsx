@@ -9,7 +9,7 @@
  */
 
 import { jsx, css, ClassNames } from '@emotion/react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
   MenuItem, Tag, Icon, ProgressBar,
@@ -70,14 +70,22 @@ function ({ extent, onChange }) {
     }
   }
 
-  async function handleImportExtentTriggerClick() {
-    setAllImportableExtents(undefined);
-    try {
-      setAllImportableExtents(await loadImportableExtents());
-    } catch (e) {
-      setAllImportableExtents([]);
+  useEffect(() => {
+    let cancelled = false;
+    async function importExtents() {
+      setAllImportableExtents(undefined);
+      try {
+        const result = await loadImportableExtents();
+        if (cancelled) return;
+        setAllImportableExtents(result);
+      } catch (e) {
+        if (cancelled) return;
+        setAllImportableExtents([]);
+      }
     }
-  }
+    importExtents()
+    return function cleanUp() { cancelled = true; };
+  }, []);
 
   function handleImportSuggestedExtent(item: SuggestedExtentListItem) {
     if (onChange && isExtent(item.extentData)) {
@@ -132,7 +140,6 @@ function ({ extent, onChange }) {
                       }}>
                     <Button
                       title="Load extent data from a pre-existing item"
-                      onClick={handleImportExtentTriggerClick}
                       css={css`
                         padding: 0 20px;
                         /* Otherwise it gets compressed (due to fill presumably) */
