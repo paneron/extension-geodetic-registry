@@ -1,9 +1,6 @@
 /** @jsx jsx */
 
-import log from 'electron-log';
 import { jsx } from '@emotion/react';
-
-Object.assign(console, log);
 
 import { RegistryView } from '@riboseinc/paneron-registry-kit/views';
 import CRITERIA_CONFIGURATION from '@riboseinc/paneron-registry-kit/views/FilterCriteria/CRITERIA_CONFIGURATION';
