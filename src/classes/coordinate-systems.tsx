@@ -1,8 +1,9 @@
 /** @jsx jsx */
 
-import { H3, UL } from '@blueprintjs/core';
+import update from 'immutability-helper';
+import { Button, ControlGroup, H3, InputGroup, UL } from '@blueprintjs/core';
 import { jsx, css } from '@emotion/react';
-import { ItemClassConfiguration, ItemDetailView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
@@ -57,6 +58,93 @@ const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = functio
   );
 };
 
+const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> = function (props)  {
+  return (
+    <CommonEditView
+      useRegisterItemData={props.useRegisterItemData}
+      getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+      itemData={props.itemData}
+      itemRef={props.itemRef}
+      onChange={props.onChange ? (newData: CommonGRItemData) => {
+        if (!props.onChange) { return; }
+        props.onChange({ ...props.itemData, ...newData });
+      } : undefined}>
+
+      <PropertyDetailView title="Aliases">
+        <ControlGroup vertical>
+          {(props.itemData.aliases || []) .map((alias, idx) =>
+            <InputGroup
+              key={idx}
+              fill
+              required
+              value={alias}
+              readOnly={!props.onChange}
+              rightElement={props.onChange
+                ? <Button
+                    icon='cross'
+                    onClick={() => props.onChange!(update(
+                      props.itemData,
+                      { aliases: { $splice: [[ idx, 1 ]] } }
+                    ))}
+                  />
+                : undefined}
+              onChange={evt => props.onChange!(update(
+                props.itemData,
+                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
+              ))}
+            />
+          )}
+          {props.onChange
+            ? <Button icon='add' onClick={() => props.onChange!(update(
+                props.itemData,
+                { aliases: { $push: [''] } },
+              ))}>
+                Add alias
+              </Button>
+            : undefined}
+        </ControlGroup>
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Axes">
+        <ControlGroup vertical>
+          {(props.itemData.coordinateSystemAxes || []) .map((axis, idx) =>
+            <li key={idx} css={css`margin-top: 1em;`}>
+              <PropertyDetailView title={`Axis ${idx + 1}`}>
+                <GenericRelatedItemView
+                  itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
+                  availableClassIDs={['coordinate-sys-axis']}
+                  onClear={props.onChange
+                    ? () => props.onChange!(update(
+                      props.itemData,
+                      { coordinateSystemAxes: { $splice: [[ idx, 1 ]] } }
+                    ))
+                    : undefined}
+                  onChange={props.onChange
+                    ? (itemRef) => props.onChange!(update(
+                      props.itemData,
+                      { coordinateSystemAxes: { [idx]: { $set: itemRef.itemID } } },
+                    ))
+                    : undefined}
+                  itemSorter={COMMON_PROPERTIES.itemSorter}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </PropertyDetailView>
+            </li>
+          )}
+          {props.onChange
+            ? <Button icon='add' onClick={() => props.onChange!(update(
+                props.itemData,
+                { coordinateSystemAxes: { $push: [''] } },
+              ))}>
+                Add axis
+              </Button>
+            : undefined}
+        </ControlGroup>
+      </PropertyDetailView>
+    </CommonEditView>
+  );
+}
 
 export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemData> = {
   ...COMMON_PROPERTIES,
@@ -72,17 +160,7 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
     detailView: CoordinateSystemDetailView,
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: CoordinateSystemEditView,
   },
 
   validatePayload: async () => true,
@@ -104,17 +182,7 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
     detailView: CoordinateSystemDetailView,
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: CoordinateSystemEditView,
   },
 
   validatePayload: async () => true,
@@ -136,17 +204,12 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
     detailView: CoordinateSystemDetailView,
-    editView: (props) => (
-      <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
-    ),
+    editView: CoordinateSystemEditView,
+  },
+
+  validatePayload: async () => true,
+  sanitizePayload: async (t) => t,
+};
   },
 
   validatePayload: async () => true,
