@@ -31,7 +31,6 @@ export { Extent, ExtentEdit, DEFAULT_EXTENT };
 export interface CommonGRItemData {
   name: string
   identifier: number
-  description: string | null
   remarks: string
   informationSources: Citation[]
 }
@@ -42,7 +41,6 @@ export const DEFAULTS: CommonGRItemData = {
   identifier: 0,
   informationSources: [],
   remarks: '',
-  description: '',
 };
 
 
@@ -117,10 +115,6 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, it
   return (
     <SplitView
         aside={<>
-
-          <FormGroup label="Description:">
-            <TextArea fill required value={itemData.description ?? ''} {...textInputProps('description')} />
-          </FormGroup>
 
           <FormGroup label="Remarks:">
             <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
@@ -310,12 +304,6 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
     <SplitView
         className={props.className}
         aside={<>
-          {data.description
-            ? <PropertyDetailView title="Description">
-                <p>{data.description}</p>
-              </PropertyDetailView>
-            : null}
-
           {data.remarks
             ? <PropertyDetailView title="Remarks">
                 <p>{data.remarks}</p>
