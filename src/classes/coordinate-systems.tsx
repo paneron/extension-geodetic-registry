@@ -210,6 +210,23 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
 };
+
+
+export const sphericalCoordinateSystem: ItemClassConfiguration<CoordinateSystemData> = {
+  ...COMMON_PROPERTIES,
+  meta: {
+    title: "Spherical Coordinate System",
+    description: "Spherical Coordinate System",
+    id: 'coordinate-sys--spherical',
+    alternativeNames: [],
+  },
+  defaults: {
+    ...DEFAULTS,
+  },
+  views: {
+    listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
+    detailView: CoordinateSystemDetailView,
+    editView: CoordinateSystemEditView,
   },
 
   validatePayload: async () => true,

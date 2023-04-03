@@ -15,6 +15,7 @@ import {
   cartesianCoordinateSystem,
   verticalCoordinateSystem,
   ellipsoidalCoordinateSystem,
+  sphericalCoordinateSystem,
 } from './classes/coordinate-systems';
 
 
@@ -38,4 +39,5 @@ export const itemClassConfiguration: Record<string, ItemClassConfiguration<any>>
   "coordinate-sys--cartesian": cartesianCoordinateSystem,
   "coordinate-sys--vertical": verticalCoordinateSystem,
   "coordinate-sys--ellipsoidal": ellipsoidalCoordinateSystem,
+  "coordinate-sys--spherical": sphericalCoordinateSystem,
 };
