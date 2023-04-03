@@ -8,6 +8,7 @@ import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/Generi
 import {
   DEFAULTS as COMMON_DEFAULTS,
   COMMON_PROPERTIES,
+  AliasesDetail,
   ListItemView as CommonListItemView,
   EditView as CommonEditView,
   DetailView as CommonDetailView,
@@ -16,9 +17,15 @@ import {
 
 
 interface CoordinateSystemData extends CommonGRItemData {
+  aliases: string[]
   coordinateSystemAxes: string[]
 }
 
+export const DEFAULTS: CoordinateSystemData = {
+  ...COMMON_DEFAULTS,
+  aliases: [],
+  coordinateSystemAxes: [],
+};
 
 const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = function (props) {
   const data = props.itemData;
@@ -26,6 +33,11 @@ const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = functio
 
   return (
     <CommonDetailView {...props}>
+
+      {(data.aliases || []).length > 0
+        ? <AliasesDetail aliases={data.aliases} />
+        : null}
+
       <H3>Axes</H3>
 
       <UL css={css`padding-left: 0; list-style: square;`}>
@@ -55,7 +67,7 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
     alternativeNames: [],
   },
   defaults: {
-    ...COMMON_DEFAULTS,
+    ...DEFAULTS,
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
@@ -87,7 +99,7 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
     alternativeNames: [],
   },
   defaults: {
-    ...COMMON_DEFAULTS,
+    ...DEFAULTS,
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
@@ -119,7 +131,7 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
     alternativeNames: [],
   },
   defaults: {
-    ...COMMON_DEFAULTS,
+    ...DEFAULTS,
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
