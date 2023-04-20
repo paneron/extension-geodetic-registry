@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import update from 'immutability-helper';
-import { Button, ControlGroup, H3, InputGroup, UL } from '@blueprintjs/core';
+import { Button, ControlGroup, H3, UL } from '@blueprintjs/core';
 import { jsx, css } from '@emotion/react';
 import { ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -70,40 +70,6 @@ const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> = function (p
         props.onChange({ ...props.itemData, ...newData });
       } : undefined}>
 
-      <PropertyDetailView title="Aliases">
-        <ControlGroup vertical>
-          {(props.itemData.aliases || []) .map((alias, idx) =>
-            <InputGroup
-              key={idx}
-              fill
-              required
-              value={alias}
-              readOnly={!props.onChange}
-              rightElement={props.onChange
-                ? <Button
-                    icon='cross'
-                    onClick={() => props.onChange!(update(
-                      props.itemData,
-                      { aliases: { $splice: [[ idx, 1 ]] } }
-                    ))}
-                  />
-                : undefined}
-              onChange={evt => props.onChange!(update(
-                props.itemData,
-                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
-              ))}
-            />
-          )}
-          {props.onChange
-            ? <Button icon='add' onClick={() => props.onChange!(update(
-                props.itemData,
-                { aliases: { $push: [''] } },
-              ))}>
-                Add alias
-              </Button>
-            : undefined}
-        </ControlGroup>
-      </PropertyDetailView>
 
       <PropertyDetailView title="Axes">
         <ControlGroup vertical>

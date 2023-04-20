@@ -33,6 +33,7 @@ export interface CommonGRItemData {
   identifier: number
   remarks: string
   informationSources: Citation[]
+  aliases: string[]
 }
 
 
@@ -41,6 +42,7 @@ export const DEFAULTS: CommonGRItemData = {
   identifier: 0,
   informationSources: [],
   remarks: '',
+  aliases: [],
 };
 
 
@@ -67,13 +69,52 @@ export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliase
   </PropertyDetailView>;
 };
 
+export const AliasesEdit: ItemEditView<CommonGRItemData> = function (props) {
+  return <PropertyDetailView title="Aliases">
+        <ControlGroup vertical>
+          {(props.itemData.aliases || []) .map((alias, idx) =>
+            <InputGroup
+              key={idx}
+              fill
+              required
+              value={alias}
+              readOnly={!props.onChange}
+              rightElement={props.onChange
+                ? <Button
+                    icon='cross'
+                    onClick={() => props.onChange!(update(
+                      props.itemData,
+                      { aliases: { $splice: [[ idx, 1 ]] } }
+                    ))}
+                  />
+                : undefined}
+              onChange={evt => props.onChange!(update(
+                props.itemData,
+                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
+              ))}
+            />
+          )}
+          {props.onChange
+            ? <Button icon='add' onClick={() => props.onChange!(update(
+                props.itemData,
+                { aliases: { $push: [''] } },
+              ))}>
+                Add alias
+              </Button>
+            : undefined}
+        </ControlGroup>
+      </PropertyDetailView>
+;
+};
+
 
 export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, 'itemSorter'> = {
   itemSorter: (a, b) => a.identifier - b.identifier,
 };
 
 
-export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, itemRef, onChange, children }) {
+export const EditView: ItemEditView<CommonGRItemData> = function (props) {
+  const { itemData, itemRef, onChange, children } = props;
   const { getMapReducedData, performOperation, operationKey } = useContext(DatasetContext);
 
   function textInputProps
@@ -116,6 +157,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function ({ itemData, it
     <SplitView
         aside={<>
 
+          <AliasesEdit {...props}/>
           <FormGroup label="Remarks:">
             <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
           </FormGroup>
