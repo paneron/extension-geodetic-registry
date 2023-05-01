@@ -301,7 +301,9 @@ export const InformationSourceDetails: React.FC<{
 
       <H6 style={{ margin: '.5em 0 0 0' }}>{source.title}</H6>
 
-      {source.otherDetails ? <p style={{ margin: '.5em 0 0 0' }}>Citation details: {source.otherDetails}</p> : null}
+      {source.otherDetails
+        ? <p style={{ margin: '.5em 0 0 0' }}>Citation details: {source.otherDetails}</p>
+        : null}
 
       <dl css={css`
           display: flex; flex-flow: row wrap;
