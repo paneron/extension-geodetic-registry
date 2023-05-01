@@ -311,11 +311,20 @@ export const InformationSourceDetails: React.FC<{
           font-size: 85%;
 
           &:not(:empty) {
-            border-bottom: .25em ${Colors.LIGHT_GRAY3} solid;
+            border-bottom-width: .25em;
+            border-bottom-style: solid;
+            padding-bottom: .25em;
           }
           dt, dd {
             margin: .25em 0 0 0;
-            border-top: .25em ${Colors.LIGHT_GRAY3} dotted;
+            border-top-width: .25em;
+            border-top-style: dotted;
+          }
+          &:not(:empty), dt, dd {
+            border-color: ${Colors.LIGHT_GRAY3};
+            .bp4-dark & {
+              border-color: ${Colors.DARK_GRAY1};
+            }
           }
           dt {
             flex-basis: 30%;
@@ -395,7 +404,11 @@ const SplitView: React.FC<{
       <aside
           css={css`
             overflow-y: auto;
-            flex-basis: 45%; background: ${Colors.LIGHT_GRAY4};
+            flex-basis: 45%;
+            background: ${Colors.LIGHT_GRAY4};
+            .bp4-dark & {
+              background: ${Colors.DARK_GRAY4};
+            }
           `}
           className={Classes.ELEVATION_1}>
         {aside}
