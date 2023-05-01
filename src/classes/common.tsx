@@ -318,7 +318,8 @@ export const InformationSourceDetails: React.FC<{
           dt {
             flex-basis: 30%;
           }
-          dd style: italic;
+          dd {
+            font-style: italic;
             flex-basis: 70%;
             padding-right: 1em;
           }
