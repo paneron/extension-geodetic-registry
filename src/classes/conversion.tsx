@@ -47,6 +47,7 @@ export interface ConversionData extends CommonGRItemData {
     value: number
     unitOfMeasurement: string // Unit of measurement UUID
   }
+  // epsg:<id>
   parameters: ConversionParameter[]
   coordinateOperationMethod?: string
   scope: string
