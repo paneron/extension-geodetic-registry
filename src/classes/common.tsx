@@ -62,49 +62,58 @@ function getInformationSourceStub(): Citation {
 
 
 export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliases }) {
-  return <PropertyDetailView title="Aliases">
-    <UL>
-      {aliases.map((a, idx) => <li key={idx}>{a}</li>)}
-    </UL>
-  </PropertyDetailView>;
+  return <AliasesEdit aliases={aliases}/>;
 };
 
-export const AliasesEdit: ItemEditView<CommonGRItemData> = function (props) {
+// export const AliasesEdit: React.FC<{
+//   aliases: CommonGRItemData["aliases"];
+//   /** If change handler is not provided, alias list is read-only. */
+//   onChange?: (newAliases: CommonGRItemData["aliases"]) => void;
+// }> = function ({ aliases, onChange }) {
+export const AliasesEdit: React.FC<{
+  itemData: CommonGRItemData;
+  /** If change handler is not provided, alias list is read-only. */
+  onChange?: (newProps: CommonGRItemData) => void;
+}> = function ({ itemData, onChange }) {
   return <PropertyDetailView title="Aliases">
-        <ControlGroup vertical>
-          {(props.itemData.aliases || []) .map((alias, idx) =>
-            <InputGroup
-              key={idx}
-              fill
-              required
-              value={alias}
-              readOnly={!props.onChange}
-              rightElement={props.onChange
-                ? <Button
-                    icon='cross'
-                    onClick={() => props.onChange!(update(
-                      props.itemData,
-                      { aliases: { $splice: [[ idx, 1 ]] } }
-                    ))}
-                  />
-                : undefined}
-              onChange={evt => props.onChange!(update(
-                props.itemData,
-                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
-              ))}
-            />
-          )}
-          {props.onChange
-            ? <Button icon='add' onClick={() => props.onChange!(update(
-                props.itemData,
-                { aliases: { $push: [''] } },
-              ))}>
-                Add alias
-              </Button>
-            : undefined}
-        </ControlGroup>
-      </PropertyDetailView>
-;
+    {onchange ?
+      <ControlGroup vertical>
+        {(itemData.aliases || []) .map((alias, idx) =>
+          <InputGroup
+            key={idx}
+            fill
+            required
+            value={alias}
+            readOnly={!onChange}
+            rightElement={onChange
+              ? <Button
+                  icon='cross'
+                  onClick={() => onChange!(update(
+                    itemData,
+                    { aliases: { $splice: [[ idx, 1 ]] } }
+                  ))}
+                />
+              : undefined}
+            onChange={evt => onChange!(update(
+              itemData,
+              { aliases: { [idx]: { $set: evt.currentTarget.value } }, }
+            ))}
+          />
+        )}
+        <Button icon='add' onClick={() => onChange!(update(
+          itemData,
+          { aliases: { $push: [''] } }
+        ))}>
+          Add alias
+        </Button>
+      </ControlGroup>
+      :
+      <UL>
+        {itemData.aliases.map((a, idx) => <li key={idx}>{a}</li>)}
+      </UL>
+    }
+  </PropertyDetailView>
+    ;
 };
 
 
@@ -112,22 +121,50 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
   itemSorter: (a, b) => a.identifier - b.identifier,
 };
 
+interface TextInputProps {
+  disabled: boolean;
+  onChange: (evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+interface TextInputPropsOnchange<
+  D extends CommonGRItemData,
+> {
+    onChange?: (newData: D) => void;
+    itemData: D;
+}
+
+export function textInputProps<
+  P extends CommonGRItemData,
+  Q extends TextInputPropsOnchange<P>,
+  Field extends keyof P,
+> (props: Q): (field: Field) => TextInputProps {
+  const { onChange, itemData } = props;
+  return function (fieldName) {
+    return {
+      disabled : !onChange,
+      onChange : (evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (!onChange) { return; }
+        onChange({ ...itemData, [fieldName] : evt.currentTarget.value })
+      },
+    }
+  }
+}
 
 export const EditView: ItemEditView<CommonGRItemData> = function (props) {
   const { itemData, itemRef, onChange, children } = props;
   const { getMapReducedData, performOperation, operationKey } = useContext(DatasetContext);
 
-  function textInputProps
-  <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
-  (fieldName: F) {
-    return {
-      disabled: !onChange,
-      onChange: (evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (!onChange) { return; }
-        onChange({ ...itemData, [fieldName]: evt.currentTarget.value })
-      },
-    }
-  }
+  // function textInputProps
+  // <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
+  // (fieldName: F) {
+  //   return {
+  //     disabled: !onChange,
+  //     onChange: (evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //       if (!onChange) { return; }
+  //       onChange({ ...itemData, [fieldName]: evt.currentTarget.value })
+  //     },
+  //   }
+  // }
 
   async function handleGetNewID() {
     if (onChange) {
@@ -157,9 +194,9 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
     <SplitView
         aside={<>
 
-          <AliasesEdit {...props}/>
+          <AliasesEdit itemData={props.itemData} onChange={onChange} />
           <FormGroup label="Remarks:">
-            <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
+            <TextArea fill required value={itemData.remarks} {...textInputProps(props)('remarks')} />
           </FormGroup>
 
           {itemData.informationSources.length > 0
@@ -222,7 +259,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
       </FormGroup>
 
       <FormGroup label="Name:">
-        <InputGroup required value={itemData.name} {...textInputProps('name')} />
+        <InputGroup required value={itemData.name} {...textInputProps(props)('name')} />
       </FormGroup>
 
       {children}

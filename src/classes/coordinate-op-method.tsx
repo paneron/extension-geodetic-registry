@@ -4,6 +4,12 @@ import { jsx, css } from '@emotion/react';
 import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
+import {
+  FormGroup,
+  TextArea,
+} from '@blueprintjs/core';
+
+
 
 import {
   CommonGRItemData,
@@ -13,18 +19,21 @@ import {
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
   AliasesDetail,
+  textInputProps,
 } from './common';
 
 
 export interface CoordinateOpMethod extends CommonGRItemData {
   aliases: string[]
   parameters: string[]
+  formula: string
 }
 
 export const DEFAULTS: CoordinateOpMethod = {
   ...SHARED_DEFAULTS,
   aliases: [],
   parameters: [],
+  formula: '',
 };
 
 
@@ -52,6 +61,12 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
             ? <AliasesDetail aliases={data.aliases} />
             : null}
 
+          {(data.formula || '').length > 0
+            ? <PropertyDetailView title="Formula">
+                <p>{data.formula}</p>
+              </PropertyDetailView>
+            : null}
+
           {(data.parameters || []).length > 0
             ? <PropertyDetailView title="Parameters">
                 {data.parameters.map(paramID =>
@@ -77,7 +92,12 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
         onChange={props.onChange ? (newData: CommonGRItemData) => {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
+        } : undefined}>
+
+        <FormGroup label="Formula">
+          <TextArea fill required value={props.itemData.formula} {...textInputProps(props)('formula')} />
+        </FormGroup>
+      </CommonEditView>
     ),
   },
 
