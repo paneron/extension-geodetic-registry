@@ -28,10 +28,11 @@ interface EllipsoidData extends CommonGRItemData {
   semiMajorAxis: number | null
   semiMajorAxisUoM: string | null
 
+  isSphere: boolean
+
+  // Ellipsoid only (isSphere == false):
   semiMinorAxis: number | null
   semiMinorAxisUoM: string | null
-
-  isSphere: boolean
 }
 
 
