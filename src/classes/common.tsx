@@ -70,41 +70,42 @@ export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliase
 };
 
 export const AliasesEdit: ItemEditView<CommonGRItemData> = function (props) {
-  return <PropertyDetailView title="Aliases">
-        <ControlGroup vertical>
-          {(props.itemData.aliases || []) .map((alias, idx) =>
-            <InputGroup
-              key={idx}
-              fill
-              required
-              value={alias}
-              readOnly={!props.onChange}
-              rightElement={props.onChange
-                ? <Button
-                    icon='cross'
-                    onClick={() => props.onChange!(update(
-                      props.itemData,
-                      { aliases: { $splice: [[ idx, 1 ]] } }
-                    ))}
-                  />
-                : undefined}
-              onChange={evt => props.onChange!(update(
-                props.itemData,
-                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
-              ))}
-            />
-          )}
-          {props.onChange
-            ? <Button icon='add' onClick={() => props.onChange!(update(
-                props.itemData,
-                { aliases: { $push: [''] } },
-              ))}>
-                Add alias
-              </Button>
-            : undefined}
-        </ControlGroup>
-      </PropertyDetailView>
-;
+  return (
+    <PropertyDetailView title="Aliases">
+      <ControlGroup vertical>
+        {(props.itemData.aliases || []) .map((alias, idx) =>
+          <InputGroup
+            key={idx}
+            fill
+            required
+            value={alias}
+            readOnly={!props.onChange}
+            rightElement={props.onChange
+              ? <Button
+                  icon='cross'
+                  onClick={() => props.onChange!(update(
+                    props.itemData,
+                    { aliases: { $splice: [[ idx, 1 ]] } }
+                  ))}
+                />
+              : undefined}
+            onChange={evt => props.onChange!(update(
+              props.itemData,
+              { aliases: { [idx]: { $set: evt.currentTarget.value } } },
+            ))}
+          />
+        )}
+        {props.onChange
+          ? <Button icon='add' onClick={() => props.onChange!(update(
+              props.itemData,
+              { aliases: { $push: [''] } },
+            ))}>
+              Add alias
+            </Button>
+          : undefined}
+      </ControlGroup>
+    </PropertyDetailView>
+  );
 };
 
 
