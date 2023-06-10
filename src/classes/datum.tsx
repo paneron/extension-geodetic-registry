@@ -17,13 +17,11 @@ import {
   Extent,
   DEFAULT_EXTENT,
   ExtentEdit,
-  AliasesDetail,
 } from './common';
 
 
 export interface DatumData extends CommonGRItemData {
   scope: string
-  aliases: string[]
   extent: Extent
   originDescription: string
   coordinateReferenceEpoch: string | null
@@ -32,7 +30,6 @@ export interface DatumData extends CommonGRItemData {
 
 export const DATUM_DEFAULTS: DatumData = {
   ...SHARED_DEFAULTS,
-  aliases: [],
   scope: '',
   extent: DEFAULT_EXTENT,
   originDescription: '',
@@ -46,10 +43,6 @@ const DatumDetailView: ItemDetailView<DatumData> = function (props) {
   return (
     <CommonDetailView {...props}>
       {props.children}
-
-      {(data.aliases || []).length > 0
-        ? <AliasesDetail aliases={data.aliases} />
-        : null}
 
       <PropertyDetailView inline title="Scope">
         {data.scope || ''}

@@ -18,13 +18,11 @@ import {
 
 
 interface CoordinateSystemData extends CommonGRItemData {
-  aliases: string[]
   coordinateSystemAxes: string[]
 }
 
 export const DEFAULTS: CoordinateSystemData = {
   ...COMMON_DEFAULTS,
-  aliases: [],
   coordinateSystemAxes: [],
 };
 

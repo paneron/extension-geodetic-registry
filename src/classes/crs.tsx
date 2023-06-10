@@ -17,20 +17,17 @@ import {
   DEFAULT_EXTENT,
   ExtentEdit,
   COMMON_PROPERTIES,
-  AliasesDetail,
 } from './common';
 
 
 export interface CRSData extends CommonGRItemData {
   scope: string
   extent: Extent
-  aliases: string[]
   coordinateSystem?: { classID: string, itemID: string }
 }
 
 export const CRS_DEFAULTS: CRSData = {
   ...SHARED_DEFAULTS,
-  aliases: [],
   extent: DEFAULT_EXTENT,
   scope: '',
 }
@@ -46,9 +43,6 @@ const CRSDetailView: ItemDetailView<CRSData> = function (props) {
 
       {props.children}
 
-      {(data.aliases || []).length > 0
-        ? <AliasesDetail aliases={data.aliases} />
-        : null}
 
       <H5>Coordinate system</H5>
       {data.coordinateSystem

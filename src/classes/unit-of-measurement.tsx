@@ -11,12 +11,10 @@ import {
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
-  AliasesDetail,
 } from './common';
 
 
 export interface UoMData extends CommonGRItemData {
-  aliases: string[]
   denominator: null | number
   numerator: null | number
   measureType: 'ANGLE' | 'SCALE' | 'LENGTH' | 'TIME'
@@ -26,7 +24,6 @@ export interface UoMData extends CommonGRItemData {
 export const DEFAULTS: UoMData = {
   ...SHARED_DEFAULTS,
   measureType: 'LENGTH',
-  aliases: [],
   symbol: null,
   denominator: null,
   numerator: null,
@@ -56,10 +53,6 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
           <PropertyDetailView inline title="Symbol">
             {data.symbol || '—'}
           </PropertyDetailView>
-
-          {(data.aliases || []).length > 0
-            ? <AliasesDetail aliases={data.aliases} />
-            : null}
 
           <PropertyDetailView inline title="Measure type">
             {data.measureType}
