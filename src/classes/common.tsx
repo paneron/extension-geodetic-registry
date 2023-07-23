@@ -24,8 +24,8 @@ import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
 // For backwards compatibility
-import { Extent, ExtentEdit, DEFAULT_EXTENT } from './extent';
-export { Extent, ExtentEdit, DEFAULT_EXTENT };
+import { type Extent, ExtentEdit, DEFAULT_EXTENT } from './extent';
+export { type Extent, ExtentEdit, DEFAULT_EXTENT };
 
 
 export interface CommonGRItemData {
