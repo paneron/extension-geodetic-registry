@@ -9,9 +9,9 @@ import { jsx } from '@emotion/react';
 
 import { Checkbox, ControlGroup, ControlGroupProps, InputGroup } from '@blueprintjs/core';
 
-import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
-  CommonGRItemData,
+  type CommonGRItemData,
   COMMON_PROPERTIES,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,

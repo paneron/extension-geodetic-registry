@@ -14,7 +14,7 @@ import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
   MenuItem, Tag, Icon, ProgressBar,
 } from '@blueprintjs/core';
-import { Select2 as Select, ItemRenderer } from '@blueprintjs/select';
+import { Select2 as Select, type ItemRenderer } from '@blueprintjs/select';
 import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import useDebounce from '@riboseinc/paneron-extension-kit/useDebounce';

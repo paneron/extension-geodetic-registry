@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update from 'immutability-helper';
-import React, { ReactChildren, ReactNode, useContext } from 'react';
+import React, { type ReactChildren, type ReactNode, useContext } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {

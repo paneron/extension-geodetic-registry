@@ -1,4 +1,4 @@
-import { ItemClassConfiguration } from '@riboseinc/paneron-registry-kit/types';
+import type { ItemClassConfiguration } from '@riboseinc/paneron-registry-kit/types';
 
 import { transformation } from './classes/transformation';
 import { conversion } from './classes/conversion';

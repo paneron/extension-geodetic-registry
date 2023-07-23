@@ -6,7 +6,7 @@ import update from 'immutability-helper';
 import React from 'react';
 import { Button, ControlGroup, FormGroup, H3, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 import { css, jsx } from '@emotion/react';
-import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 

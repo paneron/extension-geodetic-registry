@@ -7,11 +7,11 @@ import React from 'react';
 import { jsx } from '@emotion/react';
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 
-import { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
-  CommonGRItemData,
+  type CommonGRItemData,
   COMMON_PROPERTIES,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,

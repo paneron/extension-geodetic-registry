@@ -3,7 +3,7 @@
 import update from 'immutability-helper';
 import { Button, ControlGroup, H3, UL } from '@blueprintjs/core';
 import { jsx, css } from '@emotion/react';
-import { ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { type ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
@@ -13,7 +13,7 @@ import {
   ListItemView as CommonListItemView,
   EditView as CommonEditView,
   DetailView as CommonDetailView,
-  CommonGRItemData,
+  type CommonGRItemData,
 } from './common';
 
 
