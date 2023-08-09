@@ -53,7 +53,7 @@ function getParameterStub(): TransformationParameter {
 }
 
 
-interface TransformationData extends CommonGRItemData {
+export interface TransformationData extends CommonGRItemData {
   extent: Extent
   operationVersion: string
   accuracy: {
