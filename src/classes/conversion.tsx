@@ -23,7 +23,7 @@ import {
   DEFAULT_EXTENT,
 } from './common';
 
-interface ConversionParameter {
+export interface ConversionParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
   name: string // Dependent on type? filename?
