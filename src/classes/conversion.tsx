@@ -4,7 +4,7 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { Button, ControlGroup, FormGroup, H3, InputGroup, NumericInput, UL } from '@blueprintjs/core';
+import { Button, ControlGroup, FormGroup, H3, InputGroup, UL } from '@blueprintjs/core';
 import { css, jsx } from '@emotion/react';
 import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -43,10 +43,10 @@ function getParameterStub(): ConversionParameter {
 export interface ConversionData extends CommonGRItemData {
   aliases: string[]
   extent: Extent
-  accuracy: {
-    value: number
-    unitOfMeasurement: string // Unit of measurement UUID
-  }
+  // accuracy: {
+  //   value: number
+  //   unitOfMeasurement: string // Unit of measurement UUID
+  // }
   // epsg:<id>
   parameters: ConversionParameter[]
   coordinateOperationMethod?: string
@@ -55,10 +55,10 @@ export interface ConversionData extends CommonGRItemData {
 
 export const DEFAULTS: ConversionData = {
   ...SHARED_DEFAULTS,
-  accuracy: {
-    value: 0,
-    unitOfMeasurement: '',
-  },
+  // accuracy: {
+  //   value: 0,
+  //   unitOfMeasurement: '',
+  // },
   parameters: [],
   aliases: [],
   extent: DEFAULT_EXTENT,
@@ -99,6 +99,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               : '—'}
           </PropertyDetailView>
 
+          {/*
           <PropertyDetailView title="Accuracy">
             <ControlGroup vertical>
               <NumericInput readOnly value={data.accuracy.value} />
@@ -109,6 +110,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               />
             </ControlGroup>
           </PropertyDetailView>
+          */}
 
           {params.length > 0
             ? <H3 css={css`margin-top: 1.5em;`}>Parameters</H3>
@@ -167,6 +169,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
           />
         </FormGroup>
 
+        {/*
         <FormGroup label="Accuracy:">
           <ControlGroup vertical>
             <NumericInput
@@ -199,6 +202,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
             />
           </ControlGroup>
         </FormGroup>
+        */}
 
         {props.itemData.parameters.length > 0
           ? <H3 css={css`margin-top: 1.5em;`}>
