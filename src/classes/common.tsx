@@ -69,11 +69,13 @@ export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliase
   </PropertyDetailView>;
 };
 
-export const AliasesEdit: ItemEditView<CommonGRItemData> = function (props) {
+
+export const AliasesEdit: React.FC<{ aliases: string[], onChange?: (newAliases: string[]) => void }> =
+function (props) {
   return (
     <PropertyDetailView title="Aliases">
       <ControlGroup vertical>
-        {(props.itemData.aliases || []) .map((alias, idx) =>
+        {props.aliases.map((alias, idx) =>
           <InputGroup
             key={idx}
             fill
@@ -83,23 +85,27 @@ export const AliasesEdit: ItemEditView<CommonGRItemData> = function (props) {
             rightElement={props.onChange
               ? <Button
                   icon='cross'
-                  onClick={() => props.onChange!(update(
-                    props.itemData,
-                    { aliases: { $splice: [[ idx, 1 ]] } }
-                  ))}
+                  disabled={!props.onChange}
+                  onClick={props.onChange
+                    ? () => props.onChange!(update(
+                        props.aliases, { $splice: [[ idx, 1 ]] }
+                      ))
+                    : undefined}
                 />
               : undefined}
-            onChange={evt => props.onChange!(update(
-              props.itemData,
-              { aliases: { [idx]: { $set: evt.currentTarget.value } } },
-            ))}
+            onChange={props.onChange
+              ? evt => props.onChange!(update(
+                  props.aliases, { [idx]: { $set: evt.currentTarget.value } },
+                ))
+              : undefined}
           />
         )}
         {props.onChange
-          ? <Button icon='add' onClick={() => props.onChange!(update(
-              props.itemData,
-              { aliases: { $push: [''] } },
-            ))}>
+          ? <Button
+                icon='add'
+                onClick={() => props.onChange!(update(
+                  props.aliases, { $push: [''] },
+                ))}>
               Add alias
             </Button>
           : undefined}
@@ -158,7 +164,12 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
     <SplitView
         aside={<>
 
-          <AliasesEdit {...props}/>
+          <AliasesEdit
+            aliases={itemData.aliases}
+            onChange={onChange
+              ? (newAliases) => onChange!(update(itemData, { aliases: { $set: newAliases } } ))
+              : undefined}
+          />
           <FormGroup label="Remarks:">
             <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
           </FormGroup>
