@@ -137,7 +137,8 @@ export const VERTICAL_DEFAULTS = {
 
 
 export interface GeodeticCRSData extends CRSData {
-  datum: string // geodetic
+  /** Geodetic datum */
+  datum: string
 }
 export const GEODETIC_DEFAULTS = {
   datum: ''
