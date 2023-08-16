@@ -19,8 +19,12 @@ import type {
   ItemClassConfiguration,
   ItemDetailView,
   ItemEditView,
+  ItemEditViewProps,
+  Payload,
+  InternalItemReference,
 } from '@riboseinc/paneron-registry-kit/types';
 import { incompleteItemRefToItemPathPrefix } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
+import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
@@ -245,6 +249,56 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
     </SplitView>
   );
 };
+
+
+export function RelatedField<T extends Payload, F extends keyof T>(
+  props: T[F] extends (InternalItemReference | undefined)
+    ? ItemEditViewProps<T> & {
+      fieldName: F,
+      allowedClasses: string[],
+      relatedClassID?: undefined,
+    }
+    : T[F] extends string | undefined
+      ? ItemEditViewProps<T> & {
+        fieldName: F,
+        relatedClassID: string,
+        allowedClasses?: undefined,
+      }
+      : never
+) {
+  // TODO: below we cast update() to avoid type errors, for some reason it doesn’t catch
+  // that props.itemData is T and spec becomes `never`. The only way around it that I found
+  // requires verbose way of calling this component
+
+  const availableClassIDs =
+    props.allowedClasses !== undefined
+      ? props.allowedClasses
+      : [props.relatedClassID];
+
+  const onChange = props.onChange
+    ? function handleRelatedFieldChange(itemRef: InternalItemReference) {
+        // If we are given multiple classes, set as generic related field
+        // Otherwise, treat as simple related field
+        props.allowedClasses !== undefined
+          ? props.onChange!(update<T, any>(props.itemData, { [props.fieldName]: { $set: itemRef } }))
+          : props.onChange!(update<T, any>(props.itemData, { [props.fieldName]: { $set: itemRef.itemID } }));
+      }
+    : undefined;
+
+  return (
+    <GenericRelatedItemView
+      itemRef={props.itemData[props.fieldName]}
+      availableClassIDs={availableClassIDs}
+      onClear={props.onChange
+        ? () => props.onChange!(update<T, any>(props.itemData, { $unset: [props.fieldName] }))
+        : undefined}
+      onChange={onChange}
+      itemSorter={COMMON_PROPERTIES.itemSorter}
+      getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+      useRegisterItemData={props.useRegisterItemData}
+    />
+  );
+}
 
 
 const SimpleField: React.FC<{ val: string, label: string, onChange?: (newVal: string) => void }> =
