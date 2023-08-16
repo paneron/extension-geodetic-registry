@@ -428,6 +428,9 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
     <SplitView
         className={props.className}
         aside={<>
+
+          <AliasesEdit aliases={data.aliases} />
+
           {data.remarks
             ? <PropertyDetailView title="Remarks">
                 <p>{data.remarks}</p>
