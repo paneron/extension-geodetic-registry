@@ -1,9 +1,9 @@
 /** @jsx jsx */
 
 import update from 'immutability-helper';
-import { Button, ControlGroup, H3, UL } from '@blueprintjs/core';
+import { Button, H3, UL } from '@blueprintjs/core';
 import { jsx, css } from '@emotion/react';
-import { type ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
@@ -11,7 +11,6 @@ import {
   COMMON_PROPERTIES,
   ListItemView as CommonListItemView,
   EditView as CommonEditView,
-  DetailView as CommonDetailView,
   type CommonGRItemData,
 } from './common';
 
@@ -23,32 +22,6 @@ interface CoordinateSystemData extends CommonGRItemData {
 export const DEFAULTS: CoordinateSystemData = {
   ...COMMON_DEFAULTS,
   coordinateSystemAxes: [],
-};
-
-const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = function (props) {
-  const data = props.itemData;
-  const axes = data.coordinateSystemAxes ?? [];
-
-  return (
-    <CommonDetailView {...props}>
-
-      <H3>Axes</H3>
-
-      <UL css={css`padding-left: 0; list-style: square;`}>
-        {axes.map((axis, idx) =>
-          <li key={idx} css={css`margin-top: 1em;`}>
-            <PropertyDetailView title={`Axis ${idx + 1}`}>
-              <GenericRelatedItemView
-                itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </PropertyDetailView>
-          </li>
-        )}
-      </UL>
-    </CommonDetailView>
-  );
 };
 
 const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> = function (props)  {
@@ -63,44 +36,52 @@ const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> = function (p
         props.onChange({ ...props.itemData, ...newData });
       } : undefined}>
 
+      {props.itemData.coordinateSystemAxes
+        ? <H3>Axes</H3>
+        : null}
 
-      <PropertyDetailView title="Axes">
-        <ControlGroup vertical>
-          {(props.itemData.coordinateSystemAxes || []) .map((axis, idx) =>
-            <li key={idx} css={css`margin-top: 1em;`}>
-              <PropertyDetailView title={`Axis ${idx + 1}`}>
-                <GenericRelatedItemView
-                  itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
-                  availableClassIDs={['coordinate-sys-axis']}
-                  onClear={props.onChange
-                    ? () => props.onChange!(update(
-                      props.itemData,
-                      { coordinateSystemAxes: { $splice: [[ idx, 1 ]] } }
-                    ))
-                    : undefined}
-                  onChange={props.onChange
-                    ? (itemRef) => props.onChange!(update(
-                      props.itemData,
-                      { coordinateSystemAxes: { [idx]: { $set: itemRef.itemID } } },
-                    ))
-                    : undefined}
-                  itemSorter={COMMON_PROPERTIES.itemSorter}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            </li>
-          )}
-          {props.onChange
-            ? <Button icon='add' onClick={() => props.onChange!(update(
-                props.itemData,
-                { coordinateSystemAxes: { $push: [''] } },
-              ))}>
-                Add axis
-              </Button>
-            : undefined}
-        </ControlGroup>
-      </PropertyDetailView>
+      <UL css={css`padding-left: 0; list-style: square;`}>
+        {(props.itemData.coordinateSystemAxes || []) .map((axis, idx) =>
+          <li key={idx} css={css`margin-top: 1em;`}>
+            <PropertyDetailView
+                title={`Axis ${idx + 1}`}
+                secondaryTitle={<Button
+                  outlined
+                  small
+                  disabled={!props.onChange}
+                  onClick={() => props.onChange!(update(props.itemData, { coordinateSystemAxes: { $splice: [[ idx, 1 ]] } }))}
+                >Delete</Button>}>
+              <GenericRelatedItemView
+                itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
+                availableClassIDs={['coordinate-sys-axis']}
+                onClear={props.onChange
+                  ? () => props.onChange!(update(
+                    props.itemData,
+                    { coordinateSystemAxes: { $splice: [[ idx, 1 ]] } }
+                  ))
+                  : undefined}
+                onChange={props.onChange
+                  ? (itemRef) => props.onChange!(update(
+                    props.itemData,
+                    { coordinateSystemAxes: { [idx]: { $set: itemRef.itemID } } },
+                  ))
+                  : undefined}
+                itemSorter={COMMON_PROPERTIES.itemSorter}
+                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                useRegisterItemData={props.useRegisterItemData}
+              />
+            </PropertyDetailView>
+          </li>
+        )}
+      </UL>
+      {props.onChange
+        ? <Button icon='add' onClick={() => props.onChange!(update(
+            props.itemData,
+            { coordinateSystemAxes: { $push: [''] } },
+          ))}>
+            Append axis
+          </Button>
+        : undefined}
     </CommonEditView>
   );
 }
@@ -118,7 +99,6 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
-    detailView: CoordinateSystemDetailView,
     editView: CoordinateSystemEditView,
   },
 
@@ -140,7 +120,6 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
-    detailView: CoordinateSystemDetailView,
     editView: CoordinateSystemEditView,
   },
 
@@ -162,7 +141,6 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
-    detailView: CoordinateSystemDetailView,
     editView: CoordinateSystemEditView,
   },
 
@@ -184,7 +162,6 @@ export const sphericalCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemData>,
-    detailView: CoordinateSystemDetailView,
     editView: CoordinateSystemEditView,
   },
 
