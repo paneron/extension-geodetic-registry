@@ -15,7 +15,8 @@ import {
 
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
-  Citation, ItemClassConfiguration,
+  Citation,
+  ItemClassConfiguration,
   ItemDetailView,
   ItemEditView,
 } from '@riboseinc/paneron-registry-kit/types';
