@@ -175,6 +175,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
               ? (newAliases) => onChange!(update(itemData, { aliases: { $set: newAliases } } ))
               : undefined}
           />
+
           <FormGroup label="Remarks:">
             <TextArea fill required value={itemData.remarks} {...textInputProps('remarks')} />
           </FormGroup>
@@ -443,6 +444,7 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
                 </UL>
               </PropertyDetailView>
             : null}
+
         </>}>
       {props.children}
     </SplitView>
