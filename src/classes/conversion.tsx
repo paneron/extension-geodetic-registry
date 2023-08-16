@@ -41,7 +41,6 @@ function getParameterStub(): ConversionParameter {
 }
 
 export interface ConversionData extends CommonGRItemData {
-  aliases: string[]
   extent: Extent
   // accuracy: {
   //   value: number
@@ -60,7 +59,6 @@ export const DEFAULTS: ConversionData = {
   //   unitOfMeasurement: '',
   // },
   parameters: [],
-  aliases: [],
   extent: DEFAULT_EXTENT,
   scope: '',
   coordinateOperationMethod: ''
