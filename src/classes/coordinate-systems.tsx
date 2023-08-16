@@ -9,7 +9,6 @@ import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/Generi
 import {
   DEFAULTS as COMMON_DEFAULTS,
   COMMON_PROPERTIES,
-  AliasesDetail,
   ListItemView as CommonListItemView,
   EditView as CommonEditView,
   DetailView as CommonDetailView,
@@ -32,10 +31,6 @@ const CoordinateSystemDetailView: ItemDetailView<CoordinateSystemData> = functio
 
   return (
     <CommonDetailView {...props}>
-
-      {(data.aliases || []).length > 0
-        ? <AliasesDetail aliases={data.aliases} />
-        : null}
 
       <H3>Axes</H3>
 
