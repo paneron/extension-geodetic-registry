@@ -6,19 +6,19 @@ import update from 'immutability-helper';
 import React from 'react';
 import { Button, ControlGroup, FormGroup, H3, InputGroup, UL } from '@blueprintjs/core';
 import { css, jsx } from '@emotion/react';
-import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 import {
-  CommonGRItemData,
+  type CommonGRItemData,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
   AliasesDetail,
-  Extent,
+  type Extent,
   ExtentEdit,
   DEFAULT_EXTENT,
 } from './common';
