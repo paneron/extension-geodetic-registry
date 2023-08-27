@@ -11,13 +11,13 @@ import { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paner
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
-  CommonGRItemData,
+  type CommonGRItemData,
   COMMON_PROPERTIES,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
-  Extent,
+  type Extent,
   ExtentEdit,
   InformationSourceDetails,
   DEFAULT_EXTENT,
