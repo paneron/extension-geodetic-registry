@@ -302,6 +302,48 @@ export function RelatedField<T extends Payload, F extends keyof T>(
 }
 
 
+interface ItemListProps<T> {
+  items: T[]
+  itemLabel: string
+  itemRenderer: (item: T, idx: number, deleteButton?: JSX.Element) => JSX.Element
+  onChangeItems?: (spec: Spec<T[]>) => void
+  placeholderItem?: T
+}
+
+/** A wrapper for handling editable lists of items. */
+export function ItemList<T> ({
+  items,
+  itemLabel,
+  itemRenderer,
+  onChangeItems,
+  placeholderItem,
+}: ItemListProps<T>): JSX.Element {
+  return <>
+    <UL css={css`padding-left: 0; list-style: square;`}>
+      {(items) .map((item, idx) =>
+        <li key={idx} css={css`margin-top: 1em;`}>
+          {itemRenderer(
+            item,
+            idx,
+            <Button
+              outlined
+              small
+              disabled={!onChangeItems}
+              onClick={() => onChangeItems!({ $splice: [[ idx, 1 ]] })}
+            >Delete</Button>,
+          )}
+        </li>
+      )}
+    </UL>
+    {onChangeItems && placeholderItem
+      ? <Button icon='add' onClick={() => onChangeItems({ $push: [placeholderItem] })}>
+          Append {itemLabel}
+        </Button>
+      : undefined}
+  </>;
+}
+
+
 const SimpleField: React.FC<{ val: string, label: string, onChange?: (newVal: string) => void }> =
 function ({ val, label, onChange }) {
   return (
