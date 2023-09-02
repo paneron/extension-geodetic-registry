@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
-import update from 'immutability-helper';
+import update, { type Spec } from 'immutability-helper';
 import React, { type ReactChildren, type ReactNode, useContext } from 'react';
 import { jsx, css } from '@emotion/react';
 
@@ -19,8 +19,6 @@ import type {
   ItemClassConfiguration,
   ItemDetailView,
   ItemEditView,
-  ItemEditViewProps,
-  Payload,
   InternalItemReference,
 } from '@riboseinc/paneron-registry-kit/types';
 import { incompleteItemRefToItemPathPrefix } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
@@ -252,51 +250,58 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
 };
 
 
-export function RelatedField<T extends Payload, F extends keyof T>(
-  props: T[F] extends (InternalItemReference | undefined)
-    ? ItemEditViewProps<T> & {
-      fieldName: F,
-      allowedClasses: string[],
-      relatedClassID?: undefined,
-    }
-    : T[F] extends string | undefined
-      ? ItemEditViewProps<T> & {
-        fieldName: F,
-        relatedClassID: string,
-        allowedClasses?: undefined,
-      }
-      : never
-) {
-  // TODO: below we cast update() to avoid type errors, for some reason it doesn’t catch
-  // that props.itemData is T and spec becomes `never`. The only way around it that I found
-  // requires verbose way of calling this component
 
-  const availableClassIDs =
-    props.allowedClasses !== undefined
-      ? props.allowedClasses
-      : [props.relatedClassID];
+interface RelatedItemWidgetProps<M extends 'generic' | 'id', S> {
+  mode: M
+  ref?: InternalItemReference
+  /**
+   * Restrict the choice of related item classes.
+   * `mode === 'id'` means only one class can be specified.
+   */
+  classIDs: M extends 'generic' ? (undefined | string[]) : ([string] | [])
+  onSet?: (spec: { $set: S }) => void
+  /** Set only item ID. Has no effect if onSet is provided. */
+  onClear?: () => void
+}
 
-  const onChange = props.onChange
-    ? function handleRelatedFieldChange(itemRef: InternalItemReference) {
-        // If we are given multiple classes, set as generic related field
-        // Otherwise, treat as simple related field
-        props.allowedClasses !== undefined
-          ? props.onChange!(update<T, any>(props.itemData, { [props.fieldName]: { $set: itemRef } }))
-          : props.onChange!(update<T, any>(props.itemData, { [props.fieldName]: { $set: itemRef.itemID } }));
-      }
-    : undefined;
+/**
+ * A clumsy wrapper around GenericRelatedItemView
+ * for handling generic and non-generic relations.
+ */
+export function RelatedItem<
+  M extends 'generic' | 'id',
+  S extends M extends 'generic' ? InternalItemReference : string
+>({
+  ref,
+  classIDs,
+  onSet,
+  onClear,
+  mode,
+}: RelatedItemWidgetProps<M, S>) {
+
+  const defaultClass: string | undefined = classIDs?.[0] ?? ref?.classID;
+
+  // Cannot set if there is no class and mode is non-generic
+  const availableClassIDs = defaultClass === undefined && mode === 'id'
+    ? [] // no way
+    : mode === 'id'
+      ? [defaultClass as string]
+      : classIDs;
+
+  // Cannot set if there are no class choices
+  const canSet = onSet && (availableClassIDs === undefined || availableClassIDs.length > 0);
+
+  function handleSet(ref: InternalItemReference) {
+    onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
+  }
 
   return (
     <GenericRelatedItemView
-      itemRef={props.itemData[props.fieldName]}
+      itemRef={ref}
       availableClassIDs={availableClassIDs}
-      onClear={props.onChange
-        ? () => props.onChange!(update<T, any>(props.itemData, { $unset: [props.fieldName] }))
-        : undefined}
-      onChange={onChange}
+      onClear={onClear}
+      onChange={canSet ? handleSet : undefined}
       itemSorter={COMMON_PROPERTIES.itemSorter}
-      getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-      useRegisterItemData={props.useRegisterItemData}
     />
   );
 }
