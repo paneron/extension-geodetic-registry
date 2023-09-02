@@ -21,7 +21,7 @@ import {
   type Extent,
   DEFAULT_EXTENT,
   ExtentEdit,
-  RelatedField,
+  RelatedItem,
 } from './common';
 
 
@@ -109,28 +109,35 @@ export const NON_COMPOUND_CRS_DEFAULTS: CRSData = {
   scope: '',
 }
 
-const NonCompoundCRSEditView: ItemEditView<NonCompoundCRSData> = function (props) {
+const NonCompoundCRSEditView: ItemEditView<NonCompoundCRSData> =
+function ({ onChange, itemData, ...props }) {
   return (
     <CRSEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined}>
+        {...props}
+        itemData={itemData}
+        onChange={onChange
+          ? (newData: CommonGRItemData) => {
+              if (!onChange) { return; }
+              onChange({ ...itemData, ...newData });
+            }
+          : undefined
+        }>
 
       <PropertyDetailView title="Coordinate system">
-        <RelatedField
-          fieldName="coordinateSystem"
-          allowedClasses={[
+        <RelatedItem
+          itemRef={itemData.coordinateSystem}
+          mode="generic"
+          onClear={onChange
+            && (() => onChange!(update(itemData, { $unset: ['coordinateSystem'] })))}
+          onSet={onChange
+            ? ((spec) => onChange!(update(itemData, { coordinateSystem: spec })))
+            : undefined}
+          classIDs={[
             'coordinate-sys--cartesian',
             'coordinate-sys--vertical',
             'coordinate-sys--ellipsoidal',
             'coordinate-sys--spherical',
           ]}
-          {...props}
         />
       </PropertyDetailView>
 
@@ -197,29 +204,39 @@ export const compoundCRS: ItemClassConfiguration<CompoundCRSData> = {
         </CRSDetailView>
       )
     },
-    editView: (props) => {
+    editView: ({ onChange, itemData, ...props }) => {
       const EditView = CRSEditView as ItemEditView<CompoundCRSData>;
       return (
-        <EditView {...props}>
+        <EditView onChange={onChange} itemData={itemData} {...props}>
           <PropertyDetailView title="Horizontal CRS">
-            <RelatedField
-              fieldName="horizontalCRS"
-              allowedClasses={[
+            <RelatedItem
+              itemRef={itemData.horizontalCRS}
+              mode="generic"
+              onClear={onChange
+                && (() => onChange!(update(itemData, { $unset: ['horizontalCRS'] })))}
+              onSet={onChange
+                ? ((spec) => onChange!(update(itemData, { horizontalCRS: spec })))
+                : undefined}
+              classIDs={[
                 'crs--projected',
                 'crs--engineering',
                 'crs--geodetic',
               ]}
-              {...props}
             />
           </PropertyDetailView>
           <PropertyDetailView title="Vertical CRS">
-            <RelatedField
-              fieldName="verticalCRS"
-              allowedClasses={[
+            <RelatedItem
+              itemRef={itemData.verticalCRS}
+              mode="generic"
+              onClear={onChange
+                && (() => onChange!(update(itemData, { $unset: ['verticalCRS'] })))}
+              onSet={onChange
+                ? ((spec) => onChange!(update(itemData, { verticalCRS: spec })))
+                : undefined}
+              classIDs={[
                 'crs--vertical',
                 'crs--engineering',
               ]}
-              {...props}
             />
           </PropertyDetailView>
         </EditView>
@@ -280,15 +297,20 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<VerticalCRSData>,
-    editView: (props) => {
+    editView: ({ itemData, onChange, ...props }) => {
       const EditView = NonCompoundCRSEditView as ItemEditView<VerticalCRSData>;
       return (
-        <EditView {...props}>
+        <EditView itemData={itemData} onChange={onChange} {...props}>
           <PropertyDetailView title="Datum (vertical)">
-            <RelatedField
-              fieldName="datum"
-              relatedClassID="datums--vertical"
-              {...props}
+            <RelatedItem
+              mode="id"
+              itemRef={{ classID: 'datums--vertical', itemID: itemData.datum }}
+              classIDs={["datums--vertical"]}
+              onClear={onChange
+                && (() => onChange!(update(itemData, { $unset: ['datum'] })))}
+              onSet={onChange
+                ? ((spec) => onChange!(update(itemData, { datum: spec })))
+                : undefined}
             />
           </PropertyDetailView>
         </EditView>
@@ -323,15 +345,20 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<GeodeticCRSData>,
-    editView: (props) => {
+    editView: ({ itemData, onChange, ...props }) => {
       const EditView = NonCompoundCRSEditView as ItemEditView<GeodeticCRSData>;
       return (
-        <EditView {...props}>
+        <EditView itemData={itemData} onChange={onChange} {...props}>
           <PropertyDetailView title="Datum (geodetic)">
-            <RelatedField
-              fieldName="datum"
-              relatedClassID="datums--geodetic"
-              {...props}
+            <RelatedItem
+              mode="id"
+              itemRef={{ classID: 'datums--geodetic', itemID: itemData.datum }}
+              classIDs={["datums--geodetic"]}
+              onClear={onChange
+                && (() => onChange!(update(itemData, { $unset: ['datum'] })))}
+              onSet={onChange
+                ? ((spec) => onChange!(update(itemData, { datum: spec })))
+                : undefined}
             />
           </PropertyDetailView>
         </EditView>
@@ -365,15 +392,20 @@ export const engineeringCRS: ItemClassConfiguration<EngineeringCRSData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<EngineeringCRSData>,
-    editView: (props) => {
+    editView: ({ itemData, onChange, ...props }) => {
       const EditView = NonCompoundCRSEditView as ItemEditView<EngineeringCRSData>;
       return (
-        <EditView {...props}>
+        <EditView itemData={itemData} onChange={onChange} {...props}>
           <PropertyDetailView title="Datum (engineering)">
-            <RelatedField
-              fieldName="datum"
-              relatedClassID="datums--engineering"
-              {...props}
+            <RelatedItem
+              mode="id"
+              itemRef={{ classID: 'datums--engineering', itemID: itemData.datum }}
+              classIDs={["datums--engineering"]}
+              onClear={onChange
+                && (() => onChange!(update(itemData, { $unset: ['datum'] })))}
+              onSet={onChange
+                ? ((spec) => onChange!(update(itemData, { datum: spec })))
+                : undefined}
             />
           </PropertyDetailView>
         </EditView>
