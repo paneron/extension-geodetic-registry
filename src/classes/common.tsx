@@ -253,7 +253,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
 
 interface RelatedItemWidgetProps<M extends 'generic' | 'id', S> {
   mode: M
-  ref?: InternalItemReference
+  itemRef?: InternalItemReference
   /**
    * Restrict the choice of related item classes.
    * `mode === 'id'` means only one class can be specified.
@@ -272,14 +272,14 @@ export function RelatedItem<
   M extends 'generic' | 'id',
   S extends M extends 'generic' ? InternalItemReference : string
 >({
-  ref,
+  itemRef,
   classIDs,
   onSet,
   onClear,
   mode,
 }: RelatedItemWidgetProps<M, S>) {
 
-  const defaultClass: string | undefined = classIDs?.[0] ?? ref?.classID;
+  const defaultClass: string | undefined = classIDs?.[0] ?? itemRef?.classID;
 
   // Cannot set if there is no class and mode is non-generic
   const availableClassIDs = defaultClass === undefined && mode === 'id'
@@ -295,9 +295,11 @@ export function RelatedItem<
     onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
   }
 
+  console.debug("RelatedItem", JSON.stringify(itemRef));
+
   return (
     <GenericRelatedItemView
-      itemRef={ref}
+      itemRef={itemRef}
       availableClassIDs={availableClassIDs}
       onClear={onClear}
       onChange={canSet ? handleSet : undefined}
