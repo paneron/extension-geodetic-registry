@@ -1,17 +1,18 @@
 /** @jsx jsx */
 
 import update from 'immutability-helper';
-import { Button, H3, UL } from '@blueprintjs/core';
-import { jsx, css } from '@emotion/react';
+import { Button, H3 } from '@blueprintjs/core';
+import { jsx } from '@emotion/react';
 import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
   DEFAULTS as COMMON_DEFAULTS,
   COMMON_PROPERTIES,
   ListItemView as CommonListItemView,
   EditView as CommonEditView,
   type CommonGRItemData,
+  ItemList,
+  RelatedItem,
 } from './common';
 
 
@@ -24,59 +25,48 @@ export const DEFAULTS: CoordinateSystemData = {
   coordinateSystemAxes: [],
 };
 
-const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> = function (props)  {
+const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> =
+function ({ itemData, onChange, ...props })  {
   return (
     <CommonEditView
-      useRegisterItemData={props.useRegisterItemData}
-      getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-      itemData={props.itemData}
-      itemRef={props.itemRef}
-      onChange={props.onChange ? (newData: CommonGRItemData) => {
-        if (!props.onChange) { return; }
-        props.onChange({ ...props.itemData, ...newData });
-      } : undefined}>
+        {...props}
+        itemData={itemData}
+        onChange={onChange
+          ? (newData: CommonGRItemData) => {
+              onChange?.({ ...itemData, ...newData });
+            }
+          : undefined
+        }>
 
-      {props.itemData.coordinateSystemAxes
+      {itemData.coordinateSystemAxes
         ? <H3>Axes</H3>
         : null}
 
-      <UL css={css`padding-left: 0; list-style: square;`}>
-        {(props.itemData.coordinateSystemAxes || []) .map((axis, idx) =>
-          <li key={idx} css={css`margin-top: 1em;`}>
-            <PropertyDetailView
-                title={`Axis ${idx + 1}`}
-                secondaryTitle={<Button
-                  outlined
-                  small
-                  disabled={!props.onChange}
-                  onClick={() => props.onChange!(update(props.itemData, { coordinateSystemAxes: { $splice: [[ idx, 1 ]] } }))}
-                >Delete</Button>}>
-              <GenericRelatedItemView
-                itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
-                availableClassIDs={['coordinate-sys-axis']}
-                onClear={props.onChange
-                  ? () => props.onChange!(update(
-                    props.itemData,
-                    { coordinateSystemAxes: { $splice: [[ idx, 1 ]] } }
-                  ))
-                  : undefined}
-                onChange={props.onChange
-                  ? (itemRef) => props.onChange!(update(
-                    props.itemData,
-                    { coordinateSystemAxes: { [idx]: { $set: itemRef.itemID } } },
-                  ))
-                  : undefined}
-                itemSorter={COMMON_PROPERTIES.itemSorter}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </PropertyDetailView>
-          </li>
-        )}
-      </UL>
-      {props.onChange
-        ? <Button icon='add' onClick={() => props.onChange!(update(
-            props.itemData,
+      <ItemList
+        items={itemData.coordinateSystemAxes}
+        itemLabel="axis"
+        onChangeItems={onChange
+          ? (spec) => onChange!(update(itemData, { coordinateSystemAxes: spec }))
+          : undefined}
+        placeholderItem=""
+        itemRenderer={(axis, idx, deleteButton) =>
+          <PropertyDetailView
+              title={`Axis ${idx + 1}`}
+              secondaryTitle={deleteButton}>
+            <RelatedItem
+              itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
+              classIDs={['coordinate-sys-axis']}
+              mode="id"
+              onSet={onChange
+                ? (spec) => onChange!(update(itemData, { coordinateSystemAxes: { [idx]: spec } }))
+                : undefined}
+            />
+          </PropertyDetailView>
+        }
+      />
+      {onChange
+        ? <Button icon='add' onClick={() => onChange!(update(
+            itemData,
             { coordinateSystemAxes: { $push: [''] } },
           ))}>
             Append axis
