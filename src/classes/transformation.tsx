@@ -159,7 +159,8 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               onValueChange={onChange
                 ? (valueAsNumber) => onChange!(update(itemData, { accuracy: { value: { $set: valueAsNumber } } }))
                 : undefined}
-              value={itemData.accuracy.value} />
+              value={itemData.accuracy.value}
+            />
             <GenericRelatedItemView
               itemRef={{
                 classID: 'unit-of-measurement',
