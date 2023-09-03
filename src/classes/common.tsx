@@ -295,8 +295,6 @@ export function RelatedItem<
     onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
   }
 
-  console.debug("RelatedItem", JSON.stringify(itemRef));
-
   return (
     <GenericRelatedItemView
       itemRef={itemRef}
