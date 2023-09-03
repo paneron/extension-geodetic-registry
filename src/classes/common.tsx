@@ -282,11 +282,12 @@ export function RelatedItem<
   const defaultClass: string | undefined = classIDs?.[0] ?? itemRef?.classID;
 
   // Cannot set if there is no class and mode is non-generic
-  const availableClassIDs = defaultClass === undefined && mode === 'id'
-    ? [] // no way
-    : mode === 'id'
-      ? [defaultClass as string]
-      : classIDs;
+  const availableClassIDs: string[] | undefined =
+    defaultClass === undefined && mode === 'id'
+      ? [] // no way
+      : mode === 'id'
+          ? [defaultClass as string]
+          : classIDs;
 
   // Cannot set if there are no class choices
   const canSet = onSet && (availableClassIDs === undefined || availableClassIDs.length > 0);
