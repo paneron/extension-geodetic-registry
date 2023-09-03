@@ -197,47 +197,31 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             onChange({ ...itemData, ...newData });
           } : undefined}>
 
-        <FormGroup label="Source CRS:" labelInfo="(editing functionality coming soon)">
-          <GenericRelatedItemView
+        <PropertyDetailView title="Source CRS">
+          <RelatedItem
             itemRef={itemData.sourceCRS}
-            availableClassIDs={['crs--vertical', 'crs--geodetic']}
+            mode="generic"
             onClear={onChange
-              ? () => onChange!(update(itemData, { $unset: ['sourceCRS'] }))
+              && (() => onChange!(update(itemData, { $unset: ['sourceCRS'] })))}
+            onSet={onChange
+              ? ((spec) => onChange!(update(itemData, { sourceCRS: spec })))
               : undefined}
-            onChange={onChange
-              ? (itemRef) => {
-                  if (itemRef.classID.startsWith('crs--')) {
-                    onChange!(update(itemData, { sourceCRS: { $set: itemRef } }))
-                  }
-                }
-              : undefined}
-
-            itemSorter={COMMON_PROPERTIES.itemSorter}
-            getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-            useRegisterItemData={props.useRegisterItemData}
+            classIDs={['crs--vertical', 'crs--geodetic']}
           />
-        </FormGroup>
+        </PropertyDetailView>
 
-        <FormGroup label="Target CRS:" labelInfo="(editing functionality coming soon)">
-          <GenericRelatedItemView
+        <PropertyDetailView title="Target CRS">
+          <RelatedItem
             itemRef={itemData.targetCRS}
-            availableClassIDs={['crs--vertical', 'crs--geodetic']}
+            mode="generic"
             onClear={onChange
-              ? () => onChange!(update(itemData, { $unset: ['targetCRS'] }))
+              && (() => onChange!(update(itemData, { $unset: ['targetCRS'] })))}
+            onSet={onChange
+              ? ((spec) => onChange!(update(itemData, { targetCRS: spec })))
               : undefined}
-            onChange={onChange
-              ? (itemRef) => {
-                  if (itemRef.classID.startsWith('crs--')) {
-                    onChange!(update(itemData, { targetCRS: { $set: itemRef } }))
-                  }
-                }
-              : undefined}
-
-            itemSorter={COMMON_PROPERTIES.itemSorter}
-            getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-            useRegisterItemData={props.useRegisterItemData}
+            classIDs={['crs--vertical', 'crs--geodetic']}
           />
-        </FormGroup>
+        </PropertyDetailView>
 
         <FormGroup label="Extent:">
           <ExtentEdit
