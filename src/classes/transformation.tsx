@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 import { css, jsx } from '@emotion/react';
-import { Button, ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput, UL } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput, UL } from '@blueprintjs/core';
 
 import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -21,6 +21,7 @@ import {
   ExtentEdit,
   InformationSourceDetails,
   DEFAULT_EXTENT,
+  ItemList,
 } from './common';
 
 
@@ -298,22 +299,20 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             </H3>
           : null}
 
-        <UL css={css`padding-left: 0; list-style: square;`}>
-          {props.itemData.parameters.map((param, idx) =>
-            <li key={idx} css={css`margin-top: 1em;`}>
+        <ItemList
+          items={props.itemData.parameters}
+          itemLabel="parameter"
+          onChangeItems={props.onChange
+            ? (spec) => props.onChange!(update(props.itemData, { parameters: spec }))
+            : undefined}
+          placeholderItem={getParameterStub()}
+          itemRenderer={(param, idx, deleteButton) =>
+            <>
               <PropertyDetailView
                   title={`Parameter ${idx + 1}`}
-                  secondaryTitle={<Button
-                    outlined
-                    small
-                    disabled={!props.onChange}
-                    onClick={() => props.onChange!(update(props.itemData, { parameters: { $splice: [[ idx, 1 ]] } }))}
-                  >Delete</Button>}>
+                  secondaryTitle={deleteButton}>
                 <GenericRelatedItemView
                   itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-
                   availableClassIDs={['coordinate-op-parameter']}
                   onClear={props.onChange
                     ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: '' } } } }))
@@ -351,9 +350,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 {param.unitOfMeasurement || param.type === 'measure (w/ UoM)'
                   ? <GenericRelatedItemView
                       itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
-                      getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                      useRegisterItemData={props.useRegisterItemData}
-
                       availableClassIDs={['unit-of-measurement']}
                       onClear={props.onChange
                         ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: null } } } }))
@@ -374,18 +370,9 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                       source={param.fileCitation} />
                   </PropertyDetailView>
                 : null}
-            </li>
-          )}
-        </UL>
-
-        <Button
-            outlined
-            disabled={!props.onChange}
-            onClick={() => props.onChange!(update(props.itemData, { parameters: { $push: [getParameterStub()] } }))}
-            icon="add">
-          Append parameter
-        </Button>
-
+            </>
+          }
+        />
       </CommonEditView>
     </>,
   },
