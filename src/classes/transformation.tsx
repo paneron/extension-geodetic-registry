@@ -22,6 +22,7 @@ import {
   InformationSourceDetails,
   DEFAULT_EXTENT,
   ItemList,
+  RelatedItem,
 } from './common';
 
 
@@ -184,29 +185,29 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       );
     },
 
-    editView: (props) => <>
+    editView: ({ itemData, onChange, ...props }) => <>
 
       <CommonEditView
           useRegisterItemData={props.useRegisterItemData}
           getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
           itemRef={props.itemRef}
-          itemData={props.itemData}
-          onChange={props.onChange ? (newData: CommonGRItemData) => {
-            if (!props.onChange) { return; }
-            props.onChange({ ...props.itemData, ...newData });
+          itemData={itemData}
+          onChange={onChange ? (newData: CommonGRItemData) => {
+            if (!onChange) { return; }
+            onChange({ ...itemData, ...newData });
           } : undefined}>
 
         <FormGroup label="Source CRS:" labelInfo="(editing functionality coming soon)">
           <GenericRelatedItemView
-            itemRef={props.itemData.sourceCRS}
+            itemRef={itemData.sourceCRS}
             availableClassIDs={['crs--vertical', 'crs--geodetic']}
-            onClear={props.onChange
-              ? () => props.onChange!(update(props.itemData, { $unset: ['sourceCRS'] }))
+            onClear={onChange
+              ? () => onChange!(update(itemData, { $unset: ['sourceCRS'] }))
               : undefined}
-            onChange={props.onChange
+            onChange={onChange
               ? (itemRef) => {
                   if (itemRef.classID.startsWith('crs--')) {
-                    props.onChange!(update(props.itemData, { sourceCRS: { $set: itemRef } }))
+                    onChange!(update(itemData, { sourceCRS: { $set: itemRef } }))
                   }
                 }
               : undefined}
@@ -219,15 +220,15 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
         <FormGroup label="Target CRS:" labelInfo="(editing functionality coming soon)">
           <GenericRelatedItemView
-            itemRef={props.itemData.targetCRS}
+            itemRef={itemData.targetCRS}
             availableClassIDs={['crs--vertical', 'crs--geodetic']}
-            onClear={props.onChange
-              ? () => props.onChange!(update(props.itemData, { $unset: ['targetCRS'] }))
+            onClear={onChange
+              ? () => onChange!(update(itemData, { $unset: ['targetCRS'] }))
               : undefined}
-            onChange={props.onChange
+            onChange={onChange
               ? (itemRef) => {
                   if (itemRef.classID.startsWith('crs--')) {
-                    props.onChange!(update(props.itemData, { targetCRS: { $set: itemRef } }))
+                    onChange!(update(itemData, { targetCRS: { $set: itemRef } }))
                   }
                 }
               : undefined}
@@ -240,9 +241,9 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
         <FormGroup label="Extent:">
           <ExtentEdit
-            extent={props.itemData.extent ?? DEFAULT_EXTENT}
-            onChange={props.onChange
-              ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+            extent={itemData.extent ?? DEFAULT_EXTENT}
+            onChange={onChange
+              ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
               : undefined}
           />
         </FormGroup>
@@ -250,11 +251,11 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
         <FormGroup label="Operation version:">
           <InputGroup
             placeholder="E.g., GA v2"
-            value={props.itemData.operationVersion ?? ''}
-            disabled={!props.onChange}
+            value={itemData.operationVersion ?? ''}
+            disabled={!onChange}
             onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-              props.onChange
-                ? props.onChange(update(props.itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+              onChange
+                ? onChange(update(itemData, { operationVersion: { $set: evt.currentTarget.value } }))
                 : void 0;
             }}
           />
@@ -265,24 +266,24 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             <NumericInput
               fill
               css={css`margin-bottom: .5em;`}
-              readOnly={!props.onChange}
-              onValueChange={props.onChange
-                ? (valueAsNumber) => props.onChange!(update(props.itemData, { accuracy: { value: { $set: valueAsNumber } } }))
+              readOnly={!onChange}
+              onValueChange={onChange
+                ? (valueAsNumber) => onChange!(update(itemData, { accuracy: { value: { $set: valueAsNumber } } }))
                 : undefined}
-              value={props.itemData.accuracy.value} />
+              value={itemData.accuracy.value} />
             <GenericRelatedItemView
               itemRef={{
                 classID: 'unit-of-measurement',
-                itemID: props.itemData.accuracy.unitOfMeasurement,
+                itemID: itemData.accuracy.unitOfMeasurement,
               }}
               availableClassIDs={['unit-of-measurement']}
-              onClear={props.onChange
-                ? () => props.onChange!(update(props.itemData, { accuracy: { unitOfMeasurement: { $set: '' } } }))
+              onClear={onChange
+                ? () => onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: '' } } }))
                 : undefined}
-              onChange={props.onChange
+              onChange={onChange
                 ? (itemRef) => {
                     if (itemRef.classID === 'unit-of-measurement' && itemRef.subregisterID === undefined) {
-                      props.onChange!(update(props.itemData, { accuracy: { unitOfMeasurement: { $set: itemRef.itemID } } }))
+                      onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: itemRef.itemID } } }))
                     }
                   }
                 : undefined}
@@ -293,17 +294,17 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           </ControlGroup>
         </FormGroup>
 
-        {props.itemData.parameters.length > 0
+        {itemData.parameters.length > 0
           ? <H3 css={css`margin-top: 1.5em;`}>
               Parameters
             </H3>
           : null}
 
         <ItemList
-          items={props.itemData.parameters}
+          items={itemData.parameters}
           itemLabel="parameter"
-          onChangeItems={props.onChange
-            ? (spec) => props.onChange!(update(props.itemData, { parameters: spec }))
+          onChangeItems={onChange
+            ? (spec) => onChange!(update(itemData, { parameters: spec }))
             : undefined}
           placeholderItem={getParameterStub()}
           itemRenderer={(param, idx, deleteButton) =>
@@ -311,18 +312,15 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               <PropertyDetailView
                   title={`Parameter ${idx + 1}`}
                   secondaryTitle={deleteButton}>
-                <GenericRelatedItemView
+                <RelatedItem
                   itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
-                  availableClassIDs={['coordinate-op-parameter']}
-                  onClear={props.onChange
-                    ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: '' } } } }))
+                  mode="id"
+                  classIDs={['coordinate-op-parameter']}
+                  onClear={onChange
+                    ? () => onChange!(update(itemData, { parameters: { [idx]: { parameter: { $set: '' } } } }))
                     : undefined}
-                  onChange={props.onChange
-                    ? (itemRef) => {
-                        if (itemRef.classID === 'coordinate-op-parameter') {
-                          props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: itemRef.itemID }} } }))
-                        }
-                      }
+                  onSet={onChange
+                    ? ((spec) => onChange!(update(itemData, { parameters: { [idx]: { parameter: spec } } })))
                     : undefined}
                 />
               </PropertyDetailView>
@@ -335,29 +333,28 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                     value={param.type}
                     options={parameterTypes.map(param => ({ value: param, label: param }))}
                     onChange={(evt) =>
-                      props.onChange!(update(props.itemData, { parameters: { [idx]: { type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } } } }))
+                      onChange!(update(itemData, { parameters: { [idx]: { type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } } } }))
                     }
                   />
                   <InputGroup
-                    disabled={!props.onChange}
+                    disabled={!onChange}
                     fill
                     value={param.value?.toString() ?? '—'}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                      props.onChange!(update(props.itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
+                      onChange!(update(itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
                   />
                 </ControlGroup>
 
                 {param.unitOfMeasurement || param.type === 'measure (w/ UoM)'
-                  ? <GenericRelatedItemView
+                  ? <RelatedItem
                       itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
-                      availableClassIDs={['unit-of-measurement']}
-                      onClear={props.onChange
-                        ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: null } } } }))
+                      mode="id"
+                      classIDs={['unit-of-measurement']}
+                      onClear={onChange
+                        ? () => onChange!(update(itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: null } } } }))
                         : undefined}
-                      onChange={props.onChange
-                        ? (itemRef) => {
-                            props.onChange!(update(props.itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: itemRef.itemID } } } }))
-                          }
+                      onSet={onChange
+                        ? ((spec) => onChange!(update(itemData, { parameters: { [idx]: { unitOfMeasurement: spec } } })))
                         : undefined}
                     />
                   : null}
