@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 import { css, jsx } from '@emotion/react';
-import { ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput, UL } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
 
 import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -16,7 +16,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
   type Extent,
   ExtentEdit,
   InformationSourceDetails,
@@ -90,100 +89,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
-
-    detailView: (props) => {
-      const data = props.itemData;
-      const extent = data.extent;
-      const params = data.parameters ?? [];
-
-      return (
-        <CommonDetailView {...props}>
-
-          {data.sourceCRS
-            ? <PropertyDetailView title="Source CRS">
-                <GenericRelatedItemView
-                  itemRef={data.sourceCRS}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            : null}
-
-          {data.targetCRS
-            ? <PropertyDetailView title="Target CRS">
-                <GenericRelatedItemView
-                  itemRef={data.targetCRS}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            : null}
-
-          <PropertyDetailView title="Extent">
-            {extent
-              ? <ExtentEdit extent={extent} />
-              : '—'}
-          </PropertyDetailView>
-
-          <PropertyDetailView title="Operation version" inline>
-            {data.operationVersion || '—'}
-          </PropertyDetailView>
-
-          <PropertyDetailView title="Accuracy">
-            <ControlGroup vertical>
-              <NumericInput readOnly value={data.accuracy.value} />
-              <GenericRelatedItemView
-                itemRef={{ classID: 'unit-of-measurement', itemID: data.accuracy.unitOfMeasurement }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </ControlGroup>
-          </PropertyDetailView>
-
-          {params.length > 0
-            ? <H3 css={css`margin-top: 1.5em;`}>Parameters</H3>
-            : null}
-
-          <UL css={css`padding-left: 0; list-style: square;`}>
-            {params.map((param, idx) =>
-              <li key={idx} css={css`margin-top: 1em;`}>
-                <PropertyDetailView title={`Parameter ${idx + 1}`}>
-                  <GenericRelatedItemView
-                    itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
-                    getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                    useRegisterItemData={props.useRegisterItemData}
-                  />
-                </PropertyDetailView>
-
-                {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
-
-                <PropertyDetailView title="Value" secondaryTitle={param.type}>
-                  <ControlGroup vertical>
-                    <InputGroup disabled fill css={css`margin-bottom: .5rem;`} value={param.value?.toString() || '—'} />
-                    {param.unitOfMeasurement
-                      ? <GenericRelatedItemView
-                          itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement }}
-                          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                          useRegisterItemData={props.useRegisterItemData}
-                        />
-                      : null}
-                  </ControlGroup>
-                </PropertyDetailView>
-
-                {param.fileCitation !== null
-                  ? <PropertyDetailView title="Source">
-                      <InformationSourceDetails
-                        css={css`h6 { font-weight: normal; }`}
-                        source={param.fileCitation} />
-                    </PropertyDetailView>
-                  : null}
-              </li>
-            )}
-          </UL>
-
-        </CommonDetailView>
-      );
-    },
 
     editView: ({ itemData, onChange, ...props }) => <>
 
@@ -356,6 +261,100 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
         />
       </CommonEditView>
     </>,
+
+    // detailView: (props) => {
+    //   const data = props.itemData;
+    //   const extent = data.extent;
+    //   const params = data.parameters ?? [];
+
+    //   return (
+    //     <CommonDetailView {...props}>
+
+    //       {data.sourceCRS
+    //         ? <PropertyDetailView title="Source CRS">
+    //             <GenericRelatedItemView
+    //               itemRef={data.sourceCRS}
+    //               getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+    //               useRegisterItemData={props.useRegisterItemData}
+    //             />
+    //           </PropertyDetailView>
+    //         : null}
+
+    //       {data.targetCRS
+    //         ? <PropertyDetailView title="Target CRS">
+    //             <GenericRelatedItemView
+    //               itemRef={data.targetCRS}
+    //               getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+    //               useRegisterItemData={props.useRegisterItemData}
+    //             />
+    //           </PropertyDetailView>
+    //         : null}
+
+    //       <PropertyDetailView title="Extent">
+    //         {extent
+    //           ? <ExtentEdit extent={extent} />
+    //           : '—'}
+    //       </PropertyDetailView>
+
+    //       <PropertyDetailView title="Operation version" inline>
+    //         {data.operationVersion || '—'}
+    //       </PropertyDetailView>
+
+    //       <PropertyDetailView title="Accuracy">
+    //         <ControlGroup vertical>
+    //           <NumericInput readOnly value={data.accuracy.value} />
+    //           <GenericRelatedItemView
+    //             itemRef={{ classID: 'unit-of-measurement', itemID: data.accuracy.unitOfMeasurement }}
+    //             getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+    //             useRegisterItemData={props.useRegisterItemData}
+    //           />
+    //         </ControlGroup>
+    //       </PropertyDetailView>
+
+    //       {params.length > 0
+    //         ? <H3 css={css`margin-top: 1.5em;`}>Parameters</H3>
+    //         : null}
+
+    //       <UL css={css`padding-left: 0; list-style: square;`}>
+    //         {params.map((param, idx) =>
+    //           <li key={idx} css={css`margin-top: 1em;`}>
+    //             <PropertyDetailView title={`Parameter ${idx + 1}`}>
+    //               <GenericRelatedItemView
+    //                 itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
+    //                 getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+    //                 useRegisterItemData={props.useRegisterItemData}
+    //               />
+    //             </PropertyDetailView>
+
+    //             {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
+
+    //             <PropertyDetailView title="Value" secondaryTitle={param.type}>
+    //               <ControlGroup vertical>
+    //                 <InputGroup disabled fill css={css`margin-bottom: .5rem;`} value={param.value?.toString() || '—'} />
+    //                 {param.unitOfMeasurement
+    //                   ? <GenericRelatedItemView
+    //                       itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement }}
+    //                       getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+    //                       useRegisterItemData={props.useRegisterItemData}
+    //                     />
+    //                   : null}
+    //               </ControlGroup>
+    //             </PropertyDetailView>
+
+    //             {param.fileCitation !== null
+    //               ? <PropertyDetailView title="Source">
+    //                   <InformationSourceDetails
+    //                     css={css`h6 { font-weight: normal; }`}
+    //                     source={param.fileCitation} />
+    //                 </PropertyDetailView>
+    //               : null}
+    //           </li>
+    //         )}
+    //       </UL>
+
+    //     </CommonDetailView>
+    //   );
+    // },
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
