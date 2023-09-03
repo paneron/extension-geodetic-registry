@@ -293,7 +293,11 @@ export function RelatedItem<
   const canSet = onSet && (availableClassIDs === undefined || availableClassIDs.length > 0);
 
   function handleSet(ref: InternalItemReference) {
-    onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
+    if (availableClassIDs === undefined || availableClassIDs.indexOf(ref.classID) >= 0) {
+      onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
+    } else {
+      throw new Error(`Item with class ID ${ref.classID} cannot be assigned this relation`);
+    }
   }
 
   return (
