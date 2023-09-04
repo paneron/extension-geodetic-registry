@@ -49,7 +49,7 @@ function ({ itemData, onChange, ...props })  {
           ? (spec) => onChange!(update(itemData, { coordinateSystemAxes: spec }))
           : undefined}
         placeholderItem=""
-        itemRenderer={(axis, idx, deleteButton) =>
+        itemRenderer={(axis, idx, handleChange, deleteButton) =>
           <PropertyDetailView
               title={`Axis ${idx + 1}`}
               secondaryTitle={deleteButton}>

@@ -197,7 +197,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             ? (spec) => onChange!(update(itemData, { parameters: spec }))
             : undefined}
           placeholderItem={getParameterStub()}
-          itemRenderer={(param, idx, deleteButton) =>
+          itemRenderer={(param, idx, handleChange, deleteButton) =>
             <>
               <PropertyDetailView
                   title={`Parameter ${idx + 1}`}

@@ -318,8 +318,19 @@ export function RelatedItem<
 interface ItemListProps<T> {
   items: T[]
   itemLabel: string
-  itemRenderer: (item: T, idx: number, deleteButton?: JSX.Element) => JSX.Element
+  itemLabelPlural?: string
+
+  itemRenderer: (
+    item: T,
+    idx: number,
+    handleChange: ((spec: Spec<T>) => void) | undefined,
+    deleteButton: JSX.Element | undefined,
+  ) => JSX.Element
+
+  /** Required for being able to either remove, edit or create new items. */
   onChangeItems?: (spec: Spec<T[]>) => void
+
+  /** Required for being able to create new items. */
   placeholderItem?: T
 }
 
@@ -327,33 +338,47 @@ interface ItemListProps<T> {
 export function ItemList<T> ({
   items,
   itemLabel,
+  itemLabelPlural,
   itemRenderer,
   onChangeItems,
   placeholderItem,
 }: ItemListProps<T>): JSX.Element {
-  return <>
-    <UL css={css`padding-left: 0; list-style: square;`}>
-      {(items) .map((item, idx) =>
-        <li key={idx} css={css`margin-top: 1em;`}>
-          {itemRenderer(
-            item,
-            idx,
-            <Button
-              outlined
-              small
-              disabled={!onChangeItems}
-              onClick={() => onChangeItems!({ $splice: [[ idx, 1 ]] })}
-            >Delete</Button>,
-          )}
-        </li>
-      )}
-    </UL>
-    {onChangeItems && placeholderItem
-      ? <Button icon='add' onClick={() => onChangeItems({ $push: [placeholderItem] })}>
-          Append {itemLabel}
-        </Button>
-      : undefined}
-  </>;
+  return (
+    <PropertyDetailView
+        title={`${items.length} ${itemLabelPlural || `${itemLabel} item(s)`}`}
+        css={css`margin-top: 10px;`}
+        secondaryTitle={onChangeItems !== undefined && placeholderItem !== undefined
+          ? <Button
+                small
+                outlined
+                icon='add'
+                onClick={() => onChangeItems({ $push: [placeholderItem] })}>
+              Add
+            </Button>
+          : undefined}>
+      <UL css={css`margin-top: 0; padding-left: 0; list-style: square;`}>
+        {(items) .map((item, idx) =>
+          <li key={idx}>
+            {itemRenderer(
+              item,
+              idx,
+              onChangeItems
+                ? ((spec) => onChangeItems({ [idx]: spec }))
+                : undefined,
+              onChangeItems
+                ? <Button
+                    outlined
+                    small
+                    disabled={!onChangeItems}
+                    onClick={() => onChangeItems!({ $splice: [[ idx, 1 ]] })}
+                  >Delete</Button>
+                : undefined,
+            )}
+          </li>
+        )}
+      </UL>
+    </PropertyDetailView>
+  );
 }
 
 
