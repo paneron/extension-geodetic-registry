@@ -1,7 +1,6 @@
 /** @jsx jsx */
 
 import update from 'immutability-helper';
-import { Button, H3 } from '@blueprintjs/core';
 import { jsx } from '@emotion/react';
 import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -38,10 +37,6 @@ function ({ itemData, onChange, ...props })  {
           : undefined
         }>
 
-      {itemData.coordinateSystemAxes
-        ? <H3>Axes</H3>
-        : null}
-
       <ItemList
         items={itemData.coordinateSystemAxes}
         itemLabel="axis"
@@ -57,21 +52,12 @@ function ({ itemData, onChange, ...props })  {
               itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
               classIDs={['coordinate-sys-axis']}
               mode="id"
-              onSet={onChange
-                ? (spec) => onChange!(update(itemData, { coordinateSystemAxes: { [idx]: spec } }))
-                : undefined}
+              onSet={handleChange}
             />
           </PropertyDetailView>
         }
       />
-      {onChange
-        ? <Button icon='add' onClick={() => onChange!(update(
-            itemData,
-            { coordinateSystemAxes: { $push: [''] } },
-          ))}>
-            Append axis
-          </Button>
-        : undefined}
+
     </CommonEditView>
   );
 }

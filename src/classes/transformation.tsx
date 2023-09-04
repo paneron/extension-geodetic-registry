@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 import { css, jsx } from '@emotion/react';
-import { ControlGroup, FormGroup, H3, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
 
 import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -184,12 +184,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           </ControlGroup>
         </FormGroup>
 
-        {itemData.parameters.length > 0
-          ? <H3 css={css`margin-top: 1.5em;`}>
-              Parameters
-            </H3>
-          : null}
-
         <ItemList
           items={itemData.parameters}
           itemLabel="parameter"
@@ -207,10 +201,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   mode="id"
                   classIDs={['coordinate-op-parameter']}
                   onClear={onChange
-                    ? () => onChange!(update(itemData, { parameters: { [idx]: { parameter: { $set: '' } } } }))
+                    ? () => handleChange!({ parameter: { $set: '' } })
                     : undefined}
-                  onSet={onChange
-                    ? ((spec) => onChange!(update(itemData, { parameters: { [idx]: { parameter: spec } } })))
+                  onSet={handleChange
+                    ? (spec) => handleChange!({ parameter: spec })
                     : undefined}
                 />
               </PropertyDetailView>
@@ -222,8 +216,9 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   <HTMLSelect
                     value={param.type}
                     options={parameterTypes.map(param => ({ value: param, label: param }))}
+                    disabled={!handleChange}
                     onChange={(evt) =>
-                      onChange!(update(itemData, { parameters: { [idx]: { type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } } } }))
+                      handleChange!({ type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } })
                     }
                   />
                   <InputGroup
@@ -231,7 +226,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                     fill
                     value={param.value?.toString() ?? '—'}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                      onChange!(update(itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
+                      handleChange!({ value: { $set: evt.currentTarget.value } } )}
                   />
                 </ControlGroup>
 
@@ -240,11 +235,11 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                       itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
                       mode="id"
                       classIDs={['unit-of-measurement']}
-                      onClear={onChange
-                        ? () => onChange!(update(itemData, { parameters: { [idx]: { unitOfMeasurement: { $set: null } } } }))
+                      onClear={handleChange
+                        ? () => handleChange!({ unitOfMeasurement: { $set: null } })
                         : undefined}
-                      onSet={onChange
-                        ? ((spec) => onChange!(update(itemData, { parameters: { [idx]: { unitOfMeasurement: spec } } })))
+                      onSet={handleChange
+                        ? (spec) => handleChange!({ unitOfMeasurement: spec })
                         : undefined}
                     />
                   : null}
