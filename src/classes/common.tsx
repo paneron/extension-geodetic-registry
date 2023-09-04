@@ -252,15 +252,19 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
 
 
 interface RelatedItemWidgetProps<M extends 'generic' | 'id', S> {
+  /** Determines whether only item ID or full internal reference is set. */
   mode: M
+
   itemRef?: InternalItemReference
+
   /**
    * Restrict the choice of related item classes.
    * `mode === 'id'` means only one class can be specified.
    */
   classIDs: M extends 'generic' ? (undefined | string[]) : ([string] | [])
+
   onSet?: (spec: { $set: S }) => void
-  /** Set only item ID. Has no effect if onSet is provided. */
+
   onClear?: () => void
 }
 
