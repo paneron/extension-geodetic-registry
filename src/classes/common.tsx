@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update, { type Spec } from 'immutability-helper';
-import React, { type ReactChildren, type ReactNode, useContext } from 'react';
+import React, { type ReactChildren, type ReactNode, useContext, useCallback, useMemo } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
@@ -295,13 +295,13 @@ export function RelatedItem<
   // Cannot set if there are no class choices
   const canSet = onSet && (availableClassIDs === undefined || availableClassIDs.length > 0);
 
-  function handleSet(ref: InternalItemReference) {
+  const handleSet = useCallback(function handleSet(ref: InternalItemReference) {
     if (availableClassIDs === undefined || availableClassIDs.indexOf(ref.classID) >= 0) {
       onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
     } else {
       throw new Error(`Item with class ID ${ref.classID} cannot be assigned this relation`);
     }
-  }
+  }, [availableClassIDs?.toString(), itemRef?.classID, onSet]);
 
   return (
     <GenericRelatedItemView
@@ -343,6 +343,28 @@ export function ItemList<T> ({
   onChangeItems,
   placeholderItem,
 }: ItemListProps<T>): JSX.Element {
+  const itemViews = useMemo((() =>
+    items.map((item, idx) =>
+      <li key={idx}>
+        {itemRenderer(
+          item,
+          idx,
+          onChangeItems
+            ? ((spec) => onChangeItems({ [idx]: spec }))
+            : undefined,
+          onChangeItems
+            ? <Button
+                outlined
+                small
+                disabled={!onChangeItems}
+                onClick={() => onChangeItems!({ $splice: [[ idx, 1 ]] })}
+              >Delete</Button>
+            : undefined,
+        )}
+      </li>
+    )
+  ), [items.length, items.map(i => JSON.stringify(i)).toString(), itemRenderer, onChangeItems]);
+
   return (
     <PropertyDetailView
         title={`${items.length} ${itemLabelPlural || `${itemLabel} item(s)`}`}
@@ -356,25 +378,7 @@ export function ItemList<T> ({
             </Button>
           : undefined}>
       <UL css={css`margin-top: 0; padding-left: 0; list-style: square;`}>
-        {(items) .map((item, idx) =>
-          <li key={idx}>
-            {itemRenderer(
-              item,
-              idx,
-              onChangeItems
-                ? ((spec) => onChangeItems({ [idx]: spec }))
-                : undefined,
-              onChangeItems
-                ? <Button
-                    outlined
-                    small
-                    disabled={!onChangeItems}
-                    onClick={() => onChangeItems!({ $splice: [[ idx, 1 ]] })}
-                  >Delete</Button>
-                : undefined,
-            )}
-          </li>
-        )}
+        {itemViews}
       </UL>
     </PropertyDetailView>
   );
