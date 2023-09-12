@@ -12,12 +12,16 @@ const defaultCriteria = CRITERIA_CONFIGURATION['item-class'].toQuery(
   { classID: defaultClassID },
   { itemClasses: itemClassConfiguration },
 );
+const defaultSearchCriteria = {
+  require: 'all',
+  criteria: [{ key: 'item-class', query: defaultCriteria }],
+} as const;
 
 
 export default function () {
   return <RegistryView
     itemClassConfiguration={itemClassConfiguration}
     keyExpression="obj.data.identifier || obj.id"
-    defaultSearchCriteria={{ require: 'all', criteria: [{ key: 'item-class', query: defaultCriteria }] }}
+    defaultSearchCriteria={defaultSearchCriteria as any}
   />
 };
