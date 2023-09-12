@@ -351,7 +351,6 @@ export function ItemList<T> ({
           ? <Button
                 small
                 outlined
-                icon='add'
                 onClick={() => onChangeItems({ $push: [placeholderItem] })}>
               Add
             </Button>
