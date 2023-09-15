@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update, { type Spec } from 'immutability-helper';
-import React, { type ReactChildren, type ReactNode, useContext, useCallback, useMemo } from 'react';
+import React, { type ReactChildren, type ReactNode, memo, useContext, useCallback, useMemo } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
@@ -417,15 +417,17 @@ function ({ citation, onChange }) {
 
 
 export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["listItemView"] =
-(props) => (
-  <span className={props.className}>
-    <span css={css`color: ${Colors.GRAY4}; font-family: monospace; font-size: 90%`}>
-      {props.itemData.identifier}
+memo(function CommonListItemView (props) {
+  return (
+    <span className={props.className}>
+      <span css={css`color: ${Colors.GRAY4}; font-family: monospace; font-size: 90%`}>
+        {props.itemData.identifier}
+      </span>
+      &emsp;
+      {props.itemData.name}
     </span>
-    &emsp;
-    {props.itemData.name}
-  </span>
-);
+  );
+});
 
 
 const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
