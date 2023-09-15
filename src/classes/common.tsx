@@ -428,18 +428,18 @@ export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["li
 );
 
 
+const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
+  return <>
+    <dt>{t}</dt>
+    <dd>{d}</dd>
+  </>
+};
+
 
 export const InformationSourceDetails: React.FC<{
   source: Citation
   className?: string
 }> = function ({ source, className }) {
-
-  const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
-    return <>
-      <dt>{t}</dt>
-      <dd>{d}</dd>
-    </>
-  }
 
   let editionDate: string;
   try {
