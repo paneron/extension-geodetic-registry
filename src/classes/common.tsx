@@ -427,7 +427,12 @@ memo(function CommonListItemView (props) {
       {props.itemData.name}
     </span>
   );
-});
+}, (
+  (p1, p2) =>
+    p1.className === p2.className &&
+    p1.itemData.identifier === p2.itemData.identifier &&
+    p1.itemData.name === p2.itemData.name
+));
 
 
 const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
