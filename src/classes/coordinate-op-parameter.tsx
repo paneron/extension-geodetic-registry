@@ -12,19 +12,16 @@ import {
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
-  AliasesDetail,
 } from './common';
 
 
 export interface CoordinateParameterData extends CommonGRItemData {
-  aliases: string[]
   minimumOccurs: number | null
 }
 
 export const DEFAULTS: CoordinateParameterData = {
   ...SHARED_DEFAULTS,
   minimumOccurs: null,
-  aliases: [],
 };
 
 
@@ -47,10 +44,6 @@ export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterDa
 
       return (
         <CommonDetailView {...props}>
-
-          {(data.aliases || []).length > 0
-            ? <AliasesDetail aliases={data.aliases} />
-            : null}
 
           {data.minimumOccurs !== null
             ? <PropertyDetailView title="Minimum occurrences">

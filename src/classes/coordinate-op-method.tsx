@@ -12,18 +12,15 @@ import {
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
-  AliasesDetail,
 } from './common';
 
 
 export interface CoordinateOpMethod extends CommonGRItemData {
-  aliases: string[]
   parameters: string[]
 }
 
 export const DEFAULTS: CoordinateOpMethod = {
   ...SHARED_DEFAULTS,
-  aliases: [],
   parameters: [],
 };
 
@@ -47,10 +44,6 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
 
       return (
         <CommonDetailView {...props}>
-
-          {(data.aliases || []).length > 0
-            ? <AliasesDetail aliases={data.aliases} />
-            : null}
 
           {(data.parameters || []).length > 0
             ? <PropertyDetailView title="Parameters">

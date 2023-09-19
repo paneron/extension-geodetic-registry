@@ -17,7 +17,6 @@ import {
   ListItemView as CommonListItemView,
   DetailView as CommonDetailView,
   COMMON_PROPERTIES,
-  AliasesDetail,
   type Extent,
   ExtentEdit,
   DEFAULT_EXTENT,
@@ -86,10 +85,6 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
 
       return (
         <CommonDetailView {...props}>
-
-          {(data.aliases || []).length > 0
-            ? <AliasesDetail aliases={data.aliases} />
-            : null}
 
           <PropertyDetailView title="Extent">
             {extent
