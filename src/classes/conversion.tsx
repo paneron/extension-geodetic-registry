@@ -15,7 +15,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
   COMMON_PROPERTIES,
   type Extent,
   ExtentEdit,
@@ -78,70 +77,6 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<ConversionData>,
-    detailView: (props) => {
-      const data = props.itemData;
-      const extent = data.extent;
-      const params = data.parameters ?? [];
-
-      return (
-        <CommonDetailView {...props}>
-
-          <PropertyDetailView title="Extent">
-            {extent
-              ? <ExtentEdit extent={extent} />
-              : '—'}
-          </PropertyDetailView>
-
-          {/*
-          <PropertyDetailView title="Accuracy">
-            <ControlGroup vertical>
-              <NumericInput readOnly value={data.accuracy.value} />
-              <GenericRelatedItemView
-                itemRef={{ classID: 'unit-of-measurement', itemID: data.accuracy.unitOfMeasurement }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </ControlGroup>
-          </PropertyDetailView>
-          */}
-
-          {params.length > 0
-            ? <H3 css={css`margin-top: 1.5em;`}>Parameters</H3>
-            : null}
-
-          <UL css={css`padding-left: 0; list-style: square;`}>
-            {params.map((param, idx) =>
-              <li key={idx} css={css`margin-top: 1em;`}>
-                <PropertyDetailView title={`Parameter ${idx + 1}`}>
-                  <GenericRelatedItemView
-                    itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
-                    getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                    useRegisterItemData={props.useRegisterItemData}
-                  />
-                </PropertyDetailView>
-
-                {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
-
-                <PropertyDetailView title="Value">
-                  <ControlGroup vertical>
-                    <InputGroup disabled fill css={css`margin-bottom: .5rem;`} value={param.value?.toString() || '—'} />
-                    {param.unitOfMeasurement
-                      ? <GenericRelatedItemView
-                          itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement }}
-                          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                          useRegisterItemData={props.useRegisterItemData}
-                        />
-                      : null}
-                  </ControlGroup>
-                </PropertyDetailView>
-
-              </li>
-            )}
-          </UL>
-
-        </CommonDetailView>
-      )
-    },
     editView: (props) => (
       <CommonEditView
         useRegisterItemData={props.useRegisterItemData}
