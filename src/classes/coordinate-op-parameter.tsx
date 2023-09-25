@@ -22,7 +22,7 @@ export interface CoordinateParameterData extends CommonGRItemData {
 export const DEFAULTS: CoordinateParameterData = {
   ...SHARED_DEFAULTS,
   minimumOccurs: null,
-};
+} as const;
 
 
 export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterData> = {

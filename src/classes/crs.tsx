@@ -37,7 +37,7 @@ export const CRS_DEFAULTS: CRSData = {
   ...SHARED_DEFAULTS,
   extent: DEFAULT_EXTENT,
   scope: '',
-};
+} as const;
 
 const CRSDetailView: ItemDetailView<CRSData> = function (props) {
   const data = props.itemData;
@@ -107,7 +107,7 @@ export const NON_COMPOUND_CRS_DEFAULTS: CRSData = {
   ...SHARED_DEFAULTS,
   extent: DEFAULT_EXTENT,
   scope: '',
-}
+} as const;
 
 const NonCompoundCRSEditView: ItemEditView<NonCompoundCRSData> =
 function ({ onChange, itemData, ...props }) {
@@ -159,7 +159,7 @@ export interface CompoundCRSData extends CRSData {
 export const COMPOUND_DEFAULTS = {
   horizontal: undefined,
   vertical: undefined,
-};
+} as const;
 
 
 
@@ -252,7 +252,7 @@ export interface ProjectedCRSData extends NonCompoundCRSData {
 }
 
 export const PROJECTED_DEFAULTS = {
-};
+} as const;
 
 export const projectedCRS: ItemClassConfiguration<ProjectedCRSData> = {
   ...COMMON_PROPERTIES,
@@ -281,7 +281,7 @@ export interface VerticalCRSData extends NonCompoundCRSData {
 
 export const VERTICAL_DEFAULTS = {
   datum: '',
-};
+} as const;
 
 export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
   ...COMMON_PROPERTIES,
@@ -329,7 +329,7 @@ export interface GeodeticCRSData extends NonCompoundCRSData {
 
 export const GEODETIC_DEFAULTS = {
   datum: '',
-};
+} as const;
 
 export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
   ...COMMON_PROPERTIES,
@@ -376,7 +376,7 @@ export interface EngineeringCRSData extends NonCompoundCRSData {
 
 export const ENGINEERING_DEFAULTS = {
   datum: '',
-};
+} as const;
 
 export const engineeringCRS: ItemClassConfiguration<EngineeringCRSData> = {
   ...COMMON_PROPERTIES,
@@ -414,4 +414,4 @@ export const engineeringCRS: ItemClassConfiguration<EngineeringCRSData> = {
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
-};
+} as const;

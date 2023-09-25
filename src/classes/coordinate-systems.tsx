@@ -16,13 +16,13 @@ import {
 
 
 interface CoordinateSystemData extends CommonGRItemData {
-  coordinateSystemAxes: string[]
+  coordinateSystemAxes: Readonly<string[]>
 }
 
 export const DEFAULTS: CoordinateSystemData = {
   ...COMMON_DEFAULTS,
   coordinateSystemAxes: [],
-};
+} as const;
 
 const CoordinateSystemEditView: ItemEditView<CoordinateSystemData> =
 function ({ itemData, onChange, ...props })  {
@@ -101,7 +101,7 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
 
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
-};
+} as const;
 
 
 export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemData> = {
@@ -122,7 +122,7 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
 
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
-};
+} as const;
 
 
 export const sphericalCoordinateSystem: ItemClassConfiguration<CoordinateSystemData> = {
@@ -143,4 +143,4 @@ export const sphericalCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
 
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
-};
+} as const;

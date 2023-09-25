@@ -35,8 +35,8 @@ export interface CommonGRItemData {
   name: string
   identifier: number
   remarks: string
-  informationSources: Citation[]
-  aliases: string[]
+  informationSources: Readonly<Citation[]>
+  aliases: Readonly<string[]>
 }
 
 
@@ -46,7 +46,7 @@ export const DEFAULTS: CommonGRItemData = {
   informationSources: [],
   remarks: '',
   aliases: [],
-};
+} as const;
 
 
 function getInformationSourceStub(): Citation {
@@ -73,8 +73,10 @@ export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliase
 };
 
 
-export const AliasesEdit: React.FC<{ aliases: string[], onChange?: (newAliases: string[]) => void }> =
-function (props) {
+export const AliasesEdit: React.FC<{
+  aliases: Readonly<string[]>
+  onChange?: (newAliases: Readonly<string[]>) => void
+}> = function (props) {
   return (
     <PropertyDetailView title="Aliases">
       <ControlGroup vertical>
@@ -316,7 +318,7 @@ export function RelatedItem<
 
 
 interface ItemListProps<T> {
-  items: T[]
+  items: Readonly<T[]>
   itemLabel: string
   itemLabelPlural?: string
 
@@ -328,7 +330,7 @@ interface ItemListProps<T> {
   ) => JSX.Element
 
   /** Required for being able to either remove, edit or create new items. */
-  onChangeItems?: (spec: Spec<T[]>) => void
+  onChangeItems?: (spec: Spec<Readonly<T[]>>) => void
 
   /** Required for being able to create new items. */
   placeholderItem?: T

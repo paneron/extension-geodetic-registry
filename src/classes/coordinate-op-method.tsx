@@ -16,13 +16,13 @@ import {
 
 
 export interface CoordinateOpMethod extends CommonGRItemData {
-  parameters: string[]
+  parameters: Readonly<string[]>
 }
 
 export const DEFAULTS: CoordinateOpMethod = {
   ...SHARED_DEFAULTS,
   parameters: [],
-};
+} as const;
 
 
 export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {

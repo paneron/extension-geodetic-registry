@@ -61,7 +61,7 @@ export interface TransformationData extends CommonGRItemData {
     value: number
     unitOfMeasurement: string // Unit of measurement UUID
   }
-  parameters: TransformationParameter[]
+  parameters: Readonly<TransformationParameter[]>
 
   sourceCRS?: { classID: string, itemID: string }
   targetCRS?: { classID: string, itemID: string }
@@ -354,4 +354,4 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
-};
+} as const;
