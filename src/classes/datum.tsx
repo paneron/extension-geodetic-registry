@@ -2,7 +2,7 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
-import { TextArea, InputGroup, ControlGroup, Button } from '@blueprintjs/core';
+import { TextArea, InputGroup } from '@blueprintjs/core';
 import { type ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
@@ -119,41 +119,6 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
             coordinateReferenceEpoch: evt.currentTarget.value,
           })}
         />
-      </PropertyDetailView>
-
-      <PropertyDetailView title="Aliases">
-        <ControlGroup vertical>
-          {props.itemData.aliases.map((alias, idx) =>
-            <InputGroup
-              key={idx}
-              fill
-              required
-              value={alias}
-              readOnly={!props.onChange}
-              rightElement={props.onChange
-                ? <Button
-                    icon='cross'
-                    onClick={() => props.onChange!(update(
-                      props.itemData,
-                      { aliases: { $splice: [[ idx, 1 ]] } }
-                    ))}
-                  />
-                : undefined}
-              onChange={evt => props.onChange!(update(
-                props.itemData,
-                { aliases: { [idx]: { $set: evt.currentTarget.value } } },
-              ))}
-            />
-          )}
-          {props.onChange
-            ? <Button icon='add' onClick={() => props.onChange!(update(
-                props.itemData,
-                { aliases: { $push: [''] } },
-              ))}>
-                Add alias
-              </Button>
-            : undefined}
-        </ControlGroup>
       </PropertyDetailView>
 
       <PropertyDetailView title="Extent">
