@@ -550,10 +550,12 @@ export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
 const SplitView: React.FC<{
   aside?: ReactChildren | ReactNode
   className?: string
-}> = function ({ children, aside, className }) {
+}> = memo(function ({ children, aside, className }) {
   return (
     <div css={css`
         position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
+
+        @container (min-width: 700px) { background:green; }
 
         display: flex; flex-flow: row nowrap; overflow: hidden;
 
@@ -581,4 +583,4 @@ const SplitView: React.FC<{
       </aside>
     </div>
   );
-}
+});
