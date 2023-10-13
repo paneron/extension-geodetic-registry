@@ -73,7 +73,7 @@ export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliase
 };
 
 
-export const AliasesEdit: React.FC<{
+const AliasesEdit: React.FC<{
   aliases: Readonly<string[]>
   onChange?: (newAliases: Readonly<string[]>) => void
 }> = function (props) {
