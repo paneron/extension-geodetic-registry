@@ -64,13 +64,14 @@ function getInformationSourceStub(): Citation {
 }
 
 
-export const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliases }) {
-  return <PropertyDetailView title="Aliases">
-    <UL>
-      {aliases.map((a, idx) => <li key={idx}>{a}</li>)}
-    </UL>
-  </PropertyDetailView>;
-};
+// /** @deprecated: use AliasesEdit without onChange */
+// const AliasesDetail: React.FC<{ aliases: string[] }> = function ({ aliases }) {
+//   return <PropertyDetailView title="Aliases">
+//     <UL>
+//       {aliases.map((a, idx) => <li key={idx}>{a}</li>)}
+//     </UL>
+//   </PropertyDetailView>;
+// };
 
 
 const AliasesEdit: React.FC<{
