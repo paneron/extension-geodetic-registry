@@ -556,8 +556,6 @@ const SplitView: React.FC<{
     <div css={css`
         position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
 
-        @container (min-width: 700px) { background:green; }
-
         display: flex; flex-flow: row nowrap; overflow: hidden;
 
         @media (max-width: 1000px) {
