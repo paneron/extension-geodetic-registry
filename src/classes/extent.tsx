@@ -13,6 +13,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
   MenuItem, Tag, Icon, ProgressBar,
+  Colors,
 } from '@blueprintjs/core';
 import { Select2 as Select, type ItemRenderer } from '@blueprintjs/select';
 import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
@@ -224,7 +225,14 @@ function ({ value, label, onChange }) {
         onChange={(evt: React.FormEvent<HTMLInputElement>) =>
           handleChange(evt.currentTarget.value)}
         css={onChange
-          ? css`.bp4-input { ${valid ? 'background: honeydew' : 'background: mistyrose'} }`
+          ? css`
+              .bp4-input {
+                ${valid
+                  ? `background: ${Colors.GREEN5}; .bp4-dark & { background: ${Colors.GREEN2}; }`
+                  : `background: ${Colors.RED5}; .bp4-dark & { background: ${Colors.RED2}; }`}
+                }
+              }
+            `
           : undefined}
         value={editedVal ?? value.toLocaleString()}
       />
