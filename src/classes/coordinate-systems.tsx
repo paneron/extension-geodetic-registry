@@ -15,7 +15,7 @@ import {
 } from './common';
 
 
-interface CoordinateSystemData extends CommonGRItemData {
+export interface CoordinateSystemData extends CommonGRItemData {
   coordinateSystemAxes: Readonly<string[]>
 }
 
