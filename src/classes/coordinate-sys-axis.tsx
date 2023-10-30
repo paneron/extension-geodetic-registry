@@ -18,7 +18,7 @@ import {
 } from './common';
 
 
-interface CoordinateSystemAxisData extends CommonGRItemData {
+export interface CoordinateSystemAxisData extends CommonGRItemData {
   abbreviation: string
   orientation: string
   unitOfMeasurement: string
