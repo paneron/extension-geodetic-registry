@@ -9,7 +9,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
   COMMON_PROPERTIES,
 } from './common';
 
@@ -44,31 +43,6 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<UoMData>,
-    detailView: (props) => {
-      const data = props.itemData;
-
-      return (
-        <CommonDetailView {...props}>
-
-          <PropertyDetailView inline title="Symbol">
-            {data.symbol || '—'}
-          </PropertyDetailView>
-
-          <PropertyDetailView inline title="Measure type">
-            {data.measureType}
-          </PropertyDetailView>
-
-          <PropertyDetailView inline title="Denominator">
-            {data.denominator?.toString() || '—'}
-          </PropertyDetailView>
-
-          <PropertyDetailView inline title="Numerator">
-            {data.numerator?.toString() || '—'}
-          </PropertyDetailView>
-
-        </CommonDetailView>
-      )
-    },
     editView: (props) => (
       <CommonEditView
         useRegisterItemData={props.useRegisterItemData}
