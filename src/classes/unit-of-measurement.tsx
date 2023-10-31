@@ -25,7 +25,7 @@ const MEASURE_TYPES = [
 
 type MeasureType = typeof MEASURE_TYPES[number];
 
-function isMeasureType(val: unknown): val is MeasureType {
+export function isMeasureType(val: unknown): val is MeasureType {
   return typeof val === 'string' && MEASURE_TYPES.indexOf(val as typeof MEASURE_TYPES[number]) >= 0;
 }
 
