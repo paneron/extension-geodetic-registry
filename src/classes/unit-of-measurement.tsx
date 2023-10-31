@@ -1,6 +1,8 @@
 /** @jsx jsx */
 
+import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
+import { Button, InputGroup, NumericInput, HTMLSelect } from '@blueprintjs/core';
 import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
@@ -9,15 +11,40 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
+  RelatedItem,
   COMMON_PROPERTIES,
 } from './common';
 
 
+const MEASURE_TYPES = [
+  'ANGLE',
+  'LENGTH',
+  'SCALE',
+  'TIME',
+] as const;
+
+type MeasureType = typeof MEASURE_TYPES[number];
+
+function isMeasureType(val: unknown): val is MeasureType {
+  return typeof val === 'string' && MEASURE_TYPES.indexOf(val as typeof MEASURE_TYPES[number]) >= 0;
+}
+
 export interface UoMData extends CommonGRItemData {
+  /** “factor A” */
   denominator: null | number
+  /** “factor C” */
   numerator: null | number
-  measureType: 'ANGLE' | 'SCALE' | 'LENGTH' | 'TIME'
+
+  measureType: typeof MEASURE_TYPES[number]
+
   symbol: string | null
+
+  /**
+   * Per sheet:
+   * “Unit of measurement Standard Target unit of measurement identifier”
+   * “used to define this unit”.
+   */
+  baseUnit?: string
 }
 
 export const DEFAULTS: UoMData = {
@@ -45,14 +72,84 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
     listItemView: CommonListItemView as ItemListView<UoMData>,
     editView: (props) => (
       <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
+          useRegisterItemData={props.useRegisterItemData}
+          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          itemData={props.itemData}
+          itemRef={props.itemRef}
+          onChange={props.onChange ? (newData: CommonGRItemData) => {
+            if (!props.onChange) { return; }
+            props.onChange({ ...props.itemData, ...newData });
+          } : undefined}>
+
+        <PropertyDetailView title="Measure type">
+          <HTMLSelect
+            value={props.itemData.measureType}
+            required
+            disabled={!props.onChange}
+            options={MEASURE_TYPES.map(m => ({ value: m, label: m }))}
+            onChange={(evt) =>
+              isMeasureType(evt.currentTarget.value)
+                ? props.onChange?.({ ...props.itemData, measureType: evt.currentTarget.value })
+                : void 0
+            }
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView title="Symbol">
+          <InputGroup
+            required
+            value={props.itemData.symbol ?? ''}
+            disabled={!props.onChange}
+            onChange={(evt) => props.onChange?.({ ...props.itemData, symbol: evt.currentTarget.value })}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView title="Standard Target base unit">
+          <RelatedItem
+            itemRef={props.itemData.baseUnit
+              ? { classID: 'unit-of-measurement', itemID: props.itemData.baseUnit }
+              : undefined
+            }
+            mode="id"
+            onClear={props.onChange
+              && (() => props.onChange!(update(props.itemData, { $unset: ['baseUnit'] })))}
+            onSet={props.onChange
+              ? ((spec) => props.onChange!(update(props.itemData, { baseUnit: spec })))
+              : undefined}
+            classIDs={[
+              'unit-of-measurement',
+            ]}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView title="Numerator (factor C)">
+          <NumericInput
+            required
+            rightElement={<Button
+              disabled={!props.onChange}
+              icon="cross"
+              onClick={() => props.onChange?.({ ...props.itemData, numerator: null })}
+            />}
+            value={props.itemData.numerator ?? ''}
+            disabled={!props.onChange}
+            onValueChange={(num) => props.onChange?.({ ...props.itemData, numerator: num })}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView title="Denominator (factor A)">
+          <NumericInput
+            required
+            rightElement={<Button
+              disabled={!props.onChange}
+              icon="cross"
+              onClick={() => props.onChange?.({ ...props.itemData, denominator: null })}
+            />}
+            value={props.itemData.denominator ?? ''}
+            disabled={!props.onChange}
+            onValueChange={(num) => props.onChange?.({ ...props.itemData, denominator: num })}
+          />
+        </PropertyDetailView>
+      </CommonEditView>
     ),
   },
 
