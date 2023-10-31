@@ -14,7 +14,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
 } from './common';
 
 
@@ -39,32 +38,6 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateSystemAxisData>,
-
-    detailView: (props) => {
-      const data = props.itemData;
-
-      return (
-        <CommonDetailView {...props}>
-
-          <PropertyDetailView title="Abbreviation">
-            {data.abbreviation || '—'}
-          </PropertyDetailView>
-
-          <PropertyDetailView title="Orientation">
-            {data.orientation || '—'}
-          </PropertyDetailView>
-
-          <PropertyDetailView title="Unit of measurement">
-            <GenericRelatedItemView
-              itemRef={{ classID: 'unit-of-measurement', itemID: data.unitOfMeasurement }}
-              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-              useRegisterItemData={props.useRegisterItemData}
-            />
-          </PropertyDetailView>
-
-        </CommonDetailView>
-      );
-    },
 
     editView: (props) => <>
       <CommonEditView
