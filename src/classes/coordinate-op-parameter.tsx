@@ -10,7 +10,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
   COMMON_PROPERTIES,
 } from './common';
 
@@ -39,21 +38,6 @@ export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterDa
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateParameterData>,
-    detailView: (props) => {
-      const data = props.itemData;
-
-      return (
-        <CommonDetailView {...props}>
-
-          {data.minimumOccurs !== null
-            ? <PropertyDetailView title="Minimum occurrences">
-                <NumericInput readOnly value={data.minimumOccurs} />
-              </PropertyDetailView>
-            : null}
-
-        </CommonDetailView>
-      )
-    },
     editView: (props) => (
       <CommonEditView
         useRegisterItemData={props.useRegisterItemData}
