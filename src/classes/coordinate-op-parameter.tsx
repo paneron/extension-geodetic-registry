@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { NumericInput } from '@blueprintjs/core';
+import { Button, NumericInput } from '@blueprintjs/core';
 import { jsx } from '@emotion/react';
 import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -40,14 +40,30 @@ export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterDa
     listItemView: CommonListItemView as ItemListView<CoordinateParameterData>,
     editView: (props) => (
       <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
+          useRegisterItemData={props.useRegisterItemData}
+          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          itemData={props.itemData}
+          itemRef={props.itemRef}
+          onChange={props.onChange ? (newData: CommonGRItemData) => {
+            if (!props.onChange) { return; }
+            props.onChange({ ...props.itemData, ...newData });
+          } : undefined}>
+
+        <PropertyDetailView title="Minimum occurrences">
+          <NumericInput
+            required
+            rightElement={<Button
+              disabled={!props.onChange}
+              icon="cross"
+              onClick={() => props.onChange?.({ ...props.itemData, minimumOccurs: null })}
+            />}
+            value={props.itemData.minimumOccurs ?? ''}
+            disabled={!props.onChange}
+            onValueChange={(num) => props.onChange?.({ ...props.itemData, minimumOccurs: num })}
+          />
+        </PropertyDetailView>
+
+      </CommonEditView>
     ),
   },
 
