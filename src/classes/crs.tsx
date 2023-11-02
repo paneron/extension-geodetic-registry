@@ -2,6 +2,7 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
+import { InputGroup } from '@blueprintjs/core';
 import type {
   ItemClassConfiguration,
   ItemDetailView,
@@ -72,6 +73,15 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
           onChange={props.onChange
             ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
             : undefined}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Scope">
+        <InputGroup
+          required
+          value={props.itemData.scope ?? ''}
+          disabled={!props.onChange}
+          onChange={(evt) => props.onChange?.({ ...props.itemData, scope: evt.currentTarget.value })}
         />
       </PropertyDetailView>
 
