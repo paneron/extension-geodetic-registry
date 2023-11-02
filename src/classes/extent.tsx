@@ -84,7 +84,7 @@ function ({ extent, onChange }) {
         setAllImportableExtents([]);
       }
     }
-    importExtents()
+    importExtents();
     return function cleanUp() { cancelled = true; };
   }, []);
 
