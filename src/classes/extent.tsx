@@ -21,12 +21,25 @@ import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import useDebounce from '@riboseinc/paneron-extension-kit/useDebounce';
 
 
+interface ExtentBoundingPolygonPoint {
+  /** Latitude (+/-90, Northern hemisphere positive) */
+  lat: number
+  /** Longitude (+/-180, Eastern hemisphere positive) */
+  lon: number
+}
 export interface Extent {
   n: number
   e: number
   s: number
   w: number
   name: string
+  polygonPoints?: ExtentBoundingPolygonPoint[]
+
+  /** Start date on which item is valid. */
+  temporalExtentStartDate?: string
+
+  /** End date on which item stops being valid. */
+  temporalExtentEndDate?: string
 }
 const EXTENT_COORDS = ['n', 'e', 's', 'w'] as const;
 
