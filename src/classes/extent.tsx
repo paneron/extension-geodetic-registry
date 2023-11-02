@@ -41,7 +41,7 @@ function isExtent(val: any): val is Extent {
 }
 
 /** Placeholder/stub extent value. */
-export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 };
+export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 } as const;
 
 
 /**
