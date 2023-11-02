@@ -26,11 +26,15 @@ import {
 
 
 
-const parameterTypes = [
-  'parameter file name',
-  'measure (w/ UoM)',
-] as const;
+export const ParameterType = {
+  FILE: 'parameter file name',
+  MEASURE: 'measure (w/ UoM)',
+} as const;
 
+const parameterTypes = [
+  ParameterType.FILE,
+  ParameterType.MEASURE,
+] as const;
 
 interface TransformationParameter {
   parameter: string // Coordinate operation parameter UUID
