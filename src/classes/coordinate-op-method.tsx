@@ -1,5 +1,6 @@
 /** @jsx jsx */
 
+import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
 import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -10,6 +11,8 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
+  ItemList,
+  RelatedItem,
 } from './common';
 
 
@@ -37,16 +40,41 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CoordinateOpMethod>,
-    editView: (props) => (
+    editView: ({ itemRef, itemData, onChange }) => (
       <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
-        } : undefined} />
+          itemData={itemData}
+          itemRef={itemRef}
+          onChange={onChange ? (newData: CommonGRItemData) => {
+            if (!onChange) { return; }
+            onChange({ ...itemData, ...newData });
+          } : undefined}>
+
+        <ItemList
+          items={itemData.parameters}
+          itemLabel="parameter"
+          onChangeItems={onChange
+            ? (spec) => onChange!(update(itemData, { parameters: spec }))
+            : undefined}
+          placeholderItem={''}
+          itemRenderer={(param, idx, handleChange, deleteButton) =>
+            <PropertyDetailView
+                title={`Parameter ${idx + 1}`}
+                secondaryTitle={deleteButton}>
+              <RelatedItem
+                itemRef={{ classID: 'coordinate-op-parameter', itemID: param }}
+                mode="id"
+                classIDs={['coordinate-op-parameter']}
+                onClear={onChange
+                  ? () => handleChange!({ $set: '' })
+                  : undefined}
+                onSet={handleChange
+                  ? (spec) => handleChange!(spec)
+                  : undefined}
+              />
+            </PropertyDetailView>
+          }
+        />
+      </CommonEditView>
     ),
   },
 
