@@ -36,7 +36,7 @@ const parameterTypes = [
   ParameterType.MEASURE,
 ] as const;
 
-interface TransformationParameter {
+export interface TransformationParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
   name: string // Dependent on type? filename?
