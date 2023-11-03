@@ -21,6 +21,11 @@ import {
   DEFAULT_EXTENT,
 } from './common';
 
+
+/**
+ * Similar to transformation parameters, but limited
+ * to only a measure w/UoM (and thus excluding type).
+ */
 export interface ConversionParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
@@ -45,7 +50,10 @@ export interface ConversionData extends CommonGRItemData {
   //   unitOfMeasurement: string // Unit of measurement UUID
   // }
   // epsg:<id>
+
   parameters: ConversionParameter[]
+
+  // uuid
   coordinateOperationMethod?: string
   scope: string
 }
