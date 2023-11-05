@@ -5,7 +5,6 @@ import { jsx } from '@emotion/react';
 import { TextArea, InputGroup } from '@blueprintjs/core';
 import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 import {
   CommonGRItemData,
@@ -16,6 +15,7 @@ import {
   Extent,
   DEFAULT_EXTENT,
   ExtentEdit,
+  RelatedItem,
 } from './common';
 
 
@@ -143,37 +143,33 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
       return (
         <EditView {...props}>
           <PropertyDetailView title="Ellipsoid">
-            <GenericRelatedItemView
-              itemRef={{ classID: 'ellipsoid', itemID: props.itemData.ellipsoid }}
-              availableClassIDs={['ellipsoid']}
+            <RelatedItem
+              itemRef={props.itemData.ellipsoid
+                ? { classID: 'ellipsoid', itemID: props.itemData.ellipsoid }
+                : undefined
+              }
+              mode="id"
               onClear={props.onChange
-                ? () => props.onChange!(update(props.itemData, { $unset: ['ellipsoid'] }))
+                && (() => props.onChange!(update(props.itemData, { $unset: ['ellipsoid'] })))}
+              onSet={props.onChange
+                ? ((spec) => props.onChange!(update(props.itemData, { ellipsoid: spec })))
                 : undefined}
-              onChange={props.onChange
-                ? (itemRef) => {
-                    props.onChange!(update(props.itemData, { ellipsoid: { $set: itemRef.itemID } }))
-                  }
-                : undefined}
-              itemSorter={COMMON_PROPERTIES.itemSorter}
-              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-              useRegisterItemData={props.useRegisterItemData}
+              classIDs={['ellipsoid']}
             />
           </PropertyDetailView>
           <PropertyDetailView title="Prime meridian">
-            <GenericRelatedItemView
-              itemRef={{ classID: 'prime-meridian', itemID: props.itemData.primeMeridian }}
-              availableClassIDs={['prime-meridian']}
+            <RelatedItem
+              itemRef={props.itemData.primeMeridian
+                ? { classID: 'prime-meridian', itemID: props.itemData.primeMeridian }
+                : undefined
+              }
+              mode="id"
               onClear={props.onChange
-                ? () => props.onChange!(update(props.itemData, { $unset: ['primeMeridian'] }))
+                && (() => props.onChange!(update(props.itemData, { $unset: ['primeMeridian'] })))}
+              onSet={props.onChange
+                ? ((spec) => props.onChange!(update(props.itemData, { primeMeridian: spec })))
                 : undefined}
-              onChange={props.onChange
-                ? (itemRef) => {
-                    props.onChange!(update(props.itemData, { primeMeridian: { $set: itemRef.itemID } }))
-                  }
-                : undefined}
-              itemSorter={COMMON_PROPERTIES.itemSorter}
-              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-              useRegisterItemData={props.useRegisterItemData}
+              classIDs={['prime-meridian']}
             />
           </PropertyDetailView>
         </EditView>
