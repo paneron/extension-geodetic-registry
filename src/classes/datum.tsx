@@ -3,7 +3,7 @@
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
 import { TextArea, InputGroup } from '@blueprintjs/core';
-import { type ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
