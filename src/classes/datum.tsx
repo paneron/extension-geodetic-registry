@@ -117,7 +117,7 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 };
 
 
-interface GeodeticDatumData extends DatumData {
+export interface GeodeticDatumData extends DatumData {
   ellipsoid: string
   primeMeridian: string
 }
