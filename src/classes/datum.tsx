@@ -34,7 +34,7 @@ export const DATUM_DEFAULTS: DatumData = {
   originDescription: '',
   releaseDate: '',
   coordinateReferenceEpoch: null,
-};
+} as const;
 
 
 const DatumEditView: ItemEditView<DatumData> = function (props) {
