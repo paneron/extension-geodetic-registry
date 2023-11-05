@@ -3,7 +3,7 @@
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
 import { TextArea, InputGroup } from '@blueprintjs/core';
-import { type ItemClassConfiguration, ItemDetailView, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { type ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
@@ -12,7 +12,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
   COMMON_PROPERTIES,
   Extent,
   DEFAULT_EXTENT,
@@ -37,36 +36,6 @@ export const DATUM_DEFAULTS: DatumData = {
   coordinateReferenceEpoch: null,
 };
 
-const DatumDetailView: ItemDetailView<DatumData> = function (props) {
-  const data = props.itemData;
-
-  return (
-    <CommonDetailView {...props}>
-      {props.children}
-
-      <PropertyDetailView inline title="Scope">
-        {data.scope || ''}
-      </PropertyDetailView>
-
-      <PropertyDetailView inline title="Coordinate reference epoch">
-        {data.coordinateReferenceEpoch || ''}
-      </PropertyDetailView>
-
-      <PropertyDetailView title="Extent">
-        {data.extent ? <ExtentEdit extent={data.extent} /> : '—'}
-      </PropertyDetailView>
-
-      <PropertyDetailView title="Origin description">
-        {data.originDescription || ''}
-      </PropertyDetailView>
-
-      <PropertyDetailView title="Release date">
-        {data.releaseDate || ''}
-      </PropertyDetailView>
-
-    </CommonDetailView>
-  );
-};
 
 const DatumEditView: ItemEditView<DatumData> = function (props) {
   return (
@@ -169,35 +138,6 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<GeodeticDatumData>,
-    detailView: (props) => {
-      const data = props.itemData;
-
-      return (
-        <DatumDetailView {...props}>
-
-          {data.ellipsoid
-            ? <PropertyDetailView title="Ellipsoid">
-                <GenericRelatedItemView
-                  itemRef={{ classID: 'ellipsoid', itemID: data.ellipsoid }}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            : '—'}
-
-          {data.primeMeridian
-            ? <PropertyDetailView title="Prime meridian">
-                <GenericRelatedItemView
-                  itemRef={{ classID: 'prime-meridian', itemID: data.primeMeridian }}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            : '—'}
-
-        </DatumDetailView>
-      )
-    },
     editView: (props) => {
       const EditView = DatumEditView as ItemEditView<GeodeticDatumData>;
       return (
@@ -258,7 +198,6 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<DatumData>,
-    detailView: DatumDetailView as ItemDetailView<DatumData>,
     editView: (props) => {
       const EditView = DatumEditView as ItemEditView<DatumData>;
       return (
@@ -284,7 +223,6 @@ export const engineeringDatum: ItemClassConfiguration<DatumData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<DatumData>,
-    detailView: DatumDetailView as ItemDetailView<DatumData>,
     editView: (props) => {
       const EditView = DatumEditView as ItemEditView<DatumData>;
       return (
