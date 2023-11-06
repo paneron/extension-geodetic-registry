@@ -105,7 +105,7 @@ const AliasesEdit: React.FC<{
 
 export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, 'itemSorter'> = {
   itemSorter: (a, b) => a.identifier - b.identifier,
-};
+} as const;
 
 
 export const EditView: ItemEditView<CommonGRItemData> = function (props) {
