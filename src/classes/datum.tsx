@@ -195,12 +195,7 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<DatumData>,
-    editView: (props) => {
-      const EditView = DatumEditView as ItemEditView<DatumData>;
-      return (
-        <EditView {...props} />
-      );
-    },
+    editView: DatumEditView as ItemEditView<DatumData>,
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
@@ -220,12 +215,7 @@ export const engineeringDatum: ItemClassConfiguration<DatumData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<DatumData>,
-    editView: (props) => {
-      const EditView = DatumEditView as ItemEditView<DatumData>;
-      return (
-        <EditView {...props} />
-      );
-    },
+    editView: DatumEditView as ItemEditView<DatumData>,
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
