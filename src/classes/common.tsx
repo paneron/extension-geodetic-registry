@@ -163,42 +163,25 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
             <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
           </FormGroup>
 
-          {itemData.informationSources.length > 0
-            ? <H4 css={css`margin-top: 1.5em;`}>
-                Information sources
-              </H4>
-            : null}
-
-          <UL css={css`padding-left: 0; list-style: square;`}>
-            {itemData.informationSources.map((infoSource, idx) =>
-              <li key={idx} css={css`margin-top: 1em;`}>
-                <FormGroup
-                    label={`Source ${idx + 1}:`}
-                    labelInfo={<Button
-                        small
-                        disabled={!onChange}
-                        onClick={() => onChange!(update(itemData, { informationSources: { $splice: [[ idx, 1 ]] } }))}>
-                      Delete
-                    </Button>}>
-                  <InformationSourceEdit
-                    citation={infoSource}
-                    onChange={onChange
-                      ? (infoSource) => onChange!(update(itemData, { informationSources: { [idx]: { $set: infoSource } } }))
-                      : undefined}
+          <ItemList
+            items={itemData.informationSources}
+            itemLabel="citation (information source)"
+            itemLabelPlural="citations"
+            placeholderItem={getInformationSourceStub()}
+            onChangeItems={onChange
+              ? (spec) => onChange!(update(itemData, { informationSources: spec }))
+              : undefined}
+            itemRenderer={function renderCitation (item, idx, handleChange, deleteButton) {
+              return <PropertyDetailView title={`Citation ${idx + 1}`} secondaryTitle={deleteButton}>
+                <InformationSourceEdit
+                  citation={item}
+                  onChange={handleChange
+                    ? (newSource) => handleChange({ [idx]: { $set: newSource } })
+                    : undefined}
                   />
-                </FormGroup>
-              </li>
-            )}
-          </UL>
-
-          <Button
-              outlined
-              disabled={!onChange}
-              onClick={() => onChange!(update(itemData, { informationSources: { $push: [getInformationSourceStub()] } }))}
-              icon="add">
-            Append source
-          </Button>
-
+              </PropertyDetailView>
+            }}
+          />
         </>}>
 
       <FormGroup label="GR identifier:">
