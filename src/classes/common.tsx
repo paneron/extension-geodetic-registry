@@ -159,9 +159,9 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
               : undefined}
           />
 
-          <FormGroup label="Remarks:">
+          <PropertyDetailView title="Remarks">
             <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
-          </FormGroup>
+          </PropertyDetailView>
 
           <ItemList
             items={itemData.informationSources}
