@@ -77,46 +77,28 @@ function getInformationSourceStub(): Citation {
 const AliasesEdit: React.FC<{
   aliases: Readonly<string[]>
   onChange?: (newAliases: Readonly<string[]>) => void
-}> = function (props) {
+}> = function ({ aliases, onChange }) {
   return (
-    <PropertyDetailView title="Aliases">
-      <ControlGroup vertical>
-        {props.aliases.map((alias, idx) =>
-          <InputGroup
-            key={idx}
-            fill
-            required
-            value={alias}
-            readOnly={!props.onChange}
-            rightElement={props.onChange
-              ? <Button
-                  icon='cross'
-                  disabled={!props.onChange}
-                  onClick={props.onChange
-                    ? () => props.onChange!(update(
-                        props.aliases, { $splice: [[ idx, 1 ]] }
-                      ))
-                    : undefined}
-                />
-              : undefined}
-            onChange={props.onChange
-              ? evt => props.onChange!(update(
-                  props.aliases, { [idx]: { $set: evt.currentTarget.value } },
-                ))
-              : undefined}
-          />
-        )}
-        {props.onChange
-          ? <Button
-                icon='add'
-                onClick={() => props.onChange!(update(
-                  props.aliases, { $push: [''] },
-                ))}>
-              Add alias
-            </Button>
-          : undefined}
-      </ControlGroup>
-    </PropertyDetailView>
+    <ItemList
+      items={aliases}
+      itemLabel="alias"
+      itemLabelPlural="aliases"
+      onChangeItems={onChange
+        ? (spec) => onChange!(update(aliases, spec))
+        : undefined}
+      placeholderItem=""
+      itemRenderer={(alias, idx, handleChange, deleteButton) =>
+        <InputGroup
+          key={idx}
+          fill
+          required
+          value={alias}
+          readOnly={!handleChange}
+          rightElement={deleteButton}
+          onChange={(evt) => handleChange!({ $set: evt.currentTarget.value })}
+        />
+      }
+    />
   );
 };
 
