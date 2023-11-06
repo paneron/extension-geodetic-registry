@@ -7,12 +7,12 @@ import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@ribose
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
-  CommonGRItemData,
+  type CommonGRItemData,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
-  Extent,
+  type Extent,
   DEFAULT_EXTENT,
   ExtentEdit,
   RelatedItem,
