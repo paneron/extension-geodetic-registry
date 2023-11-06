@@ -4,11 +4,10 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { Button, ControlGroup, FormGroup, H3, InputGroup, UL } from '@blueprintjs/core';
+import { ControlGroup, FormGroup, InputGroup } from '@blueprintjs/core';
 import { css, jsx } from '@emotion/react';
 import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 import {
   type CommonGRItemData,
@@ -18,6 +17,8 @@ import {
   COMMON_PROPERTIES,
   type Extent,
   ExtentEdit,
+  ItemList,
+  RelatedItem,
   DEFAULT_EXTENT,
 } from './common';
 
@@ -51,7 +52,7 @@ export interface ConversionData extends CommonGRItemData {
   // }
   // epsg:<id>
 
-  parameters: ConversionParameter[]
+  parameters: Readonly<ConversionParameter[]>
 
   // uuid
   coordinateOperationMethod?: string
@@ -85,22 +86,20 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<ConversionData>,
-    editView: (props) => (
+    editView: ({ itemData, itemRef, onChange }) => (
       <CommonEditView
-        useRegisterItemData={props.useRegisterItemData}
-        getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-        itemData={props.itemData}
-        itemRef={props.itemRef}
-        onChange={props.onChange ? (newData: CommonGRItemData) => {
-          if (!props.onChange) { return; }
-          props.onChange({ ...props.itemData, ...newData });
+        itemData={itemData}
+        itemRef={itemRef}
+        onChange={onChange ? (newData: CommonGRItemData) => {
+          if (!onChange) { return; }
+          onChange({ ...itemData, ...newData });
         } : undefined}>
 
         <FormGroup label="Extent:">
           <ExtentEdit
-            extent={props.itemData.extent ?? DEFAULT_EXTENT}
-            onChange={props.onChange
-              ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+            extent={itemData.extent ?? DEFAULT_EXTENT}
+            onChange={onChange
+              ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
               : undefined}
           />
         </FormGroup>
@@ -140,38 +139,27 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
         </FormGroup>
         */}
 
-        {props.itemData.parameters.length > 0
-          ? <H3 css={css`margin-top: 1.5em;`}>
-              Parameters
-            </H3>
-          : null}
-
-        <UL css={css`padding-left: 0; list-style: square;`}>
-          {props.itemData.parameters.map((param, idx) =>
-            <li key={idx} css={css`margin-top: 1em;`}>
+        <ItemList
+          items={itemData.parameters}
+          itemLabel="parameter"
+          onChangeItems={onChange
+            ? (spec) => onChange!(update(itemData, { parameters: spec }))
+            : undefined}
+          placeholderItem={getParameterStub()}
+          itemRenderer={(param, idx, handleChange, deleteButton) =>
+            <>
               <PropertyDetailView
                   title={`Parameter ${idx + 1}`}
-                  secondaryTitle={<Button
-                    outlined
-                    small
-                    disabled={!props.onChange}
-                    onClick={() => props.onChange!(update(props.itemData, { parameters: { $splice: [[ idx, 1 ]] } }))}
-                  >Delete</Button>}>
-                <GenericRelatedItemView
+                  secondaryTitle={deleteButton}>
+                <RelatedItem
                   itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-
-                  availableClassIDs={['coordinate-op-parameter']}
-                  onClear={props.onChange
-                    ? () => props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: '' } } } }))
+                  mode="id"
+                  classIDs={['coordinate-op-parameter']}
+                  onClear={onChange
+                    ? () => handleChange!({ parameter: { $set: '' } })
                     : undefined}
-                  onChange={props.onChange
-                    ? (itemRef) => {
-                        if (itemRef.classID === 'coordinate-op-parameter') {
-                          props.onChange!(update(props.itemData, { parameters: { [idx]: { parameter: { $set: itemRef.itemID }} } }))
-                        }
-                      }
+                  onSet={handleChange
+                    ? (spec) => handleChange!({ parameter: spec })
                     : undefined}
                 />
               </PropertyDetailView>
@@ -181,27 +169,28 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               <PropertyDetailView title="Value">
                 <ControlGroup vertical css={css`margin-bottom: .5rem;`}>
                   <InputGroup
-                    disabled={!props.onChange}
+                    disabled={!onChange}
                     fill
                     value={param.value?.toString() ?? '—'}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                      props.onChange!(update(props.itemData, { parameters: { [idx]: { value: { $set: evt.currentTarget.value } } } }))}
+                      handleChange!({ value: { $set: evt.currentTarget.value } } )}
+                  />
+                  <RelatedItem
+                    itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
+                    mode="id"
+                    classIDs={['unit-of-measurement']}
+                    onClear={handleChange
+                      ? () => handleChange!({ unitOfMeasurement: { $set: null } })
+                      : undefined}
+                    onSet={handleChange
+                      ? (spec) => handleChange!({ unitOfMeasurement: spec })
+                      : undefined}
                   />
                 </ControlGroup>
-
               </PropertyDetailView>
-
-            </li>
-          )}
-        </UL>
-
-        <Button
-            outlined
-            disabled={!props.onChange}
-            onClick={() => props.onChange!(update(props.itemData, { parameters: { $push: [getParameterStub()] } }))}
-            icon="add">
-          Append parameter
-        </Button>
+            </>
+          }
+        />
       </CommonEditView>
     ),
   },
