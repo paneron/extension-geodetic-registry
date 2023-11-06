@@ -171,7 +171,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
                   <InputGroup
                     disabled={!onChange}
                     fill
-                    value={param.value?.toString() ?? '—'}
+                    value={param.value?.toString() ?? ''}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
                       handleChange!({ value: { $set: evt.currentTarget.value } } )}
                   />
