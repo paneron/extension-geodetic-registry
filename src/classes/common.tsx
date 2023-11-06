@@ -190,6 +190,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
             required
             value={itemData.identifier}
             disabled={!onChange}
+            buttonPosition={!onChange ? 'none' : undefined}
             min={0}
             max={Infinity}
             onValueChange={onChange
