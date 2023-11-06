@@ -368,9 +368,11 @@ export function ItemList<T> ({
     )
   ), [items.length, items.map(i => JSON.stringify(i)).toString(), itemRenderer, onChangeItems]);
 
+  const pluralLabel = itemLabelPlural || `${itemLabel} items`;
+
   return (
     <PropertyDetailView
-        title={`${items.length} ${itemLabelPlural || `${itemLabel} item(s)`}`}
+        title={`${items.length > 0 ? `${items.length} ` : ''}${pluralLabel}`}
         css={css`margin-top: 10px;`}
         secondaryTitle={onChangeItems !== undefined && placeholderItem !== undefined
           ? <Button
@@ -380,9 +382,11 @@ export function ItemList<T> ({
               Add
             </Button>
           : undefined}>
-      <UL css={css`margin-top: 0; padding-left: 0; list-style: square;`}>
-        {itemViews}
-      </UL>
+      {items.length > 0
+        ? <UL css={css`margin-top: 0; padding-left: 0; list-style: square;`}>
+            {itemViews}
+          </UL>
+        : <p>No {pluralLabel} to show.</p>}
     </PropertyDetailView>
   );
 }
