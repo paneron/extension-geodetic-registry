@@ -49,7 +49,7 @@ export const DEFAULTS: CommonGRItemData = {
 } as const;
 
 
-function getInformationSourceStub(): Citation {
+function getInformationSourceStub(): Readonly<Citation> {
   return {
     title: '',
     seriesIssueID: null,
@@ -60,7 +60,7 @@ function getInformationSourceStub(): Citation {
     otherDetails: '',
     isbn: null,
     issn: null,
-  };
+  } as const;
 }
 
 
