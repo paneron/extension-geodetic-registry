@@ -9,7 +9,7 @@ import {
   Button,
   Classes,
   Colors, ControlGroup, FormGroup, H4, H6, InputGroup,
-  NumericInput, TextArea, UL,
+  NumericInput, TextArea, UL, OL,
 } from '@blueprintjs/core';
 
 
@@ -289,6 +289,15 @@ interface ItemListProps<T> {
   itemLabel: string
   itemLabelPlural?: string
 
+  /** Same as for BP’s FormGroup. */
+  helperText?: React.ReactNode
+
+  /** Same as for BP’s FormGroup. */
+  subLabel?: React.ReactNode
+
+  /** When items are simple, ideally one property. */
+  simpleItems?: boolean
+
   itemRenderer: (
     item: T,
     idx: number,
@@ -308,8 +317,11 @@ export function ItemList<T> ({
   items,
   itemLabel,
   itemLabelPlural,
+  helperText,
+  subLabel,
   itemRenderer,
   onChangeItems,
+  simpleItems,
   placeholderItem,
 }: ItemListProps<T>): JSX.Element {
   const itemViews = useMemo((() =>
@@ -324,10 +336,13 @@ export function ItemList<T> ({
           onChangeItems
             ? <Button
                 outlined
-                small
+                icon="remove"
+                intent="danger"
+                title={`Delete ${itemLabel} ${idx + 1}`}
                 disabled={!onChangeItems}
                 onClick={() => onChangeItems!({ $splice: [[ idx, 1 ]] })}
-              >Delete</Button>
+                text={simpleItems ? undefined : `Delete this ${itemLabel}`}
+              />
             : undefined,
         )}
       </li>
@@ -335,24 +350,42 @@ export function ItemList<T> ({
   ), [items.length, items.map(i => JSON.stringify(i)).toString(), itemRenderer, onChangeItems]);
 
   const pluralLabel = itemLabelPlural || `${itemLabel} items`;
+  const countSummary = items.length > 0
+    ? <>({items.length} total)</>
+    : <>(no items to show)</>
+
+  const addButton = useMemo(() => (
+    onChangeItems !== undefined && placeholderItem !== undefined
+      ? <Button
+            outlined
+            icon="add"
+            intent="primary"
+            onClick={() => onChangeItems({ $push: [placeholderItem] })}>
+          Add {itemLabel}
+        </Button>
+      : null
+  ), [onChangeItems, itemLabel, placeholderItem]);
 
   return (
     <PropertyDetailView
-        title={`${items.length > 0 ? `${items.length} ` : ''}${pluralLabel}`}
+        label={pluralLabel}
+        labelInfo={countSummary}
         css={css`margin-top: 10px;`}
-        secondaryTitle={onChangeItems !== undefined && placeholderItem !== undefined
-          ? <Button
-                small
-                outlined
-                onClick={() => onChangeItems({ $push: [placeholderItem] })}>
-              Add
-            </Button>
-          : undefined}>
+        subLabel={subLabel}
+        helperText={helperText || addButton
+          ? <>
+              {subLabel}
+              {(subLabel && addButton)
+                ? <br />
+                : null}
+              {addButton}
+            </>
+          : null}>
       {items.length > 0
-        ? <UL css={css`margin-top: 0; padding-left: 0; list-style: square;`}>
+        ? <OL css={css`margin-top: 0; padding-left: 1em;`}>
             {itemViews}
-          </UL>
-        : <p>No {pluralLabel} to show.</p>}
+          </OL>
+        : null}
     </PropertyDetailView>
   );
 }
