@@ -9,10 +9,10 @@
  */
 
 import { jsx, css, ClassNames } from '@emotion/react';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
-  MenuItem, Tag, Icon, ProgressBar,
+  MenuItem, Tag, ProgressBar,
   Colors,
 } from '@blueprintjs/core';
 import { Select2 as Select, type ItemRenderer } from '@blueprintjs/select';
@@ -200,59 +200,64 @@ const CoordInput: React.FC<{
   label?: JSX.Element
 }> =
 function ({ value, label, onChange }) {
-
   const [editedVal, editVal] = useState<string | null>(null);
-  const [valid, setValid] = useState(true);
 
-  function handleChange(val: string) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleChange = useCallback(function handleChange(val: string) {
     if (!onChange) {
       return;
     }
-    let normalizedVal: string = val.trim();
     try {
-      const candidate = parseFloat(normalizedVal);
-      if (!isNaN(candidate) && candidate.toLocaleString() === normalizedVal) {
-        setValid(true);
-        onChange(candidate);
-        editVal(null);
-      } else {
-        editVal(normalizedVal);
-        setValid(false);
-      }
+      onChange(parseCoordinate(val));
+      editVal(null);
+      inputRef.current?.setCustomValidity("");
+      inputRef.current?.reportValidity();
     } catch (e) {
-      editVal(normalizedVal);
-      setValid(false);
+      editVal(val);
+      inputRef.current?.setCustomValidity((e as any).message ?? "Unable to parse value");
+      inputRef.current?.reportValidity();
     }
-  }
+  }, [editVal, inputRef.current, onChange]);
 
   return (
     <FormGroup
         label={label}
-        css={css`margin: 0;`}
-        labelInfo={onChange && !valid
-          ? <Icon icon='warning-sign' title="Invalid value" />
-          : undefined}
-        intent={onChange && !valid
-          ? 'warning'
-          : undefined}>
+        css={css`margin: 0;`}>
       <InputGroup
         readOnly={!onChange}
+        inputRef={inputRef}
         onChange={(evt: React.FormEvent<HTMLInputElement>) =>
           handleChange(evt.currentTarget.value)}
-        css={onChange
-          ? css`
-              .bp4-input {
-                ${valid
-                  ? `background: ${Colors.GREEN5}; .bp4-dark & { background: ${Colors.GREEN2}; }`
-                  : `background: ${Colors.RED5}; .bp4-dark & { background: ${Colors.RED2}; }`}
-                }
-              }
-            `
-          : undefined}
+        css={css`
+          .bp4-input:valid {
+            background: ${Colors.GREEN5};
+            .bp4-dark & { background: ${Colors.GREEN2}; }
+          }
+          .bp4-input:invalid {
+            background: ${Colors.RED5};
+            .bp4-dark & { background: ${Colors.RED2}; }
+          }
+        `}
         value={editedVal ?? value.toLocaleString()}
       />
     </FormGroup>
   );
+}
+
+
+function parseCoordinate(val: string): number {
+  let normalizedVal: string = val.trim();
+  try {
+    const candidate = parseFloat(normalizedVal);
+    if (!isNaN(candidate) && candidate.toLocaleString() === normalizedVal && candidate <= 180 && candidate >= -180) {
+      return candidate;
+    } else {
+      throw new Error("Coordinate value may be malformed");
+    }
+  } catch (e) {
+    throw new Error("Unable to parse coordinate value");
+  }
 }
 
 
