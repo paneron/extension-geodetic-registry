@@ -394,13 +394,14 @@ export function ItemList<T> ({
 const SimpleField: React.FC<{ val: string, label: string, onChange?: (newVal: string) => void }> =
 function ({ val, label, onChange }) {
   return (
-    <FormGroup label={`${label}:`}>
+    <PropertyDetailView title={label} css={css`margin-bottom: 5px; label.bp4-label { font-weight: normal; }`}>
       <InputGroup
+        title={val}
         readOnly={!onChange}
         value={val}
         onChange={(evt: React.FormEvent<HTMLInputElement>) => onChange!(evt.currentTarget.value)}
       />
-    </FormGroup>
+    </PropertyDetailView>
   );
 };
 
