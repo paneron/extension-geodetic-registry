@@ -420,6 +420,7 @@ function ({ citation, onChange }) {
       <SimpleField label="Other details" val={citation.otherDetails ?? ''} onChange={onChange ? (otherDetails) => onChange!({ ...citation, otherDetails }) : undefined} />
       <SimpleField label="ISBN" val={citation.isbn ?? ''} onChange={onChange ? (isbn) => onChange!({ ...citation, isbn }) : undefined} />
       <SimpleField label="ISSN" val={citation.issn ?? ''} onChange={onChange ? (issn) => onChange!({ ...citation, issn }) : undefined} />
+      <SimpleField label="URI" val={citation.uri ?? ''} onChange={onChange ? (uri) => onChange!({ ...citation, uri }) : undefined} />
     </>
   );
 };
