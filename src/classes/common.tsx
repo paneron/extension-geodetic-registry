@@ -201,6 +201,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
           {onChange
             ? <Button
                 icon='reset'
+                outlined
                 title="Suggest latest ID"
                 disabled={operationKey !== undefined}
                 onClick={performOperation('obtaining new ID', handleGetNewID)}

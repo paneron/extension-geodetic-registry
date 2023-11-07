@@ -154,6 +154,7 @@ function ({ extent, onChange }) {
                       }}>
                     <Button
                       title="Load extent data from a pre-existing item"
+                      outlined
                       css={css`
                         padding: 0 20px;
                         /* Otherwise it gets compressed (due to fill presumably) */
@@ -164,6 +165,7 @@ function ({ extent, onChange }) {
                 : <Button
                     title="Clear extent data. If you want to import another extent, use this first"
                     onClick={() => onChange(DEFAULT_EXTENT)}
+                    outlined
                     css={css`
                       padding: 0 20px;
                       /* Otherwise it gets compressed (due to fill presumably) */
