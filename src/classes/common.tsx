@@ -177,7 +177,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
                 <InformationSourceEdit
                   citation={item}
                   onChange={handleChange
-                    ? (newSource) => handleChange({ [idx]: { $set: newSource } })
+                    ? (newSource) => handleChange({ $set: newSource })
                     : undefined}
                   />
               </PropertyDetailView>
