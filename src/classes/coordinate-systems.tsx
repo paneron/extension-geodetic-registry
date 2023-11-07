@@ -39,6 +39,7 @@ function ({ itemData, onChange, ...props })  {
 
       <ItemList
         items={itemData.coordinateSystemAxes}
+        simpleItems
         itemLabel="axis"
         onChangeItems={onChange
           ? (spec) => onChange!(update(itemData, { coordinateSystemAxes: spec }))

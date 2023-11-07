@@ -81,6 +81,7 @@ const AliasesEdit: React.FC<{
   return (
     <ItemList
       items={aliases}
+      simpleItems
       itemLabel="alias"
       itemLabelPlural="aliases"
       onChangeItems={onChange

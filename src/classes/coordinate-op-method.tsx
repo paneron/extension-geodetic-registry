@@ -51,6 +51,7 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
 
         <ItemList
           items={itemData.parameters}
+          simpleItems
           itemLabel="parameter"
           onChangeItems={onChange
             ? (spec) => onChange!(update(itemData, { parameters: spec }))
