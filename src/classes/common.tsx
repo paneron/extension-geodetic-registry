@@ -524,7 +524,7 @@ const SplitView: React.FC<{
 }> = memo(function ({ children, aside, className }) {
   return (
     <div css={css`
-        position: absolute; top: 0rem; left: 0rem; right: 0rem; bottom: 0rem;
+        position: absolute; inset: 0;
 
         display: flex; flex-flow: row nowrap; overflow: hidden;
 
