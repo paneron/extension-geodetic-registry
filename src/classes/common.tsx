@@ -534,20 +534,26 @@ const SplitView: React.FC<{
 
         & > * { padding: 1rem; }`} className={className}>
 
-      <div css={css`overflow-y: auto; flex: 1;`}>
+      <div css={css`
+        overflow-y: auto; flex: 1;
+        background: ${Colors.LIGHT_GRAY5};
+        .bp4-dark & {
+          background: ${Colors.DARK_GRAY3};
+        }
+      `}>
         {children}
       </div>
 
       <aside
-          css={css`
-            overflow-y: auto;
-            flex-basis: 45%;
-            background: ${Colors.LIGHT_GRAY4};
-            .bp4-dark & {
-              background: ${Colors.DARK_GRAY4};
-            }
-          `}
-          className={Classes.ELEVATION_1}>
+        className={Classes.ELEVATION_1}
+        css={css`
+          overflow-y: auto;
+          flex-basis: 45%;
+          background: ${Colors.LIGHT_GRAY4};
+          .bp4-dark & {
+            background: ${Colors.DARK_GRAY4};
+          }
+      `}>
         {aside}
       </aside>
     </div>
