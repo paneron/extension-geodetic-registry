@@ -174,7 +174,7 @@ function ({ extent, onChange }) {
         )}
       </ClassNames>
       <TextArea
-        disabled={!onChange}
+        readOnly={!onChange}
         onChange={(evt) => onChange!({ ...extent, name: evt.currentTarget.value })}
         placeholder={onChange ? "Extent description goes here" : undefined}
         value={extent.name ?? ''}

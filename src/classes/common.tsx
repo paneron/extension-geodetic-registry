@@ -117,7 +117,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
   (fieldName: F) {
     return {
-      disabled: !onChange,
+      readOnly: !onChange,
       onChange: (evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (!onChange) { return; }
         onChange({ ...itemData, [fieldName]: evt.currentTarget.value })
@@ -190,8 +190,8 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
           <NumericInput
             required
             value={itemData.identifier}
-            disabled={!onChange}
             buttonPosition={!onChange ? 'none' : undefined}
+            readOnly={!onChange}
             min={0}
             max={Infinity}
             onValueChange={onChange
