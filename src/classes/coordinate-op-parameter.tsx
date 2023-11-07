@@ -52,11 +52,14 @@ export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterDa
         <PropertyDetailView title="Minimum occurrences">
           <NumericInput
             required
-            rightElement={<Button
-              disabled={!props.onChange}
-              icon="cross"
-              onClick={() => props.onChange?.({ ...props.itemData, minimumOccurs: null })}
-            />}
+            buttonPosition={props.onChange ? undefined : 'none'}
+            rightElement={props.onChange
+              ? <Button
+                  disabled={!props.onChange}
+                  icon="cross"
+                  onClick={() => props.onChange?.({ ...props.itemData, minimumOccurs: null })}
+                />
+              : undefined}
             value={props.itemData.minimumOccurs ?? ''}
             disabled={!props.onChange}
             onValueChange={(num) => props.onChange?.({ ...props.itemData, minimumOccurs: num })}
@@ -70,4 +73,3 @@ export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterDa
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
 };
-
