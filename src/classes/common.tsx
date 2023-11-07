@@ -8,7 +8,7 @@ import { jsx, css } from '@emotion/react';
 import {
   Button,
   Classes,
-  Colors, ControlGroup, FormGroup, H4, H6, InputGroup,
+  Colors, ControlGroup, FormGroup, H6, InputGroup,
   NumericInput, TextArea, UL, OL,
 } from '@blueprintjs/core';
 
