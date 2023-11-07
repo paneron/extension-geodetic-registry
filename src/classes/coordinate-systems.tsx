@@ -2,8 +2,8 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
+import { ControlGroup } from '@blueprintjs/core';
 import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
-import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import {
   DEFAULTS as COMMON_DEFAULTS,
   COMMON_PROPERTIES,
@@ -45,17 +45,16 @@ function ({ itemData, onChange, ...props })  {
           ? (spec) => onChange!(update(itemData, { coordinateSystemAxes: spec }))
           : undefined}
         placeholderItem=""
-        itemRenderer={(axis, idx, handleChange, deleteButton) =>
-          <PropertyDetailView
-              title={`Axis ${idx + 1}`}
-              secondaryTitle={deleteButton}>
+        itemRenderer={(axis, _idx, handleChange, deleteButton) =>
+          <ControlGroup>
             <RelatedItem
               itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
               classIDs={['coordinate-sys-axis']}
               mode="id"
               onSet={handleChange}
             />
-          </PropertyDetailView>
+            {deleteButton}
+          </ControlGroup>
         }
       />
 

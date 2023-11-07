@@ -190,16 +190,15 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
         <ItemList
           items={itemData.parameters}
-          itemLabel="parameter"
+          itemLabel="parameter value"
+          itemLabelPlural="parameter values"
           onChangeItems={onChange
             ? (spec) => onChange!(update(itemData, { parameters: spec }))
             : undefined}
           placeholderItem={getParameterStub()}
-          itemRenderer={(param, idx, handleChange, deleteButton) =>
-            <>
-              <PropertyDetailView
-                  title={`Parameter ${idx + 1}`}
-                  secondaryTitle={deleteButton}>
+          itemRenderer={(param, _idx, handleChange, deleteButton) =>
+            <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
+              <PropertyDetailView title="Parameter">
                 <RelatedItem
                   itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
                   mode="id"
@@ -256,7 +255,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                       source={param.fileCitation} />
                   </PropertyDetailView>
                 : null}
-            </>
+            </PropertyDetailView>
           }
         />
       </CommonEditView>

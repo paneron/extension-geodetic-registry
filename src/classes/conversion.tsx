@@ -141,16 +141,15 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
 
         <ItemList
           items={itemData.parameters}
-          itemLabel="parameter"
+          itemLabel="parameter value"
+          itemLabelPlural="parameter values"
           onChangeItems={onChange
             ? (spec) => onChange!(update(itemData, { parameters: spec }))
             : undefined}
           placeholderItem={getParameterStub()}
-          itemRenderer={(param, idx, handleChange, deleteButton) =>
-            <>
-              <PropertyDetailView
-                  title={`Parameter ${idx + 1}`}
-                  secondaryTitle={deleteButton}>
+          itemRenderer={(param, _idx, handleChange, deleteButton) =>
+            <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
+              <PropertyDetailView title="Parameter">
                 <RelatedItem
                   itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
                   mode="id"
@@ -169,7 +168,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               <PropertyDetailView title="Value">
                 <ControlGroup vertical css={css`margin-bottom: .5rem;`}>
                   <InputGroup
-                    disabled={!onChange}
+                    readOnly={!onChange}
                     fill
                     value={param.value?.toString() ?? ''}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
@@ -188,7 +187,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
                   />
                 </ControlGroup>
               </PropertyDetailView>
-            </>
+            </PropertyDetailView>
           }
         />
       </CommonEditView>

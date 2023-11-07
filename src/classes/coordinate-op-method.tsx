@@ -2,8 +2,8 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
+import { ControlGroup } from '@blueprintjs/core';
 import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
-import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
   CommonGRItemData,
@@ -57,10 +57,8 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
             ? (spec) => onChange!(update(itemData, { parameters: spec }))
             : undefined}
           placeholderItem={''}
-          itemRenderer={(param, idx, handleChange, deleteButton) =>
-            <PropertyDetailView
-                title={`Parameter ${idx + 1}`}
-                secondaryTitle={deleteButton}>
+          itemRenderer={(param, _idx, handleChange, deleteButton) =>
+            <ControlGroup>
               <RelatedItem
                 itemRef={{ classID: 'coordinate-op-parameter', itemID: param }}
                 mode="id"
@@ -72,7 +70,8 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
                   ? (spec) => handleChange!(spec)
                   : undefined}
               />
-            </PropertyDetailView>
+              {deleteButton}
+            </ControlGroup>
           }
         />
       </CommonEditView>
