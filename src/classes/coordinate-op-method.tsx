@@ -6,7 +6,7 @@ import { ControlGroup } from '@blueprintjs/core';
 import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 
 import {
-  CommonGRItemData,
+  type CommonGRItemData,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
