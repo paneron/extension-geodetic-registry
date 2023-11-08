@@ -172,7 +172,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
             onChangeItems={onChange
               ? (spec) => onChange!(update(itemData, { informationSources: spec }))
               : undefined}
-            itemRenderer={function renderCitation (item, idx, handleChange, deleteButton) {
+            itemRenderer={function renderCitation (item, _idx, handleChange, deleteButton) {
               return <PropertyDetailView helperText={deleteButton}>
                 <InformationSourceEdit
                   citation={item}
