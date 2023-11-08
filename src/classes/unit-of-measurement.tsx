@@ -82,17 +82,19 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
           } : undefined}>
 
         <PropertyDetailView title="Measure type">
-          <HTMLSelect
-            value={props.itemData.measureType}
-            required
-            disabled={!props.onChange}
-            options={MEASURE_TYPES.map(m => ({ value: m, label: m }))}
-            onChange={(evt) =>
-              isMeasureType(evt.currentTarget.value)
-                ? props.onChange?.({ ...props.itemData, measureType: evt.currentTarget.value })
-                : void 0
-            }
-          />
+          {props.onChange
+            ? <HTMLSelect
+                value={props.itemData.measureType}
+                required
+                disabled={!props.onChange}
+                options={MEASURE_TYPES.map(m => ({ value: m, label: m }))}
+                onChange={(evt) =>
+                  isMeasureType(evt.currentTarget.value)
+                    ? props.onChange?.({ ...props.itemData, measureType: evt.currentTarget.value })
+                    : void 0
+                }
+              />
+            : <InputGroup readOnly value={props.itemData.measureType} />}
         </PropertyDetailView>
 
         <PropertyDetailView title="Symbol">
