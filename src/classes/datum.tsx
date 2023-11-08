@@ -100,7 +100,9 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
         />
       </PropertyDetailView>
 
-      <PropertyDetailView title="Origin description">
+      <PropertyDetailView
+          title="Anchor definition"
+          subLabel="A.k.a. “origin description”">
         <TextArea
           fill
           required
