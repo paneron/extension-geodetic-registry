@@ -85,7 +85,11 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
           />
         </PropertyDetailView>
 
-        {!itemData.isSphere || (itemData.semiMinorAxis || itemData.inverseFlattening)
+        {!itemData.isSphere
+            || itemData.semiMinorAxis
+            || itemData.semiMinorAxisUoM
+            || itemData.inverseFlattening
+            || itemData.inverseFlatteningUoM
           ? <>
               <PropertyDetailView title="Inverse flattening">
                 <FloatWithUoM
