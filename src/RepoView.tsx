@@ -23,5 +23,8 @@ export default function () {
     itemClassConfiguration={itemClassConfiguration}
     keyExpression="obj.data.identifier || obj.id"
     defaultSearchCriteria={defaultSearchCriteria as any}
+    getQuickSearchPredicate={function getQuickSearchPredicate(quickSearchString) {
+      return `[obj.data?.name ?? '', obj.data?.identifier?.toString()].join('').toLowerCase().indexOf("${quickSearchString.toLowerCase()}") >= 0`;
+    }}
   />
 };
