@@ -249,7 +249,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               </PropertyDetailView>
 
               {param.fileCitation !== null
-                ? <PropertyDetailView title="Source">
+                ? <PropertyDetailView title="File citation">
                     <InformationSourceDetails
                       css={css`h6 { font-weight: normal; }`}
                       source={param.fileCitation} />
