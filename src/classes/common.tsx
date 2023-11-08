@@ -8,7 +8,7 @@ import { jsx, css } from '@emotion/react';
 import {
   Button,
   Classes,
-  Colors, ControlGroup, FormGroup, H6, InputGroup,
+  Colors, ControlGroup, H6, InputGroup,
   NumericInput, TextArea, UL, OL,
 } from '@blueprintjs/core';
 
@@ -185,7 +185,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
           />
         </>}>
 
-      <FormGroup label="GR identifier:">
+      <PropertyDetailView label="GR identifier">
         <ControlGroup>
           <NumericInput
             required
@@ -208,11 +208,12 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
               />
             : null}
         </ControlGroup>
-      </FormGroup>
+      </PropertyDetailView>
 
-      <FormGroup label="Name:">
+
+      <PropertyDetailView label="Name">
         <InputGroup required value={itemData.name} {...textInputProps('name')} />
-      </FormGroup>
+      </PropertyDetailView>
 
       {children}
 
