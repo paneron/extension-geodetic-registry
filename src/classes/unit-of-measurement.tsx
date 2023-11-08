@@ -125,11 +125,14 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
         <PropertyDetailView title="Numerator (factor C)">
           <NumericInput
             required
-            rightElement={<Button
-              disabled={!props.onChange}
-              icon="cross"
-              onClick={() => props.onChange?.({ ...props.itemData, numerator: null })}
-            />}
+            buttonPosition={props.onChange ? undefined : 'none'}
+            rightElement={props.onChange
+              ? <Button
+                  disabled={!props.onChange}
+                  icon="cross"
+                  onClick={() => props.onChange?.({ ...props.itemData, numerator: null })}
+                />
+              : undefined}
             value={props.itemData.numerator ?? ''}
             disabled={!props.onChange}
             onValueChange={(num) => props.onChange?.({ ...props.itemData, numerator: num })}
@@ -139,11 +142,14 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
         <PropertyDetailView title="Denominator (factor A)">
           <NumericInput
             required
-            rightElement={<Button
-              disabled={!props.onChange}
-              icon="cross"
-              onClick={() => props.onChange?.({ ...props.itemData, denominator: null })}
-            />}
+            buttonPosition={props.onChange ? undefined : 'none'}
+            rightElement={props.onChange
+              ? <Button
+                  disabled={!props.onChange}
+                  icon="cross"
+                  onClick={() => props.onChange?.({ ...props.itemData, denominator: null })}
+                />
+              : undefined}
             value={props.itemData.denominator ?? ''}
             disabled={!props.onChange}
             onValueChange={(num) => props.onChange?.({ ...props.itemData, denominator: num })}
