@@ -21,7 +21,7 @@ import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 
-interface EllipsoidData extends CommonGRItemData {
+export interface EllipsoidData extends CommonGRItemData {
   inverseFlattening: number | null
   inverseFlatteningUoM: string | null
 
