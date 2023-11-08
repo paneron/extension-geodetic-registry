@@ -19,6 +19,7 @@ import { Select2 as Select, type ItemRenderer } from '@blueprintjs/select';
 import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import useDebounce from '@riboseinc/paneron-extension-kit/useDebounce';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 
 interface ExtentBoundingPolygonPoint {
@@ -123,7 +124,9 @@ function ({ extent, onChange }) {
   }
 
   return (
-    <>
+    <PropertyDetailView
+        title="Extent"
+        subLabel="Geographic area, region, or time frame.">
       <ClassNames>
         {({ css, cx }) => (
           <ControlGroup
@@ -182,7 +185,7 @@ function ({ extent, onChange }) {
         value={extent.name ?? ''}
         css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
       />
-    </>
+    </PropertyDetailView>
   );
 };
 

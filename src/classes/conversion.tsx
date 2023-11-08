@@ -4,7 +4,7 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { ControlGroup, FormGroup, InputGroup } from '@blueprintjs/core';
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import { css, jsx } from '@emotion/react';
 import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -95,14 +95,12 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
           onChange({ ...itemData, ...newData });
         } : undefined}>
 
-        <FormGroup label="Extent:">
-          <ExtentEdit
-            extent={itemData.extent ?? DEFAULT_EXTENT}
-            onChange={onChange
-              ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
-              : undefined}
-          />
-        </FormGroup>
+        <ExtentEdit
+          extent={itemData.extent ?? DEFAULT_EXTENT}
+          onChange={onChange
+            ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
+            : undefined}
+        />
 
         {/*
         <FormGroup label="Accuracy:">

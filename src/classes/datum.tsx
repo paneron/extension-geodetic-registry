@@ -1,4 +1,5 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment */
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
@@ -52,7 +53,9 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       {props.children}
 
-      <PropertyDetailView title="Scope">
+      <PropertyDetailView
+          title="Scope"
+          subLabel="Description of usage, or limitations of usage, for which this item is.">
         <InputGroup
           fill
           required
@@ -65,7 +68,10 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
         />
       </PropertyDetailView>
 
-      <PropertyDetailView title="Release date">
+      <PropertyDetailView
+          title="Publication Date"
+          helperText={<code>yyyy-mm-dd</code>}
+          subLabel="The date that the datum was released to the public. The date may be precise or merely a year if not well-defined.">
         <InputGroup
           fill
           required
@@ -78,7 +84,10 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
         />
       </PropertyDetailView>
 
-      <PropertyDetailView title="Coordinate reference epoch">
+      <PropertyDetailView
+          title="Coordinate reference epoch"
+          helperText={<code>yyyy.y</code>}
+          subLabel="The epoch applying to defining coordinates.">
         <InputGroup
           fill
           required
@@ -91,18 +100,16 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
         />
       </PropertyDetailView>
 
-      <PropertyDetailView title="Extent">
-        <ExtentEdit
-          extent={props.itemData.extent ?? DEFAULT_EXTENT}
-          onChange={props.onChange
-            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
-            : undefined}
-        />
-      </PropertyDetailView>
+      <ExtentEdit
+        extent={props.itemData.extent ?? DEFAULT_EXTENT}
+        onChange={props.onChange
+          ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+          : undefined}
+      />
 
       <PropertyDetailView
           title="Anchor definition"
-          subLabel="A.k.a. “origin description”">
+          subLabel="A description, possibly including coordinates of an identified point. A.k.a. “origin description”.">
         <TextArea
           fill
           required
@@ -145,7 +152,7 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
       const EditView = DatumEditView as ItemEditView<GeodeticDatumData>;
       return (
         <EditView {...props}>
-          <PropertyDetailView title="Ellipsoid">
+          <PropertyDetailView title="Ellipsoid" subLabel="Relevant ellipsoid from the registry.">
             <RelatedItem
               itemRef={props.itemData.ellipsoid
                 ? { classID: 'ellipsoid', itemID: props.itemData.ellipsoid }

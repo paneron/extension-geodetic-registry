@@ -45,9 +45,10 @@ const CRSDetailView: ItemDetailView<CRSData> = function (props) {
 
   return (
     <CommonDetailView {...props}>
-      <PropertyDetailView title="Extent">
-        {data.extent ? <ExtentEdit extent={data.extent} /> : '—'}
-      </PropertyDetailView>
+
+      {data.extent
+        ? <ExtentEdit extent={data.extent} />
+        : '—'}
 
       {props.children}
 
@@ -67,14 +68,12 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
           props.onChange({ ...props.itemData, ...newData });
         } : undefined}>
 
-      <PropertyDetailView title="Extent">
-        <ExtentEdit
-          extent={props.itemData.extent ?? DEFAULT_EXTENT}
-          onChange={props.onChange
-            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
-            : undefined}
-        />
-      </PropertyDetailView>
+      <ExtentEdit
+        extent={props.itemData.extent ?? DEFAULT_EXTENT}
+        onChange={props.onChange
+          ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+          : undefined}
+      />
 
       <PropertyDetailView title="Scope">
         <InputGroup

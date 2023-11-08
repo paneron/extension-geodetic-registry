@@ -132,14 +132,12 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           />
         </PropertyDetailView>
 
-        <FormGroup label="Extent:">
-          <ExtentEdit
-            extent={itemData.extent ?? DEFAULT_EXTENT}
-            onChange={onChange
-              ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
-              : undefined}
-          />
-        </FormGroup>
+        <ExtentEdit
+          extent={itemData.extent ?? DEFAULT_EXTENT}
+          onChange={onChange
+            ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
+            : undefined}
+        />
 
         <FormGroup label="Operation version:">
           <InputGroup

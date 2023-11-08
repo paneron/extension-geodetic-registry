@@ -84,6 +84,7 @@ const AliasesEdit: React.FC<{
       simpleItems
       itemLabel="alias"
       itemLabelPlural="aliases"
+      subLabel="Alternative names for this item."
       onChangeItems={onChange
         ? (spec) => onChange!(update(aliases, spec))
         : undefined}
@@ -160,7 +161,9 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
               : undefined}
           />
 
-          <PropertyDetailView title="Remarks">
+          <PropertyDetailView
+              title="Remarks"
+              subLabel="Comments on or information about this item.">
             <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
           </PropertyDetailView>
 
@@ -168,6 +171,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
             items={itemData.informationSources}
             itemLabel="citation (information source)"
             itemLabelPlural="citations"
+            subLabel="Source citation information — ISO 19115 B 3.2.1"
             placeholderItem={getInformationSourceStub()}
             onChangeItems={onChange
               ? (spec) => onChange!(update(itemData, { informationSources: spec }))
@@ -211,7 +215,7 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
       </PropertyDetailView>
 
 
-      <PropertyDetailView label="Name">
+      <PropertyDetailView label="Name" subLabel="Unique name for this item.">
         <InputGroup required value={itemData.name} {...textInputProps('name')} />
       </PropertyDetailView>
 
