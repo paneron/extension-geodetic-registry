@@ -69,22 +69,6 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
           onChange={e => onChange!(update(itemData, { isSphere: { $set: e.currentTarget.checked } }))}
         />
 
-        <PropertyDetailView title="Inverse flattening">
-          <FloatWithUoM
-            fill
-            val={[
-              itemData.inverseFlattening,
-              itemData.inverseFlatteningUoM,
-            ]}
-            onChange={onChange
-              ? ([num, uom]) => onChange!(update(itemData, {
-                  inverseFlattening: { $set: num },
-                  inverseFlatteningUoM: { $set: uom },
-                }))
-              : undefined}
-          />
-        </PropertyDetailView>
-
         <PropertyDetailView title="Semi-major axis">
           <FloatWithUoM
             fill
@@ -101,21 +85,41 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
           />
         </PropertyDetailView>
 
-        <PropertyDetailView title="Semi-minor axis">
-          <FloatWithUoM
-            fill
-            val={[
-              itemData.semiMinorAxis,
-              itemData.semiMinorAxisUoM,
-            ]}
-            onChange={onChange
-              ? ([num, uom]) => onChange!(update(itemData, {
-                  semiMinorAxis: { $set: num },
-                  semiMinorAxisUoM: { $set: uom },
-                }))
-              : undefined}
-          />
-        </PropertyDetailView>
+        {!itemData.isSphere || (itemData.semiMinorAxis || itemData.inverseFlattening)
+          ? <>
+              <PropertyDetailView title="Inverse flattening">
+                <FloatWithUoM
+                  fill
+                  val={[
+                    itemData.inverseFlattening,
+                    itemData.inverseFlatteningUoM,
+                  ]}
+                  onChange={onChange
+                    ? ([num, uom]) => onChange!(update(itemData, {
+                        inverseFlattening: { $set: num },
+                        inverseFlatteningUoM: { $set: uom },
+                      }))
+                    : undefined}
+                />
+              </PropertyDetailView>
+
+              <PropertyDetailView title="Semi-minor axis">
+                <FloatWithUoM
+                  fill
+                  val={[
+                    itemData.semiMinorAxis,
+                    itemData.semiMinorAxisUoM,
+                  ]}
+                  onChange={onChange
+                    ? ([num, uom]) => onChange!(update(itemData, {
+                        semiMinorAxis: { $set: num },
+                        semiMinorAxisUoM: { $set: uom },
+                      }))
+                    : undefined}
+                />
+              </PropertyDetailView>
+            </>
+          : null}
       </CommonEditView>
     </>,
   },
@@ -145,7 +149,7 @@ const FloatWithUoM: React.FC<{
             onChange!([parseFloat(evt.currentTarget.value), val[1]])
           } catch (e) {}
         }}
-        value={val[0]?.toString() || '(no value)'}
+        value={val[0]?.toString() || ''}
       />
       <GenericRelatedItemView
         itemRef={val[1] ? { classID: 'unit-of-measurement', itemID: val[1] } : undefined}
