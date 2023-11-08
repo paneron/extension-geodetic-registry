@@ -377,8 +377,8 @@ export function ItemList<T> ({
         subLabel={subLabel}
         helperText={helperText || addButton
           ? <>
-              {subLabel}
-              {(subLabel && addButton)
+              {helperText}
+              {(helperText && addButton)
                 ? <br />
                 : null}
               {addButton}
