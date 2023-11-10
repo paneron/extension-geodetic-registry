@@ -417,6 +417,10 @@ const InformationSourceEdit: React.FC<{ citation: Citation, onChange?: (newCitat
 function ({ citation, onChange }) {
   return (
     <>
+      <SimpleField label="Author" val={citation.author} onChange={onChange ? (author) => onChange!({ ...citation, author }) : undefined} />
+      <SimpleField label="Publisher" val={citation.publisher} onChange={onChange ? (publisher) => onChange!({ ...citation, publisher }) : undefined} />
+      <SimpleField label="Publication Date" val={citation.publicationDate} onChange={onChange ? (publicationDate) => onChange!({ ...citation, publicationDate }) : undefined} />
+      <SimpleField label="Revision Date" val={citation.revisionDate} onChange={onChange ? (revisionDate) => onChange!({ ...citation, revisionDate }) : undefined} />
       <SimpleField label="Title" val={citation.title} onChange={onChange ? (title) => onChange!({ ...citation, title }) : undefined} />
       <SimpleField label="Name of series/journal/periodical" val={citation.seriesName ?? ''} onChange={onChange ? (seriesName) => onChange!({ ...citation, seriesName }) : undefined} />
       <SimpleField label="Series issue ID" val={citation.seriesIssueID ?? ''} onChange={onChange ? (seriesIssueID) => onChange!({ ...citation, seriesIssueID }) : undefined} />
