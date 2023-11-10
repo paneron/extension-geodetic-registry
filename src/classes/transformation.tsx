@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 import { css, jsx } from '@emotion/react';
-import { ControlGroup, FormGroup, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
+import { Button, ControlGroup, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
 
 import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -18,10 +18,11 @@ import {
   ListItemView as CommonListItemView,
   type Extent,
   ExtentEdit,
-  InformationSourceDetails,
+  InformationSourceEdit,
   DEFAULT_EXTENT,
   ItemList,
   RelatedItem,
+  getInformationSourceStub,
 } from './common';
 
 
@@ -139,20 +140,19 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             : undefined}
         />
 
-        <FormGroup label="Operation version:">
+        <PropertyDetailView label="Operation version" helperText={<>For example, <code>GA v2</code></>}>
           <InputGroup
-            placeholder="E.g., GA v2"
             value={itemData.operationVersion ?? ''}
-            disabled={!onChange}
+            readOnly={!onChange}
             onChange={(evt: React.FormEvent<HTMLInputElement>) => {
               onChange
                 ? onChange(update(itemData, { operationVersion: { $set: evt.currentTarget.value } }))
                 : void 0;
             }}
           />
-        </FormGroup>
+        </PropertyDetailView>
 
-        <FormGroup label="Accuracy:">
+        <PropertyDetailView label="Accuracy">
           <ControlGroup vertical>
             <NumericInput
               fill
@@ -184,7 +184,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               useRegisterItemData={props.useRegisterItemData}
             />
           </ControlGroup>
-        </FormGroup>
+        </PropertyDetailView>
 
         <ItemList
           items={itemData.parameters}
@@ -212,45 +212,75 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
               {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
 
-              <PropertyDetailView title="Value" secondaryTitle={param.type}>
-                <ControlGroup vertical css={css`margin-bottom: .5rem;`}>
-                  <HTMLSelect
-                    value={param.type}
-                    options={parameterTypes.map(param => ({ value: param, label: param }))}
-                    disabled={!handleChange}
-                    onChange={(evt) =>
-                      handleChange!({ type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } })
-                    }
-                  />
+              <PropertyDetailView label="Value type">
+                {handleChange
+                  ? <HTMLSelect
+                      value={param.type}
+                      options={parameterTypes.map(param => ({ value: param, label: param }))}
+                      onChange={(evt) =>
+                        handleChange!({ type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } })
+                      }
+                    />
+                  : <InputGroup readOnly value={param.type} />}
+              </PropertyDetailView>
+
+              <PropertyDetailView
+                  helperText="Depending on value type, either 1) a numerical value with unit of measurement, or 2) a filename."
+                  label="Value">
+                <ControlGroup>
                   <InputGroup
-                    disabled={!onChange}
+                    readOnly={!onChange}
                     fill
                     value={param.value?.toString() ?? ''}
                     onChange={(evt: React.FormEvent<HTMLInputElement>) =>
                       handleChange!({ value: { $set: evt.currentTarget.value } } )}
                   />
-                </ControlGroup>
 
-                {param.unitOfMeasurement || param.type === 'measure (w/ UoM)'
-                  ? <RelatedItem
-                      itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
-                      mode="id"
-                      classIDs={['unit-of-measurement']}
-                      onClear={handleChange
-                        ? () => handleChange!({ unitOfMeasurement: { $set: null } })
-                        : undefined}
-                      onSet={handleChange
-                        ? (spec) => handleChange!({ unitOfMeasurement: spec })
-                        : undefined}
-                    />
-                  : null}
+                  {param.unitOfMeasurement || param.type === ParameterType.MEASURE
+                    ? <RelatedItem
+                        itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
+                        mode="id"
+                        classIDs={['unit-of-measurement']}
+                        onClear={handleChange
+                          ? () => handleChange!({ unitOfMeasurement: { $set: null } })
+                          : undefined}
+                        onSet={handleChange
+                          ? (spec) => handleChange!({ unitOfMeasurement: spec })
+                          : undefined}
+                      />
+                    : null}
+                </ControlGroup>
               </PropertyDetailView>
 
-              {param.fileCitation !== null
-                ? <PropertyDetailView title="File citation">
-                    <InformationSourceDetails
-                      css={css`h6 { font-weight: normal; }`}
-                      source={param.fileCitation} />
+              {param.type === ParameterType.FILE || param.fileCitation !== null
+                ? <PropertyDetailView
+                      helperText={param.fileCitation && handleChange
+                        ? <Button
+                              onClick={() => handleChange!({ $unset: ['fileCitation'] })}
+                              icon="remove"
+                              outlined
+                              intent="danger">
+                            Remove file citation
+                          </Button>
+                        : handleChange
+                          ? <Button
+                                onClick={() => handleChange({ fileCitation: { $set: getInformationSourceStub() } })}
+                                intent="primary"
+                                outlined
+                                title="Add file citation"
+                                icon="add">
+                              Add
+                            </Button>
+                          : null}
+                      label="File citation">
+                    {param.fileCitation
+                      ? <InformationSourceEdit
+                          citation={param.fileCitation}
+                          onChange={handleChange
+                            ? (citation) => handleChange!({ fileCitation: { $set: citation } })
+                            : undefined}
+                        />
+                      : "N/A"}
                   </PropertyDetailView>
                 : null}
             </PropertyDetailView>
