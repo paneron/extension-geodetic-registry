@@ -49,7 +49,7 @@ export const DEFAULTS: CommonGRItemData = {
 } as const;
 
 
-function getInformationSourceStub(): Readonly<Citation> {
+export function getInformationSourceStub(): Readonly<Citation> {
   return {
     title: '',
     seriesIssueID: null,
@@ -413,8 +413,10 @@ function ({ val, label, onChange }) {
 };
 
 
-const InformationSourceEdit: React.FC<{ citation: Citation, onChange?: (newCitation: Citation) => void }> =
-function ({ citation, onChange }) {
+export const InformationSourceEdit: React.FC<{
+  citation: Citation
+  onChange?: (newCitation: Citation) => void
+}> = function ({ citation, onChange }) {
   return (
     <>
       <SimpleField label="Author" val={citation.author} onChange={onChange ? (author) => onChange!({ ...citation, author }) : undefined} />
