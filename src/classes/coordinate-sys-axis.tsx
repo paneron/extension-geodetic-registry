@@ -55,7 +55,7 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
           <InputGroup
             required
             value={props.itemData.abbreviation ?? ''}
-            disabled={!props.onChange}
+            readOnly={!props.onChange}
             onChange={(evt) => props.onChange?.({ ...props.itemData, abbreviation: evt.currentTarget.value })}
           />
         </PropertyDetailView>
@@ -64,7 +64,7 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
           <InputGroup
             required
             value={props.itemData.orientation ?? ''}
-            disabled={!props.onChange}
+            readOnly={!props.onChange}
             onChange={(evt) => props.onChange?.({ ...props.itemData, orientation: evt.currentTarget.value })}
           />
         </PropertyDetailView>
