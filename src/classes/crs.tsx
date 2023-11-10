@@ -56,7 +56,7 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
           : undefined}
       />
 
-      <PropertyDetailView title="Scope">
+      <PropertyDetailView label="Scope">
         <InputGroup
           required
           value={props.itemData.scope ?? ''}
