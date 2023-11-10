@@ -75,9 +75,8 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
         <PropertyDetailView title="Longitude from Greenwich">
           <ControlGroup fill>
             <InputGroup
-              readOnly
               value={props.itemData.longitudeFromGreenwich.toString()}
-              disabled={!props.onChange}
+              readOnly={!props.onChange}
               onChange={(evt: React.FormEvent<HTMLInputElement>) => {
                 let val: number;
                 try {
