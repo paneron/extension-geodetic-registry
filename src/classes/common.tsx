@@ -8,8 +8,8 @@ import { jsx, css } from '@emotion/react';
 import {
   Button,
   Classes,
-  Colors, ControlGroup, H6, InputGroup,
-  NumericInput, TextArea, UL, OL,
+  Colors, ControlGroup, InputGroup,
+  NumericInput, TextArea, OL,
 } from '@blueprintjs/core';
 
 
@@ -17,7 +17,6 @@ import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
   Citation,
   ItemClassConfiguration,
-  ItemDetailView,
   ItemEditView,
   InternalItemReference,
 } from '@riboseinc/paneron-registry-kit/types';
@@ -460,114 +459,114 @@ memo(function CommonListItemView (props) {
 ));
 
 
-const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
-  return <>
-    <dt>{t}</dt>
-    <dd>{d}</dd>
-  </>
-};
-
-
-export const InformationSourceDetails: React.FC<{
-  source: Citation
-  className?: string
-}> = function ({ source, className }) {
-
-  let editionDate: string;
-  try {
-    editionDate = source.editionDate?.toLocaleDateString() ?? '';
-  } catch (e) {
-    editionDate = '';
-  }
-
-
-  return (
-    <article className={className}>
-
-      <H6 style={{ margin: '.5em 0 0 0' }}>{source.title}</H6>
-
-      {source.otherDetails
-        ? <p style={{ margin: '.5em 0 0 0' }}>Citation details: {source.otherDetails}</p>
-        : null}
-
-      <dl css={css`
-          display: flex; flex-flow: row wrap;
-          margin: 0;
-          font-size: 85%;
-
-          &:not(:empty) {
-            border-bottom-width: .25em;
-            border-bottom-style: solid;
-            padding-bottom: .25em;
-          }
-          dt, dd {
-            margin: .25em 0 0 0;
-            border-top-width: .25em;
-            border-top-style: dotted;
-          }
-          &:not(:empty), dt, dd {
-            border-color: ${Colors.LIGHT_GRAY3};
-            .bp4-dark & {
-              border-color: ${Colors.DARK_GRAY1};
-            }
-          }
-          dt {
-            flex-basis: 30%;
-          }
-          dd {
-            font-style: italic;
-            flex-basis: 70%;
-            padding-right: 1em;
-          }
-        `}>
-        {source.edition ? <DLEntry t="Edition" d={source.edition} /> : null}
-        {source.editionDate ? <DLEntry t="Edition date" d={editionDate} /> : null}
-
-        {source.seriesName ? <DLEntry t="Series name" d={source.seriesName} /> : null}
-        {source.seriesIssueID ? <DLEntry t="Issue" d={source.seriesIssueID} /> : null}
-        {source.seriesPage ? <DLEntry t="Page(s)" d={source.seriesPage} /> : null}
-
-        {source.issn ? <DLEntry t="ISSN" d={source.issn} /> : null}
-        {source.isbn ? <DLEntry t="ISBN" d={source.isbn} /> : null}
-      </dl>
-
-    </article>
-  );
-};
-
-
-export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
-  const data = props.itemData;
-
-  return (
-    <SplitView
-        className={props.className}
-        aside={<>
-
-          <AliasesEdit aliases={data.aliases} />
-
-          {data.remarks
-            ? <PropertyDetailView title="Remarks">
-                <p>{data.remarks}</p>
-              </PropertyDetailView>
-            : null}
-
-          {(data.informationSources || []).length > 0
-            ? <PropertyDetailView title="Information sources">
-                <UL css={css`padding-left: 0; list-style: square;`}>
-                  {data.informationSources.map((s, idx) =>
-                    <li key={idx}>
-                      <InformationSourceDetails source={s} />
-                    </li>)}
-                </UL>
-              </PropertyDetailView>
-            : null}
-
-        </>}>
-      {props.children}
-    </SplitView>
-  )
-};
+// const DLEntry: React.FC<{ t: string, d: string }> = function ({ t, d }) {
+//   return <>
+//     <dt>{t}</dt>
+//     <dd>{d}</dd>
+//   </>
+// };
+//
+//
+// export const InformationSourceDetails: React.FC<{
+//   source: Citation
+//   className?: string
+// }> = function ({ source, className }) {
+// 
+//   let editionDate: string;
+//   try {
+//     editionDate = source.editionDate?.toLocaleDateString() ?? '';
+//   } catch (e) {
+//     editionDate = '';
+//   }
+// 
+// 
+//   return (
+//     <article className={className}>
+// 
+//       <H6 style={{ margin: '.5em 0 0 0' }}>{source.title}</H6>
+// 
+//       {source.otherDetails
+//         ? <p style={{ margin: '.5em 0 0 0' }}>Citation details: {source.otherDetails}</p>
+//         : null}
+// 
+//       <dl css={css`
+//           display: flex; flex-flow: row wrap;
+//           margin: 0;
+//           font-size: 85%;
+// 
+//           &:not(:empty) {
+//             border-bottom-width: .25em;
+//             border-bottom-style: solid;
+//             padding-bottom: .25em;
+//           }
+//           dt, dd {
+//             margin: .25em 0 0 0;
+//             border-top-width: .25em;
+//             border-top-style: dotted;
+//           }
+//           &:not(:empty), dt, dd {
+//             border-color: ${Colors.LIGHT_GRAY3};
+//             .bp4-dark & {
+//               border-color: ${Colors.DARK_GRAY1};
+//             }
+//           }
+//           dt {
+//             flex-basis: 30%;
+//           }
+//           dd {
+//             font-style: italic;
+//             flex-basis: 70%;
+//             padding-right: 1em;
+//           }
+//         `}>
+//         {source.edition ? <DLEntry t="Edition" d={source.edition} /> : null}
+//         {source.editionDate ? <DLEntry t="Edition date" d={editionDate} /> : null}
+// 
+//         {source.seriesName ? <DLEntry t="Series name" d={source.seriesName} /> : null}
+//         {source.seriesIssueID ? <DLEntry t="Issue" d={source.seriesIssueID} /> : null}
+//         {source.seriesPage ? <DLEntry t="Page(s)" d={source.seriesPage} /> : null}
+// 
+//         {source.issn ? <DLEntry t="ISSN" d={source.issn} /> : null}
+//         {source.isbn ? <DLEntry t="ISBN" d={source.isbn} /> : null}
+//       </dl>
+// 
+//     </article>
+//   );
+// };
+// 
+// 
+// export const DetailView: ItemDetailView<CommonGRItemData> = (props) => {
+//   const data = props.itemData;
+// 
+//   return (
+//     <SplitView
+//         className={props.className}
+//         aside={<>
+// 
+//           <AliasesEdit aliases={data.aliases} />
+// 
+//           {data.remarks
+//             ? <PropertyDetailView title="Remarks">
+//                 <p>{data.remarks}</p>
+//               </PropertyDetailView>
+//             : null}
+// 
+//           {(data.informationSources || []).length > 0
+//             ? <PropertyDetailView title="Information sources">
+//                 <UL css={css`padding-left: 0; list-style: square;`}>
+//                   {data.informationSources.map((s, idx) =>
+//                     <li key={idx}>
+//                       <InformationSourceDetails source={s} />
+//                     </li>)}
+//                 </UL>
+//               </PropertyDetailView>
+//             : null}
+// 
+//         </>}>
+//       {props.children}
+//     </SplitView>
+//   )
+// };
 
 
 const SplitView: React.FC<{

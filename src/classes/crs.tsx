@@ -5,12 +5,10 @@ import { jsx } from '@emotion/react';
 import { InputGroup } from '@blueprintjs/core';
 import type {
   ItemClassConfiguration,
-  ItemDetailView,
   ItemEditView,
   ItemListView,
 } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 import {
   type CommonGRItemData,
@@ -18,7 +16,6 @@ import {
   COMMON_PROPERTIES,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
   type Extent,
   DEFAULT_EXTENT,
   ExtentEdit,
@@ -39,22 +36,6 @@ export const CRS_DEFAULTS: CRSData = {
   extent: DEFAULT_EXTENT,
   scope: '',
 } as const;
-
-const CRSDetailView: ItemDetailView<CRSData> = function (props) {
-  const data = props.itemData;
-
-  return (
-    <CommonDetailView {...props}>
-
-      {data.extent
-        ? <ExtentEdit extent={data.extent} />
-        : '—'}
-
-      {props.children}
-
-    </CommonDetailView>
-  );
-};
 
 const CRSEditView: ItemEditView<CRSData> = function (props) {
   return (
@@ -186,33 +167,6 @@ export const compoundCRS: ItemClassConfiguration<CompoundCRSData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<CompoundCRSData>,
-    detailView: (props) => {
-      return (
-        <CRSDetailView {...props}>
-
-          {props.itemData.horizontalCRS
-            ? <PropertyDetailView title="Horizontal CRS">
-                <GenericRelatedItemView
-                  itemRef={props.itemData.horizontalCRS}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            : null}
-
-          {props.itemData.verticalCRS
-            ? <PropertyDetailView title="Vertical CRS">
-                <GenericRelatedItemView
-                  itemRef={props.itemData.verticalCRS}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </PropertyDetailView>
-            : null}
-
-        </CRSDetailView>
-      )
-    },
     editView: ({ onChange, itemData, ...props }) => {
       const EditView = CRSEditView as ItemEditView<CompoundCRSData>;
       return (

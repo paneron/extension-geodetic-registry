@@ -16,7 +16,6 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  DetailView as CommonDetailView,
 } from './common';
 
 
@@ -41,25 +40,6 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<PrimeMeridianData>,
-
-    detailView: (props) => {
-      const data = props.itemData;
-
-      return (
-        <CommonDetailView {...props}>
-          <PropertyDetailView title="Longitude from Greenwich">
-            <ControlGroup fill>
-              <InputGroup readOnly value={data.longitudeFromGreenwich.toString()} />
-              <GenericRelatedItemView
-                itemRef={{ classID: 'unit-of-measurement', itemID: data.longitudeFromGreenwichUoM }}
-                getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                useRegisterItemData={props.useRegisterItemData}
-              />
-            </ControlGroup>
-          </PropertyDetailView>
-        </CommonDetailView>
-      );
-    },
 
     editView: (props) => <>
       <CommonEditView
