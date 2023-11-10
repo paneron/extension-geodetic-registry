@@ -95,6 +95,23 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
             onChange({ ...itemData, ...newData });
           } : undefined}>
 
+        <PropertyDetailView
+            title="Coordinate operation method"
+            subLabel="The coordinate operation method to be used for this operation.">
+          <RelatedItem
+            itemRef={itemData.coordinateOperationMethod
+              ? { classID: 'coordinate-op-method', itemID: itemData.coordinateOperationMethod }
+              : undefined}
+            mode="id"
+            onClear={onChange
+              && (() => onChange!(update(itemData, { $unset: ['coordinateOperationMethod'] })))}
+            onSet={onChange
+              ? ((spec) => onChange!(update(itemData, { coordinateOperationMethod: spec })))
+              : undefined}
+            classIDs={['coordinate-op-method']}
+          />
+        </PropertyDetailView>
+
         <ExtentEdit
           extent={itemData.extent ?? DEFAULT_EXTENT}
           onChange={onChange
