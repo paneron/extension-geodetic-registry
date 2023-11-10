@@ -52,6 +52,10 @@ export const DEFAULTS: CommonGRItemData = {
 export function getInformationSourceStub(): Readonly<Citation> {
   return {
     title: '',
+    author: '',
+    publisher: '',
+    revisionDate: null,
+    publicationDate: null,
     seriesIssueID: null,
     seriesName: null,
     seriesPage: null,
