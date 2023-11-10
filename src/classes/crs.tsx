@@ -131,6 +131,40 @@ function ({ onChange, itemData, ...props }) {
         />
       </PropertyDetailView>
 
+      <PropertyDetailView title="Base CRS">
+        <RelatedItem
+          itemRef={itemData.baseCRS}
+          mode="generic"
+          onClear={onChange
+            && (() => onChange!(update(itemData, { $unset: ['baseCRS'] })))}
+          onSet={onChange
+            ? ((spec) => onChange!(update(itemData, { baseCRS: spec })))
+            : undefined}
+          classIDs={[
+            'crs--projected',
+            'crs--engineering',
+            'crs--geodetic',
+            'crs--vertical',
+          ]}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView title="Operation">
+        <RelatedItem
+          itemRef={itemData.operation}
+          mode="generic"
+          onClear={onChange
+            && (() => onChange!(update(itemData, { $unset: ['operation'] })))}
+          onSet={onChange
+            ? ((spec) => onChange!(update(itemData, { operation: spec })))
+            : undefined}
+          classIDs={[
+            'coordinate-ops--transformation',
+            'coordinate-ops--conversion',
+          ]}
+        />
+      </PropertyDetailView>
+
       {props.children}
 
     </CRSEditView>
