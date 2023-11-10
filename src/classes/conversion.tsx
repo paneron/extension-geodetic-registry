@@ -89,11 +89,11 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
     editView: ({ itemData, itemRef, onChange }) => (
       <CommonEditView
         itemData={itemData}
-        itemRef={itemRef}
-        onChange={onChange ? (newData: CommonGRItemData) => {
-          if (!onChange) { return; }
-          onChange({ ...itemData, ...newData });
-        } : undefined}>
+          itemRef={itemRef}
+          onChange={onChange ? (newData: CommonGRItemData) => {
+            if (!onChange) { return; }
+            onChange({ ...itemData, ...newData });
+          } : undefined}>
 
         <ExtentEdit
           extent={itemData.extent ?? DEFAULT_EXTENT}
