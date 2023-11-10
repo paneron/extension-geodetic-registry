@@ -60,7 +60,7 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
         <InputGroup
           required
           value={props.itemData.scope ?? ''}
-          disabled={!props.onChange}
+          readOnly={!props.onChange}
           onChange={(evt) => props.onChange?.({ ...props.itemData, scope: evt.currentTarget.value })}
         />
       </PropertyDetailView>
