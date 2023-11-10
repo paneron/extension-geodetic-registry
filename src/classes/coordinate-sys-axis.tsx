@@ -22,6 +22,8 @@ export interface CoordinateSystemAxisData extends CommonGRItemData {
   abbreviation: string
   orientation: string
   unitOfMeasurement: string
+  maxValue: number | null
+  minValue: number | null
 }
 
 
