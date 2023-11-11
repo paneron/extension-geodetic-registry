@@ -24,6 +24,7 @@ export interface CoordinateSystemAxisData extends CommonGRItemData {
   unitOfMeasurement: string
   maxValue: number | null
   minValue: number | null
+  rangeMeaning?: 'exact' | 'wraparound'
 }
 
 
