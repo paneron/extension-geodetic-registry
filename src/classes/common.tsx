@@ -7,6 +7,7 @@ import { jsx, css } from '@emotion/react';
 
 import {
   Button,
+  ButtonGroup,
   ControlGroup,
   InputGroup,
   Colors,
@@ -380,19 +381,36 @@ export function ItemList<T> ({
       : null
   ), [onChangeItems, itemLabel, placeholderItem]);
 
+  const deleteAllButton = useMemo(() => (
+    onChangeItems !== undefined && items.length > 1
+      ? <Button
+            outlined
+            icon="remove"
+            intent="danger"
+            onClick={() => onChangeItems({ $splice: [[0]] })}>
+          Delete all {pluralLabel}
+        </Button>
+      : null
+  ), [onChangeItems, pluralLabel, items.length > 1]);
+
   return (
     <PropertyDetailView
         label={pluralLabel}
         labelInfo={countSummary}
         css={css`margin-top: 10px;`}
         subLabel={subLabel}
-        helperText={helperText || addButton
+        helperText={helperText || addButton || deleteAllButton
           ? <>
               {helperText}
-              {(helperText && addButton)
+              {(helperText && (addButton || deleteAllButton))
                 ? <br />
                 : null}
-              {addButton}
+              {(addButton || deleteAllButton)
+                ? <ButtonGroup>
+                    {addButton}
+                    {deleteAllButton}
+                  </ButtonGroup>
+                : null}
             </>
           : null}>
       {items.length > 0
