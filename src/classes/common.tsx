@@ -328,7 +328,7 @@ interface ItemListProps<T> {
   onChangeItems?: (spec: Spec<Readonly<T[]>>) => void
 
   /** Required for being able to create new items. */
-  placeholderItem?: T
+  placeholderItem?: T | (() => T) | (() => Promise<T>)
 }
 
 /** A wrapper for handling editable lists of items. */
@@ -373,17 +373,31 @@ export function ItemList<T> ({
     ? <>({items.length} total)</>
     : <>(no items to show)</>
 
+  const handleAddNew = useMemo(() => (
+    placeholderItem && onChangeItems
+      ? async function handleAddNewItem() {
+          if (!placeholderItem) {
+            throw new Error("Cannot add new item: no item stub/placeholder provided");
+          }
+          const newItem: T = typeof placeholderItem === 'function'
+            ? await (placeholderItem as (() => T) | (() => Promise<T>))()
+            : placeholderItem;
+          onChangeItems({ $push: [newItem] });
+        }
+      : null
+  ), [onChangeItems, placeholderItem]);
+
   const addButton = useMemo(() => (
-    onChangeItems !== undefined && placeholderItem !== undefined
+    handleAddNew
       ? <Button
             outlined
             icon="add"
             intent="primary"
-            onClick={() => onChangeItems({ $push: [placeholderItem] })}>
+            onClick={handleAddNew}>
           Add {itemLabel}
         </Button>
       : null
-  ), [onChangeItems, itemLabel, placeholderItem]);
+  ), [handleAddNew, itemLabel]);
 
   const deleteAllButton = useMemo(() => (
     onChangeItems && items.length > 1
