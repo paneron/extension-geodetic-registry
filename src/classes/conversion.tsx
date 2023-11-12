@@ -3,10 +3,11 @@
 
 import update from 'immutability-helper';
 
-import React from 'react';
-import { ControlGroup, InputGroup } from '@blueprintjs/core';
+import React, { useCallback, useMemo } from 'react';
+import { Button, ControlGroup, InputGroup } from '@blueprintjs/core';
 import { css, jsx } from '@emotion/react';
-import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { Payload, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import useSingleRegisterItemData from '@riboseinc/paneron-registry-kit/views/hooks/useSingleRegisterItemData';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
@@ -87,6 +88,41 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
   views: {
     listItemView: CommonListItemView as ItemListView<ConversionData>,
     editView: ({ itemData, itemRef, onChange }) => {
+
+      // NOTE: Yes, Transformation has similar logic, but refactoring this for DRY
+      // is ill-advised at least until Transformation and Conversion themselves
+      // are refactored using a single common ancestor class (SingleOperation or the like),
+      // but ideally until users have the ability to specify this logic themselves.
+      // Refactoring it here 
+      const coordMethodParamUUIDs: string[] = (useSingleRegisterItemData(
+          itemData.coordinateOperationMethod
+          ? { classID: 'coordinate-op-method', itemID: itemData.coordinateOperationMethod }
+          : null
+      // Cast to Payload is necessary due to RegistryKit wrongly typing useSingleRegisterItemData value
+      ).value as Payload)?.parameters ?? [];
+      const itemParamParamUUIDs = (itemData.parameters ?? []).map(param => param.parameter);
+      const missingParameters = useMemo(() => (
+        coordMethodParamUUIDs.filter(uuid => itemParamParamUUIDs.indexOf(uuid) < 0)
+      ), [itemParamParamUUIDs.toString(), coordMethodParamUUIDs.toString()]);
+
+      const createParameterValueStub: () => ConversionParameter = useCallback(() => {
+        return {
+          ...getParameterStub(),
+          parameter: missingParameters[0] ?? '',
+        };
+      }, [missingParameters[0]]);
+
+      const createStubsForMissingOperationMethodParameters = useMemo(() =>
+        onChange && missingParameters.length > 0
+          ? function () {
+              const paramValueStubs = missingParameters.map(paramUUID => ({
+                ...getParameterStub(),
+                parameter: paramUUID,
+              }));
+              onChange(update(itemData, { parameters: { $splice: [[0, 0, ...paramValueStubs]] } }));
+            }
+          : null,
+        [onChange, missingParameters]);
       return (
         <CommonEditView
             itemData={itemData}
@@ -97,8 +133,18 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               } : undefined}>
 
           <PropertyDetailView
-              title="Coordinate operation method"
-              subLabel="The coordinate operation method to be used for this operation.">
+              subLabel="The coordinate operation method to be used for this operation."
+              helperText={createStubsForMissingOperationMethodParameters
+                ? <Button
+                      small
+                      outlined
+                      onClick={createStubsForMissingOperationMethodParameters}
+                      icon="add"
+                      title="Linked operation method has some parameters the values for which are not specified on this item.">
+                    Create stubs for {missingParameters.length} missing parameter values
+                  </Button>
+                : undefined}
+              title="Coordinate operation method">
             <RelatedItem
               itemRef={itemData.coordinateOperationMethod
                 ? { classID: 'coordinate-op-method', itemID: itemData.coordinateOperationMethod }
@@ -162,7 +208,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
             onChangeItems={onChange
               ? (spec) => onChange!(update(itemData, { parameters: spec }))
               : undefined}
-            placeholderItem={getParameterStub()}
+            placeholderItem={createParameterValueStub}
             itemRenderer={(param, _idx, handleChange, deleteButton) =>
               <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
                 <PropertyDetailView title="Parameter">
