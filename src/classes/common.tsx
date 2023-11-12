@@ -374,15 +374,14 @@ export function ItemList<T> ({
     : <>(no items to show)</>
 
   const handleAddNew = useMemo(() => (
-    placeholderItem && onChangeItems
+    placeholderItem !== undefined && onChangeItems
       ? async function handleAddNewItem() {
-          if (!placeholderItem) {
-            throw new Error("Cannot add new item: no item stub/placeholder provided");
-          }
           const newItem: T = typeof placeholderItem === 'function'
             ? await (placeholderItem as (() => T) | (() => Promise<T>))()
             : placeholderItem;
-          onChangeItems({ $push: [newItem] });
+          if (newItem !== undefined) {
+            onChangeItems({ $push: [newItem] });
+          }
         }
       : null
   ), [onChangeItems, placeholderItem]);
