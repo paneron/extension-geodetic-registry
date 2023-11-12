@@ -97,36 +97,36 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
 
     editView: ({ itemData, onChange, ...props }) => {
-      const coordMethodData = useSingleRegisterItemData(itemData.coordOperationMethod
-        ? { classID: 'coordinate-op-method', itemID: itemData.coordOperationMethod }
-        : null);
 
-      const coordMethodParamUUIDs: Readonly<string[]> =
-        // Cast necessary due to RegistryKit wrongly typing useSingleRegisterItemData value
-        (coordMethodData.value as Payload)?.parameters ?? [];
+      // NOTE: Yes, Conversion has similar logic, but refactoring this for DRY
+      // is ill-advised at least until Transformation and Conversion themselves
+      // are refactored using a single common ancestor class (SingleOperation or the like),
+      // but ideally until users have the ability to specify this logic themselves.
+      // Refactoring it here 
+      const coordMethodParamUUIDs: string[] = (useSingleRegisterItemData(
+          itemData.coordOperationMethod
+          ? { classID: 'coordinate-op-method', itemID: itemData.coordOperationMethod }
+          : null
+      // Cast to Payload is necessary due to RegistryKit wrongly typing useSingleRegisterItemData value
+      ).value as Payload)?.parameters ?? [];
       const itemParamParamUUIDs = (itemData.parameters ?? []).map(param => param.parameter);
       const missingParameters = useMemo(() => (
         coordMethodParamUUIDs.filter(uuid => itemParamParamUUIDs.indexOf(uuid) < 0)
       ), [itemParamParamUUIDs.toString(), coordMethodParamUUIDs.toString()]);
 
-      const createParameterValueStub = useCallback(() => {
-        const stub = getParameterStub();
-        if (missingParameters[0]) {
-          stub.parameter = missingParameters[0]
-        }
-        return stub;
+      const createParameterValueStub: () => TransformationParameter = useCallback(() => {
+        return {
+          ...getParameterStub(),
+          parameter: missingParameters[0] ?? '',
+        };
       }, [missingParameters[0]]);
 
       const createStubsForMissingOperationMethodParameters = useMemo(() =>
         onChange && missingParameters.length > 0
           ? function () {
-              const paramValueStubs: TransformationParameter[] = missingParameters.map(paramUUID => ({
+              const paramValueStubs = missingParameters.map(paramUUID => ({
+                ...getParameterStub(),
                 parameter: paramUUID,
-                name: '',
-                unitOfMeasurement: null,
-                fileCitation: null,
-                value: null,
-                type: parameterTypes[0],
               }));
               onChange(update(itemData, { parameters: { $splice: [[0, 0, ...paramValueStubs]] } }));
             }
