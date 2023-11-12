@@ -3,11 +3,12 @@
 
 import update from 'immutability-helper';
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { css, jsx } from '@emotion/react';
 import { Button, ControlGroup, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
 
-import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { Payload, Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import useSingleRegisterItemData from '@riboseinc/paneron-registry-kit/views/hooks/useSingleRegisterItemData';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
@@ -96,6 +97,42 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
 
     editView: ({ itemData, onChange, ...props }) => {
+      const coordMethodData = useSingleRegisterItemData(itemData.coordOperationMethod
+        ? { classID: 'coordinate-op-method', itemID: itemData.coordOperationMethod }
+        : null);
+
+      const coordMethodParamUUIDs: Readonly<string[]> =
+        // Cast necessary due to RegistryKit wrongly typing useSingleRegisterItemData value
+        (coordMethodData.value as Payload)?.parameters ?? [];
+      const itemParamParamUUIDs = (itemData.parameters ?? []).map(param => param.parameter);
+      const missingParameters = useMemo(() => (
+        coordMethodParamUUIDs.filter(uuid => itemParamParamUUIDs.indexOf(uuid) < 0)
+      ), [itemParamParamUUIDs.toString(), coordMethodParamUUIDs.toString()]);
+
+      const createParameterValueStub = useCallback(() => {
+        const stub = getParameterStub();
+        if (missingParameters[0]) {
+          stub.parameter = missingParameters[0]
+        }
+        return stub;
+      }, [missingParameters[0]]);
+
+      const createStubsForMissingOperationMethodParameters = useMemo(() =>
+        onChange && missingParameters.length > 0
+          ? function () {
+              const paramValueStubs: TransformationParameter[] = missingParameters.map(paramUUID => ({
+                parameter: paramUUID,
+                name: '',
+                unitOfMeasurement: null,
+                fileCitation: null,
+                value: null,
+                type: parameterTypes[0],
+              }));
+              onChange(update(itemData, { parameters: { $splice: [[0, 0, ...paramValueStubs]] } }));
+            }
+          : null,
+        [onChange, missingParameters]);
+
       return (
         <>
           <CommonEditView
@@ -136,6 +173,16 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
             <PropertyDetailView
                 subLabel="The coordinate operation method to be used for this operation."
+                helperText={createStubsForMissingOperationMethodParameters
+                  ? <Button
+                        small
+                        outlined
+                        onClick={createStubsForMissingOperationMethodParameters}
+                        icon="add"
+                        title="Linked operation method has some parameters the values for which are not specified on this item.">
+                      Create stubs for {missingParameters.length} missing parameter values
+                    </Button>
+                  : undefined}
                 title="Coordinate operation method">
               <RelatedItem
                 itemRef={itemData.coordOperationMethod
@@ -211,7 +258,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               onChangeItems={onChange
                 ? (spec) => onChange!(update(itemData, { parameters: spec }))
                 : undefined}
-              placeholderItem={getParameterStub()}
+              placeholderItem={createParameterValueStub}
               itemRenderer={(param, _idx, handleChange, deleteButton) =>
                 <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
                   <PropertyDetailView title="Parameter">
