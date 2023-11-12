@@ -95,216 +95,219 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
   views: {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
 
-    editView: ({ itemData, onChange, ...props }) => <>
-
-      <CommonEditView
-          useRegisterItemData={props.useRegisterItemData}
-          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-          itemRef={props.itemRef}
-          itemData={itemData}
-          onChange={onChange ? (newData: CommonGRItemData) => {
-            if (!onChange) { return; }
-            onChange({ ...itemData, ...newData });
-          } : undefined}>
-
-        <PropertyDetailView title="Source CRS">
-          <RelatedItem
-            itemRef={itemData.sourceCRS}
-            mode="generic"
-            onClear={onChange
-              && (() => onChange!(update(itemData, { $unset: ['sourceCRS'] })))}
-            onSet={onChange
-              ? ((spec) => onChange!(update(itemData, { sourceCRS: spec })))
-              : undefined}
-            classIDs={['crs--vertical', 'crs--geodetic']}
-          />
-        </PropertyDetailView>
-
-        <PropertyDetailView title="Target CRS">
-          <RelatedItem
-            itemRef={itemData.targetCRS}
-            mode="generic"
-            onClear={onChange
-              && (() => onChange!(update(itemData, { $unset: ['targetCRS'] })))}
-            onSet={onChange
-              ? ((spec) => onChange!(update(itemData, { targetCRS: spec })))
-              : undefined}
-            classIDs={['crs--vertical', 'crs--geodetic']}
-          />
-        </PropertyDetailView>
-
-        <PropertyDetailView
-            title="Coordinate operation method"
-            subLabel="The coordinate operation method to be used for this operation.">
-          <RelatedItem
-            itemRef={itemData.coordOperationMethod
-              ? { classID: 'coordinate-op-method', itemID: itemData.coordOperationMethod }
-              : undefined}
-            mode="id"
-            onClear={onChange
-              && (() => onChange!(update(itemData, { $unset: ['coordOperationMethod'] })))}
-            onSet={onChange
-              ? ((spec) => onChange!(update(itemData, { coordOperationMethod: spec })))
-              : undefined}
-            classIDs={['coordinate-op-method']}
-          />
-        </PropertyDetailView>
-
-        <ExtentEdit
-          extent={itemData.extent ?? DEFAULT_EXTENT}
-          onChange={onChange
-            ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
-            : undefined}
-        />
-
-        <PropertyDetailView label="Operation version" helperText={<>For example, <code>GA v2</code></>}>
-          <InputGroup
-            value={itemData.operationVersion ?? ''}
-            readOnly={!onChange}
-            onChange={(evt: React.FormEvent<HTMLInputElement>) => {
-              onChange
-                ? onChange(update(itemData, { operationVersion: { $set: evt.currentTarget.value } }))
-                : void 0;
-            }}
-          />
-        </PropertyDetailView>
-
-        <PropertyDetailView label="Accuracy">
-          <ControlGroup vertical>
-            <NumericInput
-              fill
-              css={css`margin-bottom: .5em;`}
-              readOnly={!onChange}
-              onValueChange={onChange
-                ? (valueAsNumber) => onChange!(update(itemData, { accuracy: { value: { $set: valueAsNumber } } }))
-                : undefined}
-              value={itemData.accuracy.value}
-            />
-            <GenericRelatedItemView
-              itemRef={{
-                classID: 'unit-of-measurement',
-                itemID: itemData.accuracy.unitOfMeasurement,
-              }}
-              availableClassIDs={['unit-of-measurement']}
-              onClear={onChange
-                ? () => onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: '' } } }))
-                : undefined}
-              onChange={onChange
-                ? (itemRef) => {
-                    if (itemRef.classID === 'unit-of-measurement' && itemRef.subregisterID === undefined) {
-                      onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: itemRef.itemID } } }))
-                    }
-                  }
-                : undefined}
-              itemSorter={COMMON_PROPERTIES.itemSorter}
-              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+    editView: ({ itemData, onChange, ...props }) => {
+      return (
+        <>
+          <CommonEditView
               useRegisterItemData={props.useRegisterItemData}
-            />
-          </ControlGroup>
-        </PropertyDetailView>
+              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+              itemRef={props.itemRef}
+              itemData={itemData}
+              onChange={onChange ? (newData: CommonGRItemData) => {
+                if (!onChange) { return; }
+                onChange({ ...itemData, ...newData });
+              } : undefined}>
 
-        <ItemList
-          items={itemData.parameters}
-          itemLabel="parameter value"
-          itemLabelPlural="parameter values"
-          onChangeItems={onChange
-            ? (spec) => onChange!(update(itemData, { parameters: spec }))
-            : undefined}
-          placeholderItem={getParameterStub()}
-          itemRenderer={(param, _idx, handleChange, deleteButton) =>
-            <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
-              <PropertyDetailView title="Parameter">
-                <RelatedItem
-                  itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
-                  mode="id"
-                  classIDs={['coordinate-op-parameter']}
-                  onClear={onChange
-                    ? () => handleChange!({ parameter: { $set: '' } })
-                    : undefined}
-                  onSet={handleChange
-                    ? (spec) => handleChange!({ parameter: spec })
-                    : undefined}
-                />
-              </PropertyDetailView>
-
-              {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
-
-              <PropertyDetailView label="Value type">
-                {handleChange
-                  ? <HTMLSelect
-                      value={param.type}
-                      options={parameterTypes.map(param => ({ value: param, label: param }))}
-                      onChange={(evt) =>
-                        handleChange!({ type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } })
-                      }
-                    />
-                  : <InputGroup readOnly value={param.type} />}
-              </PropertyDetailView>
-
-              <PropertyDetailView
-                  helperText="Depending on value type, either 1) a numerical value with unit of measurement, or 2) a filename."
-                  label="Value">
-                <ControlGroup>
-                  <InputGroup
-                    readOnly={!onChange}
-                    fill
-                    value={param.value?.toString() ?? ''}
-                    onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                      handleChange!({ value: { $set: evt.currentTarget.value } } )}
-                  />
-
-                  {param.unitOfMeasurement || param.type === ParameterType.MEASURE
-                    ? <RelatedItem
-                        itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
-                        mode="id"
-                        classIDs={['unit-of-measurement']}
-                        onClear={handleChange
-                          ? () => handleChange!({ unitOfMeasurement: { $set: null } })
-                          : undefined}
-                        onSet={handleChange
-                          ? (spec) => handleChange!({ unitOfMeasurement: spec })
-                          : undefined}
-                      />
-                    : null}
-                </ControlGroup>
-              </PropertyDetailView>
-
-              {param.type === ParameterType.FILE || param.fileCitation !== null
-                ? <PropertyDetailView
-                      helperText={param.fileCitation && handleChange
-                        ? <Button
-                              onClick={() => handleChange!({ $unset: ['fileCitation'] })}
-                              icon="remove"
-                              outlined
-                              intent="danger">
-                            Remove file citation
-                          </Button>
-                        : handleChange
-                          ? <Button
-                                onClick={() => handleChange({ fileCitation: { $set: getInformationSourceStub() } })}
-                                intent="primary"
-                                outlined
-                                title="Add file citation"
-                                icon="add">
-                              Add
-                            </Button>
-                          : null}
-                      label="File citation">
-                    {param.fileCitation
-                      ? <InformationSourceEdit
-                          citation={param.fileCitation}
-                          onChange={handleChange
-                            ? (citation) => handleChange!({ fileCitation: { $set: citation } })
-                            : undefined}
-                        />
-                      : "N/A"}
-                  </PropertyDetailView>
-                : null}
+            <PropertyDetailView title="Source CRS">
+              <RelatedItem
+                itemRef={itemData.sourceCRS}
+                mode="generic"
+                onClear={onChange
+                  && (() => onChange!(update(itemData, { $unset: ['sourceCRS'] })))}
+                onSet={onChange
+                  ? ((spec) => onChange!(update(itemData, { sourceCRS: spec })))
+                  : undefined}
+                classIDs={['crs--vertical', 'crs--geodetic']}
+              />
             </PropertyDetailView>
-          }
-        />
-      </CommonEditView>
-    </>,
+
+            <PropertyDetailView title="Target CRS">
+              <RelatedItem
+                itemRef={itemData.targetCRS}
+                mode="generic"
+                onClear={onChange
+                  && (() => onChange!(update(itemData, { $unset: ['targetCRS'] })))}
+                onSet={onChange
+                  ? ((spec) => onChange!(update(itemData, { targetCRS: spec })))
+                  : undefined}
+                classIDs={['crs--vertical', 'crs--geodetic']}
+              />
+            </PropertyDetailView>
+
+            <PropertyDetailView
+                subLabel="The coordinate operation method to be used for this operation."
+                title="Coordinate operation method">
+              <RelatedItem
+                itemRef={itemData.coordOperationMethod
+                  ? { classID: 'coordinate-op-method', itemID: itemData.coordOperationMethod }
+                  : undefined}
+                mode="id"
+                onClear={onChange
+                  && (() => onChange!(update(itemData, { $unset: ['coordOperationMethod'] })))}
+                onSet={onChange
+                  ? ((spec) => onChange!(update(itemData, { coordOperationMethod: spec })))
+                  : undefined}
+                classIDs={['coordinate-op-method']}
+              />
+            </PropertyDetailView>
+
+            <ExtentEdit
+              extent={itemData.extent ?? DEFAULT_EXTENT}
+              onChange={onChange
+                ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
+                : undefined}
+            />
+
+            <PropertyDetailView label="Operation version" helperText={<>For example, <code>GA v2</code></>}>
+              <InputGroup
+                value={itemData.operationVersion ?? ''}
+                readOnly={!onChange}
+                onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+                  onChange
+                    ? onChange(update(itemData, { operationVersion: { $set: evt.currentTarget.value } }))
+                    : void 0;
+                }}
+              />
+            </PropertyDetailView>
+
+            <PropertyDetailView label="Accuracy">
+              <ControlGroup vertical>
+                <NumericInput
+                  fill
+                  css={css`margin-bottom: .5em;`}
+                  readOnly={!onChange}
+                  onValueChange={onChange
+                    ? (valueAsNumber) => onChange!(update(itemData, { accuracy: { value: { $set: valueAsNumber } } }))
+                    : undefined}
+                  value={itemData.accuracy.value}
+                />
+                <GenericRelatedItemView
+                  itemRef={{
+                    classID: 'unit-of-measurement',
+                    itemID: itemData.accuracy.unitOfMeasurement,
+                  }}
+                  availableClassIDs={['unit-of-measurement']}
+                  onClear={onChange
+                    ? () => onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: '' } } }))
+                    : undefined}
+                  onChange={onChange
+                    ? (itemRef) => {
+                        if (itemRef.classID === 'unit-of-measurement' && itemRef.subregisterID === undefined) {
+                          onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: itemRef.itemID } } }))
+                        }
+                      }
+                    : undefined}
+                  itemSorter={COMMON_PROPERTIES.itemSorter}
+                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+                  useRegisterItemData={props.useRegisterItemData}
+                />
+              </ControlGroup>
+            </PropertyDetailView>
+
+            <ItemList
+              items={itemData.parameters}
+              itemLabel="parameter value"
+              itemLabelPlural="parameter values"
+              onChangeItems={onChange
+                ? (spec) => onChange!(update(itemData, { parameters: spec }))
+                : undefined}
+              placeholderItem={getParameterStub()}
+              itemRenderer={(param, _idx, handleChange, deleteButton) =>
+                <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
+                  <PropertyDetailView title="Parameter">
+                    <RelatedItem
+                      itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
+                      mode="id"
+                      classIDs={['coordinate-op-parameter']}
+                      onClear={onChange
+                        ? () => handleChange!({ parameter: { $set: '' } })
+                        : undefined}
+                      onSet={handleChange
+                        ? (spec) => handleChange!({ parameter: spec })
+                        : undefined}
+                    />
+                  </PropertyDetailView>
+
+                  {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
+
+                  <PropertyDetailView label="Value type">
+                    {handleChange
+                      ? <HTMLSelect
+                          value={param.type}
+                          options={parameterTypes.map(param => ({ value: param, label: param }))}
+                          onChange={(evt) =>
+                            handleChange!({ type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } })
+                          }
+                        />
+                      : <InputGroup readOnly value={param.type} />}
+                  </PropertyDetailView>
+
+                  <PropertyDetailView
+                      helperText="Depending on value type, either 1) a numerical value with unit of measurement, or 2) a filename."
+                      label="Value">
+                    <ControlGroup>
+                      <InputGroup
+                        readOnly={!onChange}
+                        fill
+                        value={param.value?.toString() ?? ''}
+                        onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+                          handleChange!({ value: { $set: evt.currentTarget.value } } )}
+                      />
+
+                      {param.unitOfMeasurement || param.type === ParameterType.MEASURE
+                        ? <RelatedItem
+                            itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
+                            mode="id"
+                            classIDs={['unit-of-measurement']}
+                            onClear={handleChange
+                              ? () => handleChange!({ unitOfMeasurement: { $set: null } })
+                              : undefined}
+                            onSet={handleChange
+                              ? (spec) => handleChange!({ unitOfMeasurement: spec })
+                              : undefined}
+                          />
+                        : null}
+                    </ControlGroup>
+                  </PropertyDetailView>
+
+                  {param.type === ParameterType.FILE || param.fileCitation !== null
+                    ? <PropertyDetailView
+                          helperText={param.fileCitation && handleChange
+                            ? <Button
+                                  onClick={() => handleChange!({ $unset: ['fileCitation'] })}
+                                  icon="remove"
+                                  outlined
+                                  intent="danger">
+                                Remove file citation
+                              </Button>
+                            : handleChange
+                              ? <Button
+                                    onClick={() => handleChange({ fileCitation: { $set: getInformationSourceStub() } })}
+                                    intent="primary"
+                                    outlined
+                                    title="Add file citation"
+                                    icon="add">
+                                  Add
+                                </Button>
+                              : null}
+                          label="File citation">
+                        {param.fileCitation
+                          ? <InformationSourceEdit
+                              citation={param.fileCitation}
+                              onChange={handleChange
+                                ? (citation) => handleChange!({ fileCitation: { $set: citation } })
+                                : undefined}
+                            />
+                          : "N/A"}
+                      </PropertyDetailView>
+                    : null}
+                </PropertyDetailView>
+              }
+            />
+          </CommonEditView>
+        </>
+      )
+    },
 
     // detailView: (props) => {
     //   const data = props.itemData;
