@@ -386,7 +386,7 @@ export function ItemList<T> ({
   ), [onChangeItems, itemLabel, placeholderItem]);
 
   const deleteAllButton = useMemo(() => (
-    onChangeItems !== undefined && items.length > 1
+    onChangeItems && items.length > 1
       ? <Button
             outlined
             icon="remove"
