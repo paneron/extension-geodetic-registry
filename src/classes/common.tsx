@@ -301,7 +301,11 @@ export function RelatedItem<
 
 interface ItemListProps<T> {
   items: Readonly<T[]>
+
+  /** Singular item label, lowercase. */
   itemLabel: string
+
+  /** Plural item label, lowercase. */
   itemLabelPlural?: string
 
   /** Same as for BP’s FormGroup. */
