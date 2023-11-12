@@ -18,9 +18,13 @@ import {
 
 const MEASURE_TYPES = [
   'ANGLE',
+  'AREA',
   'LENGTH',
   'SCALE',
   'TIME',
+  'VELOCITY',
+  'VOLUME',
+  'WEIGHT',
 ] as const;
 
 type MeasureType = typeof MEASURE_TYPES[number];
