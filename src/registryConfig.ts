@@ -1,6 +1,7 @@
 import type { ItemClassConfiguration } from '@riboseinc/paneron-registry-kit/types';
 
 import { transformation } from './classes/transformation';
+import { concatenatedOperation } from './classes/concatenated-operation';
 import { conversion } from './classes/conversion';
 import { verticalCRS, geodeticCRS, projectedCRS, compoundCRS, engineeringCRS } from './classes/crs';
 import { verticalDatum, geodeticDatum, engineeringDatum } from './classes/datum';
@@ -22,6 +23,7 @@ import {
 export const itemClassConfiguration: Record<string, ItemClassConfiguration<any>> = {
   "coordinate-ops--conversion": conversion,
   "coordinate-ops--transformation": transformation,
+  "coordinate-ops--concatenated": concatenatedOperation,
   "datums--engineering": engineeringDatum,
   "datums--geodetic": geodeticDatum,
   "datums--vertical": verticalDatum,
