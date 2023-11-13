@@ -130,7 +130,7 @@ function ({ extent, onChange }) {
   return (
     <PropertyDetailView
         title="Extent"
-        subLabel="Geographic area, region, or time frame.">
+        subLabel="Geographic area, region, or time frame. Also known as “domain of validity”.">
       <ClassNames>
         {({ css, cx }) => (
           <ControlGroup
