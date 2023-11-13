@@ -584,6 +584,7 @@ export const AccuracyEdit: React.FC<{
         fill
         css={css`margin-bottom: .5em;`}
         readOnly={!onChange}
+        buttonPosition={onChange ? undefined : 'none'}
         onValueChange={onChange
           ? (valueAsNumber) => onChange(update(accuracy, { value: { $set: valueAsNumber } }))
           : undefined}
