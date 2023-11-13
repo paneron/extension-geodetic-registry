@@ -168,6 +168,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
                 <ControlGroup>
                   <RelatedItem
                     itemRef={opRef}
+                    fill
                     validity={operationValidationErrors[opRef.itemID]}
                     mode="generic"
                     classIDs={['coordinate-ops--transformation', 'coordinate-ops--conversion']}

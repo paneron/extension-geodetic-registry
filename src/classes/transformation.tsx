@@ -260,10 +260,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   <PropertyDetailView
                       helperText="Depending on value type, either 1) a numerical value with unit of measurement, or 2) a filename."
                       label="Value">
-                    <ControlGroup>
+                    {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
+                    <ControlGroup fill>
                       <InputGroup
                         readOnly={!onChange}
-                        fill
                         value={param.value?.toString() ?? ''}
                         onChange={(evt: React.FormEvent<HTMLInputElement>) =>
                           handleChange!({ value: { $set: evt.currentTarget.value } } )}
@@ -272,6 +272,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                       {param.unitOfMeasurement || param.type === ParameterType.MEASURE
                         ? <RelatedItem
                             itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
+                            fill
                             mode="id"
                             classIDs={['unit-of-measurement']}
                             onClear={handleChange

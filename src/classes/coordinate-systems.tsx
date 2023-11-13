@@ -46,9 +46,10 @@ function ({ itemData, onChange, ...props })  {
           : undefined}
         placeholderItem=""
         itemRenderer={(axis, _idx, handleChange, deleteButton) =>
-          <ControlGroup>
+          <ControlGroup fill>
             <RelatedItem
               itemRef={{ classID: 'coordinate-sys-axis', itemID: axis }}
+              fill
               classIDs={['coordinate-sys-axis']}
               mode="id"
               onSet={handleChange}

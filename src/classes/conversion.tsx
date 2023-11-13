@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React, { useCallback, useMemo } from 'react';
 import { Button, ControlGroup, InputGroup } from '@blueprintjs/core';
-import { css, jsx } from '@emotion/react';
+import { jsx } from '@emotion/react';
 import type { Payload, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import useSingleRegisterItemData from '@riboseinc/paneron-registry-kit/views/hooks/useSingleRegisterItemData';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -228,7 +228,8 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
                 {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
 
                 <PropertyDetailView title="Value">
-                  <ControlGroup vertical css={css`margin-bottom: .5rem;`}>
+                  {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
+                  <ControlGroup fill>
                     <InputGroup
                       readOnly={!onChange}
                       fill
@@ -238,6 +239,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
                     />
                     <RelatedItem
                       itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
+                      fill
                       mode="id"
                       classIDs={['unit-of-measurement']}
                       onClear={handleChange

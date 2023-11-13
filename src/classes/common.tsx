@@ -251,6 +251,8 @@ interface RelatedItemWidgetProps<M extends 'generic' | 'id', S> {
 
   onClear?: () => void
 
+  fill?: boolean
+
   validity?: string
 }
 
@@ -267,6 +269,7 @@ export function RelatedItem<
   onSet,
   onClear,
   mode,
+  fill,
   validity,
 }: RelatedItemWidgetProps<M, S>) {
 
@@ -305,6 +308,7 @@ export function RelatedItem<
 
   return (
     <GenericRelatedItemView
+      controlGroupProps={fill !== undefined ? { fill } : undefined}
       inputRef={inputRef}
       itemRef={itemRef}
       availableClassIDs={availableClassIDs}
@@ -579,10 +583,9 @@ export const AccuracyEdit: React.FC<{
   onChange?: (newValue: Accuracy) => void
 }> = function ({ accuracy, onChange }) {
   return <PropertyDetailView label="Accuracy">
-    <ControlGroup>
+    {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
+    <ControlGroup fill>
       <NumericInput
-        fill
-        css={css`margin-bottom: .5em;`}
         readOnly={!onChange}
         buttonPosition={onChange ? undefined : 'none'}
         onValueChange={onChange
@@ -591,6 +594,7 @@ export const AccuracyEdit: React.FC<{
         value={accuracy.value}
       />
       <RelatedItem
+        fill
         itemRef={accuracy.unitOfMeasurement
           ? { classID: 'unit-of-measurement', itemID: accuracy.unitOfMeasurement }
           : undefined

@@ -62,6 +62,7 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
               <RelatedItem
                 itemRef={{ classID: 'coordinate-op-parameter', itemID: param }}
                 mode="id"
+                fill
                 classIDs={['coordinate-op-parameter']}
                 onClear={onChange
                   ? () => handleChange!({ $set: '' })
