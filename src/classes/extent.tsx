@@ -68,6 +68,10 @@ function ({ extent, onChange }) {
   const { getMapReducedData } = useContext(DatasetContext);
   const [_allImportableExtents, setAllImportableExtents] = useState<SuggestedExtentListItem[] | undefined>(undefined);
 
+  if (!isExtent(extent)) {
+    throw new Error("Item given to ExtentEdit is not an extent");
+  }
+
   const allImportableExtents = useDebounce(_allImportableExtents, 400);
   const extentsAreLoading = allImportableExtents === undefined;
 
