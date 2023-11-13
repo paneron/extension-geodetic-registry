@@ -52,8 +52,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
   views: {
     listItemView: CommonListItemView as ItemListView<ConcatenatedOperationData>,
 
-    editView: ({ itemData, onChange, ...props }) => {
-
+    editView: function ConcatenatedOperationEditView ({ itemData, onChange, ...props }) {
       return (
         <>
           <CommonEditView
