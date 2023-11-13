@@ -87,7 +87,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
             <ItemList
               items={itemData.operations}
               itemLabel="operation"
-              itemLabelPlural="opperations"
+              itemLabelPlural="operations"
               onChangeItems={onChange
                 ? (spec) => onChange!(update(itemData, { operations: spec }))
                 : undefined}
