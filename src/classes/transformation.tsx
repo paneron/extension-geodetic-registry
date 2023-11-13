@@ -4,13 +4,12 @@
 import update from 'immutability-helper';
 
 import React, { useCallback, useMemo } from 'react';
-import { css, jsx } from '@emotion/react';
-import { Button, ControlGroup, HTMLSelect, InputGroup, NumericInput } from '@blueprintjs/core';
+import { jsx } from '@emotion/react';
+import { Button, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
 
 import type { Payload, Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import useSingleRegisterItemData from '@riboseinc/paneron-registry-kit/views/hooks/useSingleRegisterItemData';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 import {
   type CommonGRItemData,
   COMMON_PROPERTIES,
@@ -23,9 +22,11 @@ import {
   DEFAULT_EXTENT,
   ItemList,
   RelatedItem,
+  Accuracy,
+  AccuracyEdit,
+  ACCURACY_STUB,
   getInformationSourceStub,
 } from './common';
-
 
 
 export const ParameterType = {
@@ -63,10 +64,7 @@ function getParameterStub(): TransformationParameter {
 export interface TransformationData extends CommonGRItemData {
   extent: Extent
   operationVersion: string
-  accuracy: {
-    value: number
-    unitOfMeasurement: string // Unit of measurement UUID
-  }
+  accuracy: Accuracy
   parameters: Readonly<TransformationParameter[]>
 
   sourceCRS?: { classID: string, itemID: string }
@@ -88,10 +86,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     extent: { name: '', n: 0, e: 0, s: 0, w: 0 },
     operationVersion: '',
     parameters: [],
-    accuracy: {
-      value: 0,
-      unitOfMeasurement: '',
-    },
+    accuracy: ACCURACY_STUB,
   },
   views: {
     listItemView: CommonListItemView as ItemListView<TransformationData>,
@@ -217,39 +212,12 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
               />
             </PropertyDetailView>
 
-            <PropertyDetailView label="Accuracy">
-              <ControlGroup vertical>
-                <NumericInput
-                  fill
-                  css={css`margin-bottom: .5em;`}
-                  readOnly={!onChange}
-                  onValueChange={onChange
-                    ? (valueAsNumber) => onChange!(update(itemData, { accuracy: { value: { $set: valueAsNumber } } }))
-                    : undefined}
-                  value={itemData.accuracy.value}
-                />
-                <GenericRelatedItemView
-                  itemRef={{
-                    classID: 'unit-of-measurement',
-                    itemID: itemData.accuracy.unitOfMeasurement,
-                  }}
-                  availableClassIDs={['unit-of-measurement']}
-                  onClear={onChange
-                    ? () => onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: '' } } }))
-                    : undefined}
-                  onChange={onChange
-                    ? (itemRef) => {
-                        if (itemRef.classID === 'unit-of-measurement' && itemRef.subregisterID === undefined) {
-                          onChange!(update(itemData, { accuracy: { unitOfMeasurement: { $set: itemRef.itemID } } }))
-                        }
-                      }
-                    : undefined}
-                  itemSorter={COMMON_PROPERTIES.itemSorter}
-                  getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-                  useRegisterItemData={props.useRegisterItemData}
-                />
-              </ControlGroup>
-            </PropertyDetailView>
+            <AccuracyEdit
+              accuracy={itemData.accuracy}
+              onChange={onChange
+                ? ((accuracy) => onChange(update(itemData, { accuracy: { $set: accuracy } } )))
+                : undefined}
+            />
 
             <ItemList
               items={itemData.parameters}

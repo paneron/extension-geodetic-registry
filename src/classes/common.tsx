@@ -539,3 +539,49 @@ const SplitView: React.FC<{
     </div>
   );
 });
+
+
+export interface Accuracy {
+  value: number
+  /** UUID of respective UoM. */
+  unitOfMeasurement: string
+}
+
+
+export const ACCURACY_STUB: Readonly<Accuracy> = {
+  value: 0,
+  unitOfMeasurement: '',
+} as const;
+
+
+export const AccuracyEdit: React.FC<{
+  accuracy: Accuracy
+  onChange?: (newValue: Accuracy) => void
+}> = function ({ accuracy, onChange }) {
+  return <PropertyDetailView label="Accuracy">
+    <ControlGroup>
+      <NumericInput
+        fill
+        css={css`margin-bottom: .5em;`}
+        readOnly={!onChange}
+        onValueChange={onChange
+          ? (valueAsNumber) => onChange(update(accuracy, { value: { $set: valueAsNumber } }))
+          : undefined}
+        value={accuracy.value}
+      />
+      <RelatedItem
+        itemRef={accuracy.unitOfMeasurement
+          ? { classID: 'unit-of-measurement', itemID: accuracy.unitOfMeasurement }
+          : undefined
+        }
+        mode="id"
+        onClear={onChange
+          && (() => onChange(update(accuracy, { $unset: ['unitOfMeasurement'] } )))}
+        onSet={onChange
+          ? ((spec) => onChange(update(accuracy, { unitOfMeasurement: spec } )))
+          : undefined}
+        classIDs={['unit-of-measurement']}
+      />
+    </ControlGroup>
+  </PropertyDetailView>
+};
