@@ -541,11 +541,14 @@ const SplitView: React.FC<{
 });
 
 
-export interface Accuracy {
+export interface NumericValueWithUoM {
   value: number
   /** UUID of respective UoM. */
   unitOfMeasurement: string
 }
+
+
+export type Accuracy = NumericValueWithUoM;
 
 
 export const ACCURACY_STUB: Readonly<Accuracy> = {
