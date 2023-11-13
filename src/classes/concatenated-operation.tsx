@@ -19,7 +19,7 @@ import {
   COMMON_PROPERTIES,
   ItemList,
   RelatedItem,
-  Accuracy,
+  type Accuracy,
   AccuracyEdit,
   ACCURACY_STUB,
 } from './common';

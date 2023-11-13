@@ -22,7 +22,7 @@ import {
   DEFAULT_EXTENT,
   ItemList,
   RelatedItem,
-  Accuracy,
+  type Accuracy,
   AccuracyEdit,
   ACCURACY_STUB,
   getInformationSourceStub,
