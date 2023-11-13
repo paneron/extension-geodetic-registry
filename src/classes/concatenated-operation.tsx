@@ -18,6 +18,9 @@ import {
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
   ItemList,
+  type Extent,
+  ExtentEdit,
+  DEFAULT_EXTENT,
   RelatedItem,
   type Accuracy,
   AccuracyEdit,
@@ -35,6 +38,7 @@ export interface ConcatenatedOperationData extends CommonGRItemData {
    */
   operations: Readonly<InternalItemReference[]>
   scope: string
+  extent: Extent
   operationVersion: string
   accuracy: Accuracy
 }
@@ -51,6 +55,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
   defaults: {
     ...SHARED_DEFAULTS,
     operationVersion: '',
+    extent: DEFAULT_EXTENT,
     operations: [],
     accuracy: ACCURACY_STUB,
   },
@@ -135,6 +140,13 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
                 if (!onChange) { return; }
                 onChange({ ...itemData, ...newData });
               } : undefined}>
+
+            <ExtentEdit
+              extent={itemData.extent}
+              onChange={onChange
+                ? ((extent) => onChange(update(itemData, { extent: { $set: extent } } )))
+                : undefined}
+            />
 
             <AccuracyEdit
               accuracy={itemData.accuracy}
