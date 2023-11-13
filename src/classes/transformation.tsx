@@ -83,7 +83,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
   },
   defaults: {
     ...SHARED_DEFAULTS,
-    extent: { name: '', n: 0, e: 0, s: 0, w: 0 },
+    extent: DEFAULT_EXTENT,
     operationVersion: '',
     parameters: [],
     accuracy: ACCURACY_STUB,
