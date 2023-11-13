@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update, { type Spec } from 'immutability-helper';
-import React, { type ReactChildren, type ReactNode, memo, useContext, useCallback, useMemo } from 'react';
+import React, { type ReactChildren, type ReactNode, memo, useContext, useCallback, useRef, useEffect, useMemo } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
@@ -250,6 +250,8 @@ interface RelatedItemWidgetProps<M extends 'generic' | 'id', S> {
   onSet?: (spec: { $set: S }) => void
 
   onClear?: () => void
+
+  validity?: string
 }
 
 /**
@@ -265,6 +267,7 @@ export function RelatedItem<
   onSet,
   onClear,
   mode,
+  validity,
 }: RelatedItemWidgetProps<M, S>) {
 
   const defaultClass: string | undefined = classIDs?.[0] ?? itemRef?.classID;
@@ -287,8 +290,22 @@ export function RelatedItem<
     }
   }, [availableClassIDs?.toString(), itemRef?.classID, onSet]);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    // TODO: We want to show validity even if items are not being edited (read-only)
+    // during review
+    if (inputRef.current && (handleSet || onClear)) {
+      inputRef.current.setCustomValidity(validity ?? '');
+      if (validity) {
+        inputRef.current.reportValidity();
+      }
+    }
+  }, [validity, inputRef, handleSet || onClear]);
+
   return (
     <GenericRelatedItemView
+      inputRef={inputRef}
       itemRef={itemRef}
       availableClassIDs={availableClassIDs}
       onClear={onClear}
