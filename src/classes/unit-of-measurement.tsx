@@ -76,8 +76,6 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
     listItemView: CommonListItemView as ItemListView<UoMData>,
     editView: (props) => (
       <CommonEditView
-          useRegisterItemData={props.useRegisterItemData}
-          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
           itemData={props.itemData}
           itemRef={props.itemRef}
           onChange={props.onChange ? (newData: CommonGRItemData) => {
