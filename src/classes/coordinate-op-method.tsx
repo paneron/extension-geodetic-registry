@@ -3,7 +3,7 @@
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
 import { ControlGroup } from '@blueprintjs/core';
-import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 
 import {
   type CommonGRItemData,
