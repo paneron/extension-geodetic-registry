@@ -65,6 +65,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
     editView: function ConcatenatedOperationEditView ({ itemData, onChange, ...props }) {
       const { useRegisterItemData } = useContext(BrowserCtx);
       const operationItemPaths = itemData.operations.map(ref => itemRefToItemPath(ref));
+      const operationItemUUIDs = itemData.operations.map(ref => ref.itemID);
 
       /** Item data for every linked single operation. */
       const operationItemData = useRegisterItemData({
@@ -75,7 +76,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
        * [source, target] CRS item paths for every linked single operation.
        * Operations with either CRS missing are omitted.
        */
-      const crsRefs: Record<string, [string, string]> = useMemo(() =>
+      const crsByOperation: Record<string, [string, string]> = useMemo(() =>
         Object.values(operationItemData).
           filter(op => op !== null && op !== undefined).
           map(op => {
@@ -89,37 +90,35 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
             }
             return [op!.id, crsPaths] as [string, [string, string]];
           }).
-          filter(([_, paths]) => (paths.find(p => p === '') === undefined)).
           map(([opID, paths]) =>
             ({ [opID]: [paths[0], paths[1]] as [string, string] })
           ).
           reduce((prev, curr) => ({ ...prev, ...curr }), {}),
         [operationItemData]);
 
-      /** CRS data for every linked CRS, through linked operations. */
-      const crsItemData = useRegisterItemData({
-        itemPaths: [...Object.values(crsRefs)].flat(),
-      });
-
       /**
        * Maps each operation item UUID to custom validation error
        * (empty string if no error).
        */
       const operationValidationErrors: Record<string, string> = useMemo(() => {
-        const ops = itemData.operations.map(ref => ref.itemID);
         const errors: Record<string, string> = {};
         let previousTarget: string | null = null;
-        for (const opUUID of ops) {
-          if (crsRefs[opUUID]) {
-            if (!previousTarget) {
-              previousTarget = crsRefs[opUUID][1];
-              errors[opUUID] = "";
-            } else {
-              if (crsRefs[opUUID][0] !== previousTarget) {
-                errors[opUUID] = "Source CRS of this operation does not match target CRS of previous operation";
-              } else {
+        for (const opUUID of operationItemUUIDs.filter(uuid => uuid !== '')) {
+          if (crsByOperation[opUUID]) {
+            const [currentSource, currentTarget] = crsByOperation[opUUID];
+            if (currentSource && currentTarget) {
+              if (!previousTarget) {
+                previousTarget = currentTarget;
                 errors[opUUID] = "";
+              } else {
+                if (currentSource !== previousTarget) {
+                  errors[opUUID] = "Source CRS of this operation does not match target CRS of previous operation";
+                } else {
+                  errors[opUUID] = "";
+                }
               }
+            } else {
+              errors[opUUID] = "This operation has no target and/or no source CRS specified.";
             }
           } else {
             console.warn("Source/target CRS for operation with UUID were not retrieved:", opUUID);
@@ -127,7 +126,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
           }
         }
         return errors;
-      }, [crsItemData]);
+      }, [crsByOperation, operationItemUUIDs.toString()]);
 
       return (
         <>
