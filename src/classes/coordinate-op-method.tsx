@@ -2,8 +2,9 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
-import { ControlGroup } from '@blueprintjs/core';
-import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { Button, TextArea, ControlGroup, NumericInput } from '@blueprintjs/core';
+import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
   type CommonGRItemData,
@@ -13,16 +14,28 @@ import {
   COMMON_PROPERTIES,
   ItemList,
   RelatedItem,
+  InformationSourceEdit,
+  getInformationSourceStub,
 } from './common';
 
 
 export interface CoordinateOpMethod extends CommonGRItemData {
   parameters: Readonly<string[]>
+  sourceCRSDimensionCount: number
+  targetCRSDimensionCount: number
+
+  /** Mutually exclusive with formulaCitation. */
+  formula?: string | null
+
+  /** Mutually exclusive with formula. */
+  formulaCitation?: Citation
 }
 
 export const DEFAULTS: CoordinateOpMethod = {
   ...SHARED_DEFAULTS,
   parameters: [],
+  sourceCRSDimensionCount: 1,
+  targetCRSDimensionCount: 1,
 } as const;
 
 
@@ -75,6 +88,75 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
             </ControlGroup>
           }
         />
+
+        <PropertyDetailView label="Source CRS dimension count" subLabel="Minimum is 1.">
+          <NumericInput
+            readOnly={!onChange}
+            buttonPosition={onChange ? undefined : 'none'}
+            onValueChange={onChange
+              ? (valueAsNumber) => onChange(update(itemData, { sourceCRSDimensionCount: { $set: valueAsNumber } }))
+              : undefined}
+            value={itemData.sourceCRSDimensionCount ?? 0}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView label="Target CRS dimension count" subLabel="Minimum is 1.">
+          <NumericInput
+            readOnly={!onChange}
+            buttonPosition={onChange ? undefined : 'none'}
+            onValueChange={onChange
+              ? (valueAsNumber) => onChange(update(itemData, { targetCRSDimensionCount: { $set: valueAsNumber } }))
+              : undefined}
+            value={itemData.targetCRSDimensionCount ?? 0}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView label="Formula" subLabel="Mutually exclusive with formula citation.">
+          <TextArea
+            fill
+            value={itemData.formula ?? ''}
+            disabled={itemData.formulaCitation !== undefined}
+            readOnly={!onChange}
+            onChange={(evt) => {
+              onChange
+                ? onChange(update(itemData, { formula: { $set: evt.currentTarget.value } }))
+                : void 0;
+            }}
+          />
+        </PropertyDetailView>
+
+        <PropertyDetailView
+            subLabel="Mutually exclusive with formula."
+            helperText={itemData.formulaCitation && onChange
+              ? <Button
+                    onClick={() => onChange(update(itemData, { $unset: ['formulaCitation'] }))}
+                    icon="remove"
+                    outlined
+                    intent="danger">
+                  Remove formula citation
+                </Button>
+              : onChange
+                ? <Button
+                      onClick={() => onChange(update(itemData, { formulaCitation: { $set: getInformationSourceStub() } }))}
+                      intent="primary"
+                      outlined
+                      disabled={(itemData.formula ?? '') !== ''}
+                      title="Add file citation"
+                      icon="add">
+                    Add
+                  </Button>
+                : null}
+            label="Formula citation">
+          {itemData.formulaCitation
+            ? <InformationSourceEdit
+                citation={itemData.formulaCitation}
+                onChange={onChange
+                  ? (citation) => onChange(update(itemData, { formulaCitation: { $set: citation } }))
+                  : undefined}
+              />
+            : "N/A"}
+        </PropertyDetailView>
+
       </CommonEditView>
     ),
   },
