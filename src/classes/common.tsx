@@ -392,7 +392,7 @@ export function ItemList<T> ({
   const pluralLabel = itemLabelPlural || `${itemLabel} items`;
   const countSummary = items.length > 0
     ? <>({items.length} total)</>
-    : <>(no items to show)</>
+    : <>(no items to show)</>;
 
   const handleAddNew = useMemo(() => (
     placeholderItem !== undefined && onChangeItems
