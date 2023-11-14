@@ -41,6 +41,12 @@ export interface ConcatenatedOperationData extends CommonGRItemData {
   extent: Extent
   operationVersion: string
   accuracy: Accuracy
+
+  /** Source CRS must match the first operation’s source CRS. */
+  sourceCRS?: InternalItemReference
+
+  /** Target CRS must match the last operation’s target CRS. */
+  targetCRS?: InternalItemReference
 }
 
 
@@ -139,6 +145,32 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
                 if (!onChange) { return; }
                 onChange({ ...itemData, ...newData });
               } : undefined}>
+
+            <PropertyDetailView title="Source CRS">
+              <RelatedItem
+                itemRef={itemData.sourceCRS}
+                mode="generic"
+                onClear={onChange
+                  && (() => onChange!(update(itemData, { $unset: ['sourceCRS'] })))}
+                onSet={onChange
+                  ? ((spec) => onChange!(update(itemData, { sourceCRS: spec })))
+                  : undefined}
+                classIDs={['crs--vertical', 'crs--geodetic']}
+              />
+            </PropertyDetailView>
+
+            <PropertyDetailView title="Target CRS">
+              <RelatedItem
+                itemRef={itemData.targetCRS}
+                mode="generic"
+                onClear={onChange
+                  && (() => onChange!(update(itemData, { $unset: ['targetCRS'] })))}
+                onSet={onChange
+                  ? ((spec) => onChange!(update(itemData, { targetCRS: spec })))
+                  : undefined}
+                classIDs={['crs--vertical', 'crs--geodetic']}
+              />
+            </PropertyDetailView>
 
             <ExtentEdit
               extent={itemData.extent}
