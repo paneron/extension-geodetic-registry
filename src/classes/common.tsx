@@ -8,6 +8,7 @@ import { jsx, css } from '@emotion/react';
 import {
   Button,
   ButtonGroup,
+  Callout,
   ControlGroup,
   InputGroup,
   Colors,
@@ -338,6 +339,9 @@ interface ItemListProps<T> {
   /** When items are simple, ideally one property. */
   simpleItems?: boolean
 
+  maxItems?: number
+  minItems?: number
+
   itemRenderer: (
     item: T,
     idx: number,
@@ -362,6 +366,8 @@ export function ItemList<T> ({
   itemRenderer,
   onChangeItems,
   simpleItems,
+  maxItems,
+  minItems,
   placeholderItem,
 }: ItemListProps<T>): JSX.Element {
   const itemViews = useMemo((() =>
@@ -431,20 +437,27 @@ export function ItemList<T> ({
       : null
   ), [onChangeItems, pluralLabel, items.length > 1]);
 
+  const countValidity = (maxItems !== undefined && items.length > maxItems)
+    ? `Too many ${pluralLabel}: at most ${maxItems} is expected`
+    : (minItems !== undefined && items.length < minItems)
+      ? `Not enough ${pluralLabel}: at least ${minItems} is expected`
+      : '';
+
   return (
     <PropertyDetailView
         label={pluralLabel}
         labelInfo={countSummary}
         css={css`margin-top: 10px;`}
+        intent={countValidity ? 'warning' : undefined}
         subLabel={subLabel}
-        helperText={helperText || addButton || deleteAllButton
+        helperText={helperText || addButton || deleteAllButton || countValidity
           ? <>
               {helperText}
-              {(helperText && (addButton || deleteAllButton))
-                ? <br />
+              {countValidity && onChangeItems
+                ? <Callout intent="warning" css={css`margin-top: 10px;`}>{countValidity}</Callout>
                 : null}
               {(addButton || deleteAllButton)
-                ? <ButtonGroup>
+                ? <ButtonGroup css={css`margin-top: 10px;`}>
                     {addButton}
                     {deleteAllButton}
                   </ButtonGroup>
