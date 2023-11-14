@@ -7,7 +7,7 @@ import React, { useCallback, useMemo } from 'react';
 import { jsx } from '@emotion/react';
 import { Button, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
 
-import type { Payload, Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { Payload, Citation, ItemClassConfiguration, InternalItemReference, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import useSingleRegisterItemData from '@riboseinc/paneron-registry-kit/views/hooks/useSingleRegisterItemData';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import {
@@ -67,8 +67,8 @@ export interface TransformationData extends CommonGRItemData {
   accuracy: Accuracy
   parameters: Readonly<TransformationParameter[]>
 
-  sourceCRS?: { classID: string, itemID: string }
-  targetCRS?: { classID: string, itemID: string }
+  sourceCRS?: InternalItemReference
+  targetCRS?: InternalItemReference
   coordOperationMethod?: string
 }
 
