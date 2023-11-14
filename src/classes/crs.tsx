@@ -87,7 +87,10 @@ export interface NonCompoundCRSData extends CRSData {
     itemID: string
   }
   operation?: {
-    /** Transformation or Conversion */
+    /**
+     * Transformation or Conversion.
+     * Contingent on baseCRS?
+     */
     classID: string
     itemID: string
   }
