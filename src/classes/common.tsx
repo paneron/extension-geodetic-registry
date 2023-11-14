@@ -447,7 +447,6 @@ export function ItemList<T> ({
     <PropertyDetailView
         label={pluralLabel}
         labelInfo={countSummary}
-        css={css`margin-top: 10px;`}
         intent={countValidity ? 'warning' : undefined}
         subLabel={subLabel}
         helperText={helperText || addButton || deleteAllButton || countValidity
