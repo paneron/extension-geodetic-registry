@@ -9,7 +9,7 @@
  */
 
 import { jsx, css, ClassNames } from '@emotion/react';
-import React, { useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React from 'react';
 import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
   MenuItem, Tag, ProgressBar,
@@ -17,9 +17,8 @@ import {
 } from '@blueprintjs/core';
 import { Select2 as Select, type ItemRenderer } from '@blueprintjs/select';
 import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
-import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
-import useDebounce from '@riboseinc/paneron-extension-kit/useDebounce';
-import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import { useDebounce, DatasetContext } from '@riboseinc/paneron-extension-kit';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
 
 interface ExtentBoundingPolygonPoint {
@@ -65,8 +64,8 @@ export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 } as co
 export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
 function ({ extent, onChange }) {
   const isStub = JSON.stringify(extent) === JSON.stringify(DEFAULT_EXTENT);
-  const { getMapReducedData } = useContext(DatasetContext);
-  const [_allImportableExtents, setAllImportableExtents] = useState<SuggestedExtentListItem[] | undefined>(undefined);
+  const { getMapReducedData } = React.useContext(DatasetContext);
+  const [_allImportableExtents, setAllImportableExtents] = React.useState<SuggestedExtentListItem[] | undefined>(undefined);
 
   if (!isExtent(extent)) {
     throw new Error("Item given to ExtentEdit is not an extent");
@@ -89,7 +88,7 @@ function ({ extent, onChange }) {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     let cancelled = false;
     async function importExtents() {
       setAllImportableExtents(undefined);
@@ -207,11 +206,11 @@ const CoordInput: React.FC<{
   label?: JSX.Element
 }> =
 function ({ value, label, onChange }) {
-  const [editedVal, editVal] = useState<string | null>(null);
+  const [editedVal, editVal] = React.useState<string | null>(null);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const handleChange = useCallback(function handleChange(val: string) {
+  const handleChange = React.useCallback(function handleChange(val: string) {
     if (!onChange) {
       return;
     }

@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update, { type Spec } from 'immutability-helper';
-import React, { type ReactChildren, type ReactNode, memo, useContext, useCallback, useRef, useEffect, useMemo } from 'react';
+import React, { type ReactChildren, type ReactNode } from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
@@ -26,9 +26,7 @@ import type {
   ItemEditView,
   InternalItemReference,
 } from '@riboseinc/paneron-registry-kit/types';
-import { incompleteItemRefToItemPathPrefix } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
-import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import { incompleteItemRefToItemPathPrefix, GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
 
 // For backwards compatibility
@@ -121,7 +119,7 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
 
 export const EditView: ItemEditView<CommonGRItemData> = function (props) {
   const { itemData, itemRef, onChange, children } = props;
-  const { getMapReducedData, performOperation, operationKey } = useContext(DatasetContext);
+  const { getMapReducedData, performOperation, operationKey } = React.useContext(DatasetContext);
 
   function textInputProps
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
@@ -288,7 +286,7 @@ export function RelatedItem<
   // Cannot set if there are no class choices
   const canSet = onSet && (availableClassIDs === undefined || availableClassIDs.length > 0);
 
-  const handleSet = useCallback(function handleSet(ref: InternalItemReference) {
+  const handleSet = React.useCallback(function handleSet(ref: InternalItemReference) {
     if (availableClassIDs === undefined || availableClassIDs.indexOf(ref.classID) >= 0) {
       onSet?.({ $set: (mode === 'generic' ? ref : ref.itemID) as S })
     } else {
@@ -296,9 +294,9 @@ export function RelatedItem<
     }
   }, [availableClassIDs?.toString(), itemRef?.classID, onSet]);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // TODO: We want to show validity even if items are not being edited (read-only)
     // during review
     if (inputRef.current && (handleSet || onClear)) {
@@ -372,7 +370,7 @@ export function ItemList<T> ({
   minItems,
   placeholderItem,
 }: ItemListProps<T>): JSX.Element {
-  const itemViews = useMemo((() =>
+  const itemViews = React.useMemo((() =>
     items.map((item, idx) =>
       <li key={idx}>
         {itemRenderer(
@@ -402,7 +400,7 @@ export function ItemList<T> ({
     ? <>({items.length} total)</>
     : <>(no items to show)</>;
 
-  const handleAddNew = useMemo(() => (
+  const handleAddNew = React.useMemo(() => (
     placeholderItem !== undefined && onChangeItems
       ? async function handleAddNewItem() {
           const newItem: T = typeof placeholderItem === 'function'
@@ -415,7 +413,7 @@ export function ItemList<T> ({
       : null
   ), [onChangeItems, placeholderItem]);
 
-  const addButton = useMemo(() => (
+  const addButton = React.useMemo(() => (
     handleAddNew
       ? <Button
             outlined
@@ -427,7 +425,7 @@ export function ItemList<T> ({
       : null
   ), [handleAddNew, itemLabel]);
 
-  const deleteAllButton = useMemo(() => (
+  const deleteAllButton = React.useMemo(() => (
     onChangeItems && items.length > 1
       ? <Button
             outlined
@@ -515,7 +513,7 @@ export const InformationSourceEdit: React.FC<{
 
 
 export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["listItemView"] =
-memo(function CommonListItemView (props) {
+React.memo(function CommonListItemView (props) {
   return (
     <span className={props.className}>
       <span css={css`color: ${Colors.GRAY4}; font-family: monospace; font-size: 90%`}>
@@ -536,7 +534,7 @@ memo(function CommonListItemView (props) {
 const SplitView: React.FC<{
   aside?: ReactChildren | ReactNode
   className?: string
-}> = memo(function ({ children, aside, className }) {
+}> = React.memo(function ({ children, aside, className }) {
   return (
     <div css={css`
         position: absolute; inset: 0;

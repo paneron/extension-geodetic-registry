@@ -9,7 +9,8 @@ import { jsx } from '@emotion/react';
 
 import { Checkbox, ControlGroup, ControlGroupProps, InputGroup } from '@blueprintjs/core';
 
-import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
   type CommonGRItemData,
   COMMON_PROPERTIES,
@@ -17,8 +18,6 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
 } from './common';
-import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
-import GenericRelatedItemView from '@riboseinc/paneron-registry-kit/views/GenericRelatedItemView';
 
 
 export interface EllipsoidData extends CommonGRItemData {

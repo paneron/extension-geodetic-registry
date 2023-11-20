@@ -3,13 +3,12 @@
 
 import update from 'immutability-helper';
 
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { jsx } from '@emotion/react';
 import { Button, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
 
 import type { Payload, Citation, ItemClassConfiguration, InternalItemReference, ItemListView } from '@riboseinc/paneron-registry-kit/types';
-import useSingleRegisterItemData from '@riboseinc/paneron-registry-kit/views/hooks/useSingleRegisterItemData';
-import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 import {
   type CommonGRItemData,
   COMMON_PROPERTIES,
@@ -105,18 +104,18 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
       // Cast to Payload is necessary due to RegistryKit wrongly typing useSingleRegisterItemData value
       ).value as Payload)?.parameters ?? [];
       const itemParamParamUUIDs = (itemData.parameters ?? []).map(param => param.parameter);
-      const missingParameters = useMemo(() => (
+      const missingParameters = React.useMemo(() => (
         coordMethodParamUUIDs.filter(uuid => itemParamParamUUIDs.indexOf(uuid) < 0)
       ), [itemParamParamUUIDs.toString(), coordMethodParamUUIDs.toString()]);
 
-      const createParameterValueStub: () => TransformationParameter = useCallback(() => {
+      const createParameterValueStub: () => TransformationParameter = React.useCallback(() => {
         return {
           ...getParameterStub(),
           parameter: missingParameters[0] ?? '',
         };
       }, [missingParameters[0]]);
 
-      const createStubsForMissingOperationMethodParameters = useMemo(() =>
+      const createStubsForMissingOperationMethodParameters = React.useMemo(() =>
         onChange && missingParameters.length > 0
           ? function () {
               const paramValueStubs = missingParameters.map(paramUUID => ({

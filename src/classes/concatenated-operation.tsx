@@ -3,7 +3,7 @@
 
 import update from 'immutability-helper';
 
-import React, { useContext, useMemo } from 'react';
+import React from 'react';
 import { jsx } from '@emotion/react';
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
@@ -69,7 +69,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
     listItemView: CommonListItemView as ItemListView<ConcatenatedOperationData>,
 
     editView: function ConcatenatedOperationEditView ({ itemData, onChange, ...props }) {
-      const { useRegisterItemData } = useContext(BrowserCtx);
+      const { useRegisterItemData } = React.useContext(BrowserCtx);
       const operationItemPaths = itemData.operations.map(ref => itemRefToItemPath(ref));
       const operationItemUUIDs = itemData.operations.map(ref => ref.itemID);
 
@@ -82,7 +82,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
        * [source, target] CRS item paths for every linked single operation.
        * Operations with either CRS missing are omitted.
        */
-      const crsByOperation: Record<string, [string, string]> = useMemo(() =>
+      const crsByOperation: Record<string, [string, string]> = React.useMemo(() =>
         Object.values(operationItemData).
           filter(op => op !== null && op !== undefined).
           map(op => {
@@ -106,7 +106,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
        * Maps each operation item UUID to custom validation error
        * (empty string if no error).
        */
-      const operationValidationErrors: Record<string, string> = useMemo(() => {
+      const operationValidationErrors: Record<string, string> = React.useMemo(() => {
         const errors: Record<string, string> = {};
         let previousTarget: string | null = null;
         for (const opUUID of operationItemUUIDs.filter(uuid => uuid !== '')) {
