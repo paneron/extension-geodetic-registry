@@ -198,7 +198,9 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
           />
         </>}>
 
-      <PropertyDetailView label="GR identifier">
+      <PropertyDetailView
+          label="GR identifier"
+          subLabel="Globally unique, approximately sequential numerical ID assigned to the item in this register.">
         <ControlGroup>
           <NumericInput
             required
