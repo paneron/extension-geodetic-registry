@@ -103,7 +103,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
           <InputGroup
             required
             value={props.itemData.symbol ?? ''}
-            disabled={!props.onChange}
+            readOnly={!props.onChange}
             onChange={(evt) => props.onChange?.({ ...props.itemData, symbol: evt.currentTarget.value })}
           />
         </PropertyDetailView>
@@ -138,7 +138,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
                 />
               : undefined}
             value={props.itemData.numerator ?? ''}
-            disabled={!props.onChange}
+            readOnly={!props.onChange}
             onValueChange={(num) => props.onChange?.({ ...props.itemData, numerator: num })}
           />
         </PropertyDetailView>
@@ -155,7 +155,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
                 />
               : undefined}
             value={props.itemData.denominator ?? ''}
-            disabled={!props.onChange}
+            readOnly={!props.onChange}
             onValueChange={(num) => props.onChange?.({ ...props.itemData, denominator: num })}
           />
         </PropertyDetailView>
