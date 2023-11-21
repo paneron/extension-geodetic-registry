@@ -158,6 +158,15 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
             />
           </PropertyDetailView>
 
+          <PropertyDetailView label="Scope">
+            <InputGroup
+              required
+              value={itemData.scope ?? ''}
+              readOnly={!onChange}
+              onChange={(evt) => onChange?.({ ...itemData, scope: evt.currentTarget.value })}
+            />
+          </PropertyDetailView>
+
           <ExtentEdit
             extent={itemData.extent ?? DEFAULT_EXTENT}
             onChange={onChange
