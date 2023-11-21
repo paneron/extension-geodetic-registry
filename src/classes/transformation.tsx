@@ -62,6 +62,7 @@ function getParameterStub(): TransformationParameter {
 
 export interface TransformationData extends CommonGRItemData {
   extent: Extent
+  scope: string
   operationVersion: string
   accuracy: Accuracy
   parameters: Readonly<TransformationParameter[]>
@@ -83,6 +84,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
   defaults: {
     ...SHARED_DEFAULTS,
     extent: DEFAULT_EXTENT,
+    scope: '',
     operationVersion: '',
     parameters: [],
     accuracy: ACCURACY_STUB,
@@ -189,6 +191,15 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   ? ((spec) => onChange!(update(itemData, { coordOperationMethod: spec })))
                   : undefined}
                 classIDs={['coordinate-op-method']}
+              />
+            </PropertyDetailView>
+
+            <PropertyDetailView label="Scope">
+              <InputGroup
+                required
+                value={itemData.scope ?? ''}
+                readOnly={!onChange}
+                onChange={(evt) => onChange?.({ ...itemData, scope: evt.currentTarget.value })}
               />
             </PropertyDetailView>
 
