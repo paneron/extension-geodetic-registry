@@ -27,6 +27,8 @@ interface ExtentBoundingPolygonPoint {
   /** Longitude (+/-180, Eastern hemisphere positive) */
   lon: number
 }
+
+/** A.k.a. “domain of validity”. */
 export interface Extent {
   n: number
   e: number
