@@ -304,6 +304,7 @@ function (item, { handleClick, handleFocus, modifiers, query }) {
   if (modifiers.matchesPredicate) {
     return <Tooltip
       placement='left'
+      key={item.extentData.name}
       content={`From ${item.registerItemDescription}`}
       hoverOpenDelay={0}
       transitionDuration={0}
