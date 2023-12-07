@@ -17,14 +17,16 @@ const defaultSearchCriteria = {
   criteria: [{ key: 'item-class', query: defaultCriteria }],
 } as const;
 
+const getQuickSearchPredicate = function getQuickSearchPredicate(quickSearchString: string) {
+  return `[obj.data?.name ?? '', obj.data?.identifier?.toString()].join('').toLowerCase().indexOf("${quickSearchString.toLowerCase()}") >= 0`;
+}
+
 
 export default function () {
   return <RegistryView
     itemClassConfiguration={itemClassConfiguration}
     keyExpression="obj.data.identifier || obj.id"
     defaultSearchCriteria={defaultSearchCriteria as any}
-    getQuickSearchPredicate={function getQuickSearchPredicate(quickSearchString) {
-      return `[obj.data?.name ?? '', obj.data?.identifier?.toString()].join('').toLowerCase().indexOf("${quickSearchString.toLowerCase()}") >= 0`;
-    }}
+    getQuickSearchPredicate={getQuickSearchPredicate}
   />
 };
