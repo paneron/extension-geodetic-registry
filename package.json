@@ -9,8 +9,12 @@
     "email": "open.source@ribose.com"
   },
   "scripts": {
-    "build2": "esbuild src/plugin.ts --outfile=dist/test.js --format=esm --bundle \"--external:@riboseinc/*\" \"--external:react-dom\" \"--external:react\" \"--external:@blueprintjs/*\" \"--external:@emotion/*\" \"--external:immutability-helper\" --minify=false --sourcemap=inline --target=chrome94",
-    "build": "rm -r compiled dist; mkdir compiled dist; tsc --outDir compiled; babel compiled --out-dir dist; cp package.json dist/; rsync -a --include '*/' --include '*.d.ts' --include '*.js.map' --exclude '*' compiled/ dist/"
+    "dist": "yarn clean && yarn compile && yarn prepare-dist && yarn dist-legacy && yarn dist-new",
+    "prepare-dist": "mkdir dist; cp package.json dist/; rsync -a --include '*/' --include '*.ts' --include '*.mts' --include '*.tsx' --exclude '*' src/ dist/",
+    "compile": "tsc --outDir compiled",
+    "dist-legacy": "babel compiled --out-dir dist; rsync -a --include '*/' --include '*.d.ts' --include '*.js.map' --exclude '*' compiled/ dist/",
+    "dist-new": "esbuild src/plugin.ts --outfile=dist/extension.js --format=esm --bundle \"--external:@riboseinc/*\" \"--external:react-dom\" \"--external:react\" \"--external:@blueprintjs/*\" \"--external:@emotion/*\" \"--external:immutability-helper\" --minify=false --sourcemap=inline --target=chrome94",
+    "clean": "rm -r compiled dist"
   },
   "paneronExtension": {
     "title": "ISO Geodetic Registry",
