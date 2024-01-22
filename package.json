@@ -14,7 +14,7 @@
     "compile": "tsc --outDir compiled",
     "dist-legacy": "babel compiled --out-dir dist; rsync -a --include '*/' --include '*.d.ts' --include '*.js.map' --exclude '*' compiled/ dist/",
     "dist-new": "esbuild src/plugin.ts --outfile=dist/extension.js --format=esm --bundle \"--external:@riboseinc/*\" \"--external:react-dom\" \"--external:react\" \"--external:@blueprintjs/*\" \"--external:@emotion/*\" \"--external:immutability-helper\" --minify=false --sourcemap=inline --target=chrome94",
-    "clean": "rm -r compiled dist"
+    "clean": "rm -rf compiled dist"
   },
   "paneronExtension": {
     "title": "ISO Geodetic Registry",
