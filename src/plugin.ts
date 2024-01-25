@@ -21,10 +21,7 @@
 
 
 import { makeRegistryExtension, CRITERIA_CONFIGURATION } from '@riboseinc/paneron-registry-kit';
-import { incompleteItemRefToItemPathPrefix} from '@riboseinc/paneron-registry-kit';
-import { itemPathInCR, itemPathToItemRef } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
-import { isAddition } from '@riboseinc/paneron-registry-kit/types/proposal';
-import type { Payload } from '@riboseinc/paneron-registry-kit/types/item';
+import { type Payload, itemPathInCR, itemPathToItemRef, incompleteItemRefToItemPathPrefix, isAddition } from '@riboseinc/paneron-registry-kit';
 
 import { itemClassConfiguration } from './registryConfig';
 
