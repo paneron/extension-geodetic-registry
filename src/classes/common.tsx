@@ -168,12 +168,6 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
               : undefined}
           />
 
-          <PropertyDetailView
-              title="Remarks"
-              subLabel="Comments on or information about this item.">
-            <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
-          </PropertyDetailView>
-
           <ItemList
             items={itemData.informationSources}
             itemLabel="citation (information source)"
@@ -225,6 +219,12 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
 
       <PropertyDetailView label="Name" subLabel="Unique name for this item.">
         <InputGroup required value={itemData.name} {...textInputProps('name')} />
+      </PropertyDetailView>
+
+      <PropertyDetailView
+          title="Remarks"
+          subLabel="Comments on or information about this item.">
+        <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
       </PropertyDetailView>
 
       {children}
