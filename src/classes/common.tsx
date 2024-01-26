@@ -223,7 +223,6 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
         </ControlGroup>
       </PropertyDetailView>
 
-
       <PropertyDetailView label="Name" subLabel="Unique name for this item.">
         <InputGroup required value={itemData.name} {...textInputProps('name')} />
       </PropertyDetailView>
