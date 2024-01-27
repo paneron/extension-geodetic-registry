@@ -16,6 +16,7 @@ import {
   NumericInput,
   TextArea,
   OL,
+  UL,
 } from '@blueprintjs/core';
 
 
@@ -88,6 +89,7 @@ const AliasesEdit: React.FC<{
   return (
     <ItemList
       items={aliases}
+      hideOrdinals
       simpleItems
       itemLabel="alias"
       itemLabelPlural="aliases"
@@ -341,6 +343,8 @@ interface ItemListProps<T> {
   maxItems?: number
   minItems?: number
 
+  hideOrdinals?: boolean
+
   itemRenderer: (
     item: T,
     idx: number,
@@ -368,6 +372,7 @@ export function ItemList<T> ({
   maxItems,
   minItems,
   placeholderItem,
+  hideOrdinals,
 }: ItemListProps<T>): JSX.Element {
   const itemViews = React.useMemo((() =>
     items.map((item, idx) =>
@@ -442,6 +447,8 @@ export function ItemList<T> ({
       ? `Not enough ${pluralLabel}: at least ${minItems} is expected`
       : '';
 
+  const Tag = hideOrdinals ? UL : OL;
+
   return (
     <PropertyDetailView
         label={pluralLabel}
@@ -463,9 +470,9 @@ export function ItemList<T> ({
             </>
           : null}>
       {items.length > 0
-        ? <OL css={css`margin-top: 0; padding-left: 1em;`}>
+        ? <Tag css={css`margin-top: 0; padding-left: 1em;`}>
             {itemViews}
-          </OL>
+          </Tag>
         : null}
     </PropertyDetailView>
   );
