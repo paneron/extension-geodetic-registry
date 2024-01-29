@@ -231,8 +231,8 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
 
             <ItemList
               items={itemData.parameters}
-              itemLabel="parameter value"
-              itemLabelPlural="parameter values"
+              itemLabel="parameter with value"
+              itemLabelPlural="operation parameters with values"
               onChangeItems={onChange
                 ? (spec) => onChange!(update(itemData, { parameters: spec }))
                 : undefined}
