@@ -343,10 +343,14 @@ interface ItemListProps<T> {
   maxItems?: number
   minItems?: number
 
+  /** The list is still ordered, but numbers won’t be shown. */
   hideOrdinals?: boolean
 
+  /** Renders any given item. */
   itemRenderer: (
+    /** Item data. */
     item: T,
+    /** Item index in the list. */
     idx: number,
     handleChange: ((spec: Spec<T>) => void) | undefined,
     deleteButton: JSX.Element | undefined,
@@ -359,7 +363,10 @@ interface ItemListProps<T> {
   placeholderItem?: T | (() => T) | (() => Promise<T>)
 }
 
-/** A wrapper for handling editable lists of items. */
+/**
+ * A wrapper for handling an ordered, optionally editable, list of items.
+ * Not suitable for large or unbounded lists (it’s not windowed).
+ */
 export function ItemList<T> ({
   items,
   itemLabel,
