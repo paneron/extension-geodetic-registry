@@ -268,7 +268,11 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   </PropertyDetailView>
 
                   <PropertyDetailView
-                      helperText="Depending on value type, either 1) a numerical value with unit of measurement, or 2) a filename."
+                      helperText={<>
+                        Depending on value type, the value can be either
+                        1) a&nbsp;numerical&nbsp;value with&nbsp;unit&nbsp;of&nbsp;measurement,
+                        or 2) a&nbsp;filename.
+                      </>}
                       label="Value">
                     {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
                     <ControlGroup fill>
