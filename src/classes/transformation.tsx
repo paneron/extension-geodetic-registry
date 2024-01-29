@@ -308,7 +308,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                                   icon="remove"
                                   outlined
                                   intent="danger">
-                                Remove file citation
+                                Clear file citation only
                               </Button>
                             : handleChange
                               ? <Button
