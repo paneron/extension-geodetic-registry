@@ -469,7 +469,7 @@ export function ItemList<T> ({
                 ? <Callout intent="warning" css={css`margin-top: 10px;`}>{countValidity}</Callout>
                 : null}
               {(addButton || deleteAllButton)
-                ? <ButtonGroup css={css`margin-top: 10px;`}>
+                ? <ButtonGroup css={css`margin-top: ${items.length > 0 ? '10px' : '0'};`}>
                     {addButton}
                     {deleteAllButton}
                   </ButtonGroup>
