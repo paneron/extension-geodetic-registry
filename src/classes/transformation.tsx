@@ -4,7 +4,7 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 import { Button, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
 
 import type { Payload, Citation, ItemClassConfiguration, InternalItemReference, ItemListView } from '@riboseinc/paneron-registry-kit/types';
@@ -238,7 +238,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 : undefined}
               placeholderItem={createParameterValueStub}
               itemRenderer={(param, _idx, handleChange, deleteButton) =>
-                <PropertyDetailView title="Parameter Value" helperText={deleteButton}>
+                <>
                   <PropertyDetailView title="Parameter">
                     <RelatedItem
                       itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
@@ -327,7 +327,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                           : "N/A"}
                       </PropertyDetailView>
                     : null}
-                </PropertyDetailView>
+                  {deleteButton
+                    ? <div css={css`margin: 10px 0 15px 0;`}>{deleteButton}</div>
+                    : null}
+                </>
               }
             />
           </CommonEditView>
