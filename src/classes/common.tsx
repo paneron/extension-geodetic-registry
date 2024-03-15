@@ -618,9 +618,8 @@ export const AccuracyEdit: React.FC<{
     <ControlGroup fill>
       <InputGroup
         readOnly={!onChange}
-        onValueChange={onChange
-          ? (val: string) => onChange(update(accuracy, { value: { $set: val } }))
-          : undefined}
+        onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+            onChange!((update(accuracy, { value: { $set: evt.currentTarget.value } } )))}
         value={accuracy.value}
       />
       <RelatedItem
