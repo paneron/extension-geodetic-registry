@@ -593,12 +593,18 @@ export interface NumericValueWithUoM {
   unitOfMeasurement: string
 }
 
+export interface StringValueWithUoM {
+  value: string
+  /** UUID of respective UoM. */
+  unitOfMeasurement: string
+}
 
-export type Accuracy = NumericValueWithUoM;
+
+export type Accuracy = StringValueWithUoM;
 
 
 export const ACCURACY_STUB: Readonly<Accuracy> = {
-  value: 0,
+  value: '',
   unitOfMeasurement: '',
 } as const;
 
@@ -610,12 +616,10 @@ export const AccuracyEdit: React.FC<{
   return <PropertyDetailView label="Accuracy">
     {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
     <ControlGroup fill>
-      <NumericInput
+      <InputGroup
         readOnly={!onChange}
-        buttonPosition={onChange ? undefined : 'none'}
-        onValueChange={onChange
-          ? (valueAsNumber) => onChange(update(accuracy, { value: { $set: valueAsNumber } }))
-          : undefined}
+        onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+            onChange!((update(accuracy, { value: { $set: evt.currentTarget.value } } )))}
         value={accuracy.value}
       />
       <RelatedItem
