@@ -58,6 +58,7 @@ export default makeRegistryExtension({
         if (!nextAvailableIDPerClass[classID]) {
           try {
             const itemPathPrefix = incompleteItemRefToItemPathPrefix({ subregisterID, classID });
+            // FIXME: the identifier should be global?
             const newIDResult = await getMapReducedData({
               chains: {
                 maxID: {
