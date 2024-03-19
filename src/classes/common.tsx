@@ -46,7 +46,9 @@ export interface CommonGRItemData {
 
 export const DEFAULTS: CommonGRItemData = {
   name: '',
-  identifier: 0,
+  // Negative identifiers are replaced with next available positive integers
+  // in afterApprovedCR hook.
+  identifier: -1,
   informationSources: [],
   remarks: '',
   aliases: [],
