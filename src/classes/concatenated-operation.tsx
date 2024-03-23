@@ -8,7 +8,7 @@ import { jsx } from '@emotion/react';
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import { itemRefToItemPath } from '@riboseinc/paneron-registry-kit/views/itemPathUtils';
-import { BrowserCtx } from '@riboseinc/paneron-registry-kit/views/BrowserCtx';
+//import { BrowserCtx } from '@riboseinc/paneron-registry-kit/views/BrowserCtx';
 import type { RegisterItem, InternalItemReference, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 
 import {
@@ -69,14 +69,18 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
     listItemView: CommonListItemView as ItemListView<ConcatenatedOperationData>,
 
     editView: function ConcatenatedOperationEditView ({ itemData, onChange, ...props }) {
-      const { useRegisterItemData } = React.useContext(BrowserCtx);
       const operationItemPaths = itemData.operations.map(ref => itemRefToItemPath(ref));
       const operationItemUUIDs = itemData.operations.map(ref => ref.itemID);
 
       /** Item data for every linked single operation. */
-      const operationItemData = useRegisterItemData({
-        itemPaths: operationItemPaths,
-      }).value as Record<string, RegisterItem<TransformationData | ConversionData> | null>;
+      const operationItemData = (typeof props.useRegisterItemData === 'function'
+        ? props.useRegisterItemData({
+          itemPaths: operationItemPaths,
+        }).value
+        : {}
+      ) as Record<string, RegisterItem<TransformationData | ConversionData> | null>;
+      // NOTE: We cannot obtain the above useRegisterItemData via context, apparently,
+      // so we pass it as prop again.
 
       /**
        * [source, target] CRS item paths for every linked single operation.
