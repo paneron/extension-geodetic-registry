@@ -312,7 +312,9 @@ export function RelatedItem<
 
   return (
     <GenericRelatedItemView
-      controlGroupProps={fill !== undefined ? { fill } : undefined}
+      controlGroupProps={React.useMemo(
+        (() => fill !== undefined ? { fill } : undefined),
+        [fill])}
       inputRef={inputRef}
       itemRef={itemRef}
       availableClassIDs={availableClassIDs}
