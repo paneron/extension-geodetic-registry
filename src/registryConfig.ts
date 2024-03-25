@@ -1,5 +1,3 @@
-import type { ItemClassConfiguration } from '@riboseinc/paneron-registry-kit/types';
-
 import { transformation } from './classes/transformation';
 import { concatenatedOperation } from './classes/concatenated-operation';
 import { conversion } from './classes/conversion';
@@ -20,7 +18,7 @@ import {
 } from './classes/coordinate-systems';
 
 
-export const itemClassConfiguration: Record<string, ItemClassConfiguration<any>> = {
+export const itemClassConfiguration = {
   "coordinate-ops--conversion": conversion,
   "coordinate-ops--transformation": transformation,
   "coordinate-ops--concatenated": concatenatedOperation,
@@ -42,4 +40,4 @@ export const itemClassConfiguration: Record<string, ItemClassConfiguration<any>>
   "coordinate-sys--vertical": verticalCoordinateSystem,
   "coordinate-sys--ellipsoidal": ellipsoidalCoordinateSystem,
   "coordinate-sys--spherical": sphericalCoordinateSystem,
-};
+} as const;
