@@ -18,7 +18,7 @@ import {
 } from './common';
 
 
-interface PrimeMeridianData extends CommonGRItemData {
+export interface PrimeMeridianData extends CommonGRItemData {
   longitudeFromGreenwich: number
   longitudeFromGreenwichUoM: string
 }
