@@ -317,7 +317,10 @@ export function RelatedItem<
         [fill])}
       inputRef={inputRef}
       itemRef={itemRef}
+
+      // Memo these?
       availableClassIDs={availableClassIDs}
+
       onClear={onClear}
       onChange={canSet ? handleSet : undefined}
       itemSorter={COMMON_PROPERTIES.itemSorter}
