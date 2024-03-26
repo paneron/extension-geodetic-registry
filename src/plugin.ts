@@ -37,9 +37,44 @@ const defaultSearchCriteria = {
   criteria: [{ key: 'item-class', query: defaultCriteria }],
 } as const;
 
+const itemClassGroups: Record<string, readonly (keyof typeof itemClassConfiguration)[]> = {
+  "Coordinate operations": [
+    'coordinate-ops--conversion',
+    'coordinate-ops--transformation',
+    'coordinate-ops--concatenated',
+  ],
+  "Coordinate reference systems": [
+    'crs--compound',
+    'crs--engineering',
+    'crs--geodetic',
+    'crs--projected',
+    'crs--vertical',
+  ],
+  "Coordinate systems": [
+    'coordinate-sys--cartesian',
+    'coordinate-sys--vertical',
+    'coordinate-sys--ellipsoidal',
+    'coordinate-sys--spherical',
+  ],
+  "Datums": [
+    'datums--engineering',
+    'datums--geodetic',
+    'datums--vertical',
+  ],
+  "Other": [
+    'ellipsoid',
+    'coordinate-sys-axis',
+    'coordinate-op-method',
+    'coordinate-op-parameter',
+    'prime-meridian',
+    'unit-of-measurement',
+  ],
+} as const;
+
 export default makeRegistryExtension({
   name: "ISO Geodetic Registry",
   itemClassConfiguration,
+  itemClassGroups,
   keyExpression: "obj.data.identifier || obj.id",
   defaultSearchCriteria: defaultSearchCriteria as any,
   alterApprovedCR: async function (crID, proposals, origItemData, newItemData, { getMapReducedData }) {
