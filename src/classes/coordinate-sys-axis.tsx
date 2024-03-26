@@ -74,17 +74,18 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
 
         <PropertyDetailView title="Unit of measurement">
           <RelatedItem
-            itemRef={props.itemData.unitOfMeasurement
-              ? { classID: 'unit-of-measurement', itemID: props.itemData.unitOfMeasurement }
-              : undefined
-            }
+            itemRef={React.useMemo(
+              (() => props.itemData.unitOfMeasurement
+                ? { classID: 'unit-of-measurement', itemID: props.itemData.unitOfMeasurement }
+                : undefined),
+              [props.itemData.unitOfMeasurement])}
             mode="id"
             onClear={props.onChange
-              && (() => props.onChange!(update(props.itemData, { $unset: ['unitOfMeasurement'] })))}
+              && React.useCallback(() => props.onChange!(update(props.itemData, { $unset: ['unitOfMeasurement'] })), [props.onChange, props.itemData])}
             onSet={props.onChange
-              ? ((spec) => props.onChange!(update(props.itemData, { unitOfMeasurement: spec })))
+              ? React.useCallback((spec) => props.onChange!(update(props.itemData, { unitOfMeasurement: spec })), [props.onChange, props.itemData])
               : undefined}
-            classIDs={['unit-of-measurement']}
+            classIDs={React.useMemo((() => ['unit-of-measurement']), []) as [string]}
           />
         </PropertyDetailView>
       </CommonEditView>
