@@ -38,10 +38,10 @@ const defaultSearchCriteria = {
 } as const;
 
 const itemClassGroups: Record<string, readonly (keyof typeof itemClassConfiguration)[]> = {
-  "Coordinate operations": [
-    'coordinate-ops--conversion',
-    'coordinate-ops--transformation',
-    'coordinate-ops--concatenated',
+  "Datums": [
+    'datums--engineering',
+    'datums--geodetic',
+    'datums--vertical',
   ],
   "Coordinate reference systems": [
     'crs--compound',
@@ -50,22 +50,22 @@ const itemClassGroups: Record<string, readonly (keyof typeof itemClassConfigurat
     'crs--projected',
     'crs--vertical',
   ],
+  "Coordinate operations": [
+    'coordinate-ops--conversion',
+    'coordinate-ops--concatenated',
+    'coordinate-ops--transformation',
+  ],
   "Coordinate systems": [
     'coordinate-sys--cartesian',
-    'coordinate-sys--vertical',
     'coordinate-sys--ellipsoidal',
     'coordinate-sys--spherical',
-  ],
-  "Datums": [
-    'datums--engineering',
-    'datums--geodetic',
-    'datums--vertical',
+    'coordinate-sys--vertical',
   ],
   "Other": [
-    'ellipsoid',
-    'coordinate-sys-axis',
     'coordinate-op-method',
     'coordinate-op-parameter',
+    'coordinate-sys-axis',
+    'ellipsoid',
     'prime-meridian',
     'unit-of-measurement',
   ],
