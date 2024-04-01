@@ -381,66 +381,65 @@ export const extents: ItemClassConfiguration<Extent> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<Extent>,
-    editView: (props) => (
+    editView: ({ itemData, ...props }) => 
       <ExtentEdit
         onChange={props.onChange ? (newData: Extent) => {
           if (!props.onChange) { return; }
-          props.onChange({ ...props, ...newData });
-        } : undefined} extent={props.itemData}>
+          props.onChange({ ...itemData, ...newData });
+        } : undefined} extent={itemData}>
 
         <PropertyDetailView title="North">
           {props.onChange
             ? <NumericInput
-                value={props.itemData.n}
+                value={itemData.n}
                 required
                 disabled={!props.onChange}
                 onChange={(evt) =>
-                  props.onChange?.({ ...props.itemData, n: evt.currentTarget.valueAsNumber })
+                  props.onChange?.({ ...itemData, n: evt.currentTarget.valueAsNumber })
                 }
               />
-            : <NumericInput readOnly value={props.itemData.n} />}
+            : <NumericInput readOnly value={itemData.n} />}
         </PropertyDetailView>
 
         <PropertyDetailView title="East">
           {props.onChange
             ? <NumericInput
-                value={props.itemData.e}
+                value={itemData.e}
                 required
                 disabled={!props.onChange}
                 onChange={(evt) =>
-                  props.onChange?.({ ...props.itemData, e: evt.currentTarget.valueAsNumber })
+                  props.onChange?.({ ...itemData, e: evt.currentTarget.valueAsNumber })
                 }
               />
-            : <NumericInput readOnly value={props.itemData.e} />}
+            : <NumericInput readOnly value={itemData.e} />}
         </PropertyDetailView>
 
         <PropertyDetailView title="South">
           {props.onChange
             ? <NumericInput
-                value={props.itemData.s}
+                value={itemData.s}
                 required
                 disabled={!props.onChange}
                 onChange={(evt) =>
-                  props.onChange?.({ ...props.itemData, s: evt.currentTarget.valueAsNumber })
+                  props.onChange?.({ ...itemData, s: evt.currentTarget.valueAsNumber })
                 }
               />
-            : <NumericInput readOnly value={props.itemData.s} />}
+            : <NumericInput readOnly value={itemData.s} />}
         </PropertyDetailView>
 
          <PropertyDetailView title="West">
           {props.onChange
             ? <NumericInput
-                value={props.itemData.w}
+                value={itemData.w}
                 required
                 disabled={!props.onChange}
                 onChange={(evt) =>
-                  props.onChange?.({ ...props.itemData, w: evt.currentTarget.valueAsNumber })
+                  props.onChange?.({ ...itemData, w: evt.currentTarget.valueAsNumber })
                 }
               />
-            : <NumericInput readOnly value={props.itemData.w} />}
+            : <NumericInput readOnly value={itemData.w} />}
         </PropertyDetailView>
       </ExtentEdit>
-    ),
   },
 
   validatePayload: async () => true,
