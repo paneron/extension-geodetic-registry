@@ -12,13 +12,19 @@ import { jsx, css, ClassNames } from '@emotion/react';
 import React from 'react';
 import {
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
-  MenuItem, Tag, ProgressBar,
-  Colors,
-} from '@blueprintjs/core';
+  MenuItem, Tag, ProgressBar, NumericInput,
+  Colors} from '@blueprintjs/core';
 import { Select2 as Select, type ItemRenderer } from '@blueprintjs/select';
 import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
 import { useDebounce, DatasetContext } from '@riboseinc/paneron-extension-kit';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit';
+import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import { 
+  type CommonGRItemData,
+  DEFAULTS as SHARED_DEFAULTS,
+  ListItemView as CommonListItemView,
+  COMMON_PROPERTIES,
+} from './common';
 
 
 interface ExtentBoundingPolygonPoint {
@@ -29,7 +35,7 @@ interface ExtentBoundingPolygonPoint {
 }
 
 /** A.k.a. “domain of validity”. */
-export interface Extent {
+export interface Extent extends CommonGRItemData {
   n: number
   e: number
   s: number
@@ -56,8 +62,17 @@ function isExtent(val: any): val is Extent {
 }
 
 /** Placeholder/stub extent value. */
-export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 } as const;
-
+export const DEFAULT_EXTENT: Extent = {
+  n: 0,
+  e: 0,
+  s: 0,
+  w: 0,
+  name: '',
+  identifier:0,
+  remarks: '',
+  informationSources: [], 
+  aliases:[]
+} as const;
 
 /**
  * A widget for editing extent data.
@@ -351,3 +366,82 @@ const EXTENT_REDUCE_FUNC = `
     return accumulator;
   }
 `;
+
+export const extents: ItemClassConfiguration<Extent> = {
+  ...COMMON_PROPERTIES,
+  meta: {
+    title: "Extent",
+    description: "Extent",
+    id: 'extents',
+    alternativeNames: [],
+  },
+  defaults: {
+    ...SHARED_DEFAULTS,
+    ...DEFAULT_EXTENT,
+  },
+  views: {
+    listItemView: CommonListItemView as ItemListView<Extent>,
+    editView: ({ itemData, ...props }) => 
+      <ExtentEdit
+        onChange={props.onChange ? (newData: Extent) => {
+          if (!props.onChange) { return; }
+          props.onChange({ ...itemData, ...newData });
+        } : undefined} extent={itemData}>
+
+        <PropertyDetailView title="North">
+          {props.onChange
+            ? <NumericInput
+                value={itemData.n}
+                required
+                disabled={!props.onChange}
+                onChange={(evt) =>
+                  props.onChange?.({ ...itemData, n: evt.currentTarget.valueAsNumber })
+                }
+              />
+            : <NumericInput readOnly value={itemData.n} />}
+        </PropertyDetailView>
+
+        <PropertyDetailView title="East">
+          {props.onChange
+            ? <NumericInput
+                value={itemData.e}
+                required
+                disabled={!props.onChange}
+                onChange={(evt) =>
+                  props.onChange?.({ ...itemData, e: evt.currentTarget.valueAsNumber })
+                }
+              />
+            : <NumericInput readOnly value={itemData.e} />}
+        </PropertyDetailView>
+
+        <PropertyDetailView title="South">
+          {props.onChange
+            ? <NumericInput
+                value={itemData.s}
+                required
+                disabled={!props.onChange}
+                onChange={(evt) =>
+                  props.onChange?.({ ...itemData, s: evt.currentTarget.valueAsNumber })
+                }
+              />
+            : <NumericInput readOnly value={itemData.s} />}
+        </PropertyDetailView>
+
+         <PropertyDetailView title="West">
+          {props.onChange
+            ? <NumericInput
+                value={itemData.w}
+                required
+                disabled={!props.onChange}
+                onChange={(evt) =>
+                  props.onChange?.({ ...itemData, w: evt.currentTarget.valueAsNumber })
+                }
+              />
+            : <NumericInput readOnly value={itemData.w} />}
+        </PropertyDetailView>
+      </ExtentEdit>
+  },
+
+  validatePayload: async () => true,
+  sanitizePayload: async (t) => t,
+};
