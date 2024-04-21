@@ -81,9 +81,9 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
               [props.itemData.unitOfMeasurement])}
             mode="id"
             onClear={props.onChange
-              && React.useCallback(() => props.onChange!(update(props.itemData, { $unset: ['unitOfMeasurement'] })), [props.onChange, props.itemData])}
+              && (() => props.onChange!(update(props.itemData, { $unset: ['unitOfMeasurement'] })))}
             onSet={props.onChange
-              ? React.useCallback((spec) => props.onChange!(update(props.itemData, { unitOfMeasurement: spec })), [props.onChange, props.itemData])
+              ? (spec) => props.onChange!(update(props.itemData, { unitOfMeasurement: spec }))
               : undefined}
             classIDs={React.useMemo((() => ['unit-of-measurement']), []) as [string]}
           />
