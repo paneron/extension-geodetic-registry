@@ -48,8 +48,7 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
   },
   views: {
     listItemView: CommonListItemView as ItemListView<EllipsoidData>,
-
-    editView: ({ itemData, onChange, itemRef, ...props }) => <>
+    editView: ({ itemData, onChange, itemRef, ...props }) => (
       <CommonEditView
           useRegisterItemData={props.useRegisterItemData}
           getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
@@ -124,7 +123,7 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
             </>
           : null}
       </CommonEditView>
-    </>,
+    ),
   },
 
   validatePayload: async () => true,
