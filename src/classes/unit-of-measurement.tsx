@@ -57,7 +57,7 @@ export const DEFAULTS: UoMData = {
   symbol: null,
   denominator: null,
   numerator: null,
-};
+} as const;
 
 
 export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
