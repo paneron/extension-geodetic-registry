@@ -342,6 +342,7 @@ const EXTENT_MAP_FUNC = `
     });
   }
 `;
+
 const EXTENT_REDUCE_FUNC = `
   if (!accumulator.find) {
     return value ? [accumulator, value] : [accumulator];
