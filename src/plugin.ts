@@ -62,6 +62,7 @@ const itemClassGroups: Record<string, readonly (keyof typeof itemClassConfigurat
     'coordinate-sys--vertical',
   ],
   "Other": [
+    'extent',
     'coordinate-op-method',
     'coordinate-op-parameter',
     'coordinate-sys-axis',

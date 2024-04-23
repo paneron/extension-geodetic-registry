@@ -8,6 +8,7 @@
  * Still, users may want to import an extent from another item.
  */
 
+import update from 'immutability-helper';
 import { jsx, css, ClassNames } from '@emotion/react';
 import React from 'react';
 import {
@@ -20,6 +21,19 @@ import { Tooltip2 as Tooltip } from '@blueprintjs/popover2';
 import { useDebounce, DatasetContext } from '@riboseinc/paneron-extension-kit';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
+import type {
+  ItemClassConfiguration,
+  ItemListView,
+} from '@riboseinc/paneron-registry-kit/types';
+
+import {
+  type CommonGRItemData,
+  DEFAULTS as SHARED_DEFAULTS,
+  COMMON_PROPERTIES,
+  EditView as CommonEditView,
+  ListItemView as CommonListItemView,
+} from './common';
+
 
 interface ExtentBoundingPolygonPoint {
   /** Latitude (+/-90, Northern hemisphere positive) */
@@ -28,7 +42,6 @@ interface ExtentBoundingPolygonPoint {
   lon: number
 }
 
-/** A.k.a. “domain of validity”. */
 export interface Extent {
   n: number
   e: number
@@ -43,6 +56,12 @@ export interface Extent {
   /** End date on which item stops being valid. */
   temporalExtentEndDate?: string
 }
+
+/** A.k.a. “domain of validity”. */
+export interface ExtentItemData extends CommonGRItemData {
+  extent: Extent
+}
+
 const EXTENT_COORDS = ['n', 'e', 's', 'w'] as const;
 
 function isExtent(val: any): val is Extent {
@@ -57,6 +76,11 @@ function isExtent(val: any): val is Extent {
 
 /** Placeholder/stub extent value. */
 export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 } as const;
+
+export const EXTENT_DEFAULTS: ExtentItemData = {
+  ...SHARED_DEFAULTS,
+  extent: DEFAULT_EXTENT,
+} as const;
 
 
 /**
@@ -352,3 +376,44 @@ const EXTENT_REDUCE_FUNC = `
     return accumulator;
   }
 `;
+
+export const extent: ItemClassConfiguration<ExtentItemData> = {
+  ...COMMON_PROPERTIES,
+  meta: {
+    title: "Extent",
+    description: "Extent",
+    id: 'extent',
+    alternativeNames: [],
+  },
+  defaults: {
+    ...SHARED_DEFAULTS,
+    extent: DEFAULT_EXTENT,
+  },
+  views: {
+    listItemView: CommonListItemView as ItemListView<ExtentItemData>,
+    editView: (props) => (
+      <CommonEditView
+          useRegisterItemData={props.useRegisterItemData}
+          getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
+          itemData={props.itemData}
+          itemRef={props.itemRef}
+          onChange={props.onChange ? (newData: CommonGRItemData) => {
+            if (!props.onChange) { return; }
+            props.onChange({ ...props.itemData, ...newData });
+          } : undefined}>
+
+        <ExtentEdit
+          extent={props.itemData.extent}
+          onChange={props.onChange
+            ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+            : undefined}
+        />
+
+        {props.children}
+
+      </CommonEditView>
+    ),
+  },
+  validatePayload: async () => true,
+  sanitizePayload: async (t) => t,
+};
