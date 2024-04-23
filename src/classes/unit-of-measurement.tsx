@@ -68,10 +68,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
     id: 'unit-of-measurement',
     alternativeNames: [],
   },
-  defaults: {
-    ...SHARED_DEFAULTS,
-    ...DEFAULTS,
-  },
+  defaults: DEFAULTS,
   views: {
     listItemView: CommonListItemView as ItemListView<UoMData>,
     editView: (props) => (
