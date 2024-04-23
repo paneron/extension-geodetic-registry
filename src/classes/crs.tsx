@@ -11,14 +11,16 @@ import type {
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
+  type Extent,
+  ExtentEdit,
+  DEFAULT_EXTENT,
+} from './extent';
+import {
   type CommonGRItemData,
   DEFAULTS as SHARED_DEFAULTS,
   COMMON_PROPERTIES,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  type Extent,
-  DEFAULT_EXTENT,
-  ExtentEdit,
   RelatedItem,
 } from './common';
 

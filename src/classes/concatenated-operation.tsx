@@ -12,15 +12,17 @@ import { itemRefToItemPath } from '@riboseinc/paneron-registry-kit/views/itemPat
 import type { RegisterItem, InternalItemReference, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 
 import {
+  type Extent,
+  ExtentEdit,
+  DEFAULT_EXTENT,
+} from './extent';
+import {
   type CommonGRItemData,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
   ItemList,
-  type Extent,
-  ExtentEdit,
-  DEFAULT_EXTENT,
   RelatedItem,
   type Accuracy,
   AccuracyEdit,

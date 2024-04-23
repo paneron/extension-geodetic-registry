@@ -10,15 +10,17 @@ import { Button, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core'
 import type { Payload, Citation, ItemClassConfiguration, InternalItemReference, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 import {
+  type Extent,
+  ExtentEdit,
+  DEFAULT_EXTENT,
+} from './extent';
+import {
   type CommonGRItemData,
   COMMON_PROPERTIES,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
-  type Extent,
-  ExtentEdit,
   InformationSourceEdit,
-  DEFAULT_EXTENT,
   ItemList,
   RelatedItem,
   type Accuracy,

@@ -10,16 +10,18 @@ import type { Payload, ItemClassConfiguration, ItemListView } from '@riboseinc/p
 import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
 import {
+  type Extent,
+  ExtentEdit,
+  DEFAULT_EXTENT,
+} from './extent';
+import {
   type CommonGRItemData,
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
-  type Extent,
-  ExtentEdit,
   ItemList,
   RelatedItem,
-  DEFAULT_EXTENT,
 } from './common';
 
 

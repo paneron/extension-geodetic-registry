@@ -30,11 +30,6 @@ import type {
 import { incompleteItemRefToItemPathPrefix, GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
 
-// For backwards compatibility
-import { type Extent, ExtentEdit, DEFAULT_EXTENT } from './extent';
-export { type Extent, ExtentEdit, DEFAULT_EXTENT };
-
-
 export interface CommonGRItemData {
   name: string
   identifier: number
