@@ -397,6 +397,7 @@ export const extent: ItemClassConfiguration<ExtentItemData> = {
           getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
           itemData={props.itemData}
           itemRef={props.itemRef}
+          hideRemarks hideAliases
           onChange={props.onChange ? (newData: CommonGRItemData) => {
             if (!props.onChange) { return; }
             props.onChange({ ...props.itemData, ...newData });

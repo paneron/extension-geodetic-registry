@@ -24,7 +24,7 @@ import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
   Citation,
   ItemClassConfiguration,
-  ItemEditView,
+  ItemEditViewProps,
   InternalItemReference,
 } from '@riboseinc/paneron-registry-kit/types';
 import { incompleteItemRefToItemPathPrefix, GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
@@ -116,7 +116,10 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
 } as const;
 
 
-export const EditView: ItemEditView<CommonGRItemData> = function (props) {
+export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
+  hideRemarks?: boolean,
+  hideAliases?: boolean,
+}> = function (props) {
   const { itemData, itemRef, onChange, children } = props;
   const { getMapReducedData, performOperation, operationKey } = React.useContext(DatasetContext);
 
@@ -160,12 +163,14 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
     <SplitView
         aside={<>
 
-          <AliasesEdit
-            aliases={itemData.aliases}
-            onChange={onChange
-              ? (newAliases) => onChange!(update(itemData, { aliases: { $set: newAliases } } ))
-              : undefined}
-          />
+          {props.hideAliases
+            ? null
+            : <AliasesEdit
+                aliases={itemData.aliases}
+                onChange={onChange
+                  ? (newAliases) => onChange!(update(itemData, { aliases: { $set: newAliases } } ))
+                  : undefined}
+              />}
 
           <ItemList
             items={itemData.informationSources}
@@ -220,11 +225,13 @@ export const EditView: ItemEditView<CommonGRItemData> = function (props) {
         <InputGroup required value={itemData.name} {...textInputProps('name')} />
       </PropertyDetailView>
 
-      <PropertyDetailView
-          title="Remarks"
-          subLabel="Comments on or information about this item.">
-        <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
-      </PropertyDetailView>
+      {props.hideRemarks
+        ? null
+        : <PropertyDetailView
+              title="Remarks"
+              subLabel="Comments on or information about this item.">
+            <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
+          </PropertyDetailView>}
 
       {children}
 
