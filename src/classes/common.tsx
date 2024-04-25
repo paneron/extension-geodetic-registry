@@ -163,15 +163,6 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
     <SplitView
         aside={<>
 
-          {props.hideAliases
-            ? null
-            : <AliasesEdit
-                aliases={itemData.aliases}
-                onChange={onChange
-                  ? (newAliases) => onChange!(update(itemData, { aliases: { $set: newAliases } } ))
-                  : undefined}
-              />}
-
           <ItemList
             items={itemData.informationSources}
             itemLabel="citation (information source)"
@@ -193,6 +184,15 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
             }}
           />
         </>}>
+
+      {props.hideAliases
+        ? null
+        : <AliasesEdit
+            aliases={itemData.aliases}
+            onChange={onChange
+              ? (newAliases) => onChange!(update(itemData, { aliases: { $set: newAliases } } ))
+              : undefined}
+          />}
 
       <PropertyDetailView
           label="GR identifier"
