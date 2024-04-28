@@ -40,10 +40,10 @@ export interface CommonGRItemData {
 
 
 export const DEFAULTS: CommonGRItemData = {
-  name: '',
-  // Negative identifiers are replaced with next available positive integers
+  name: "Unnamed item",
+  // Non-positive identifiers are replaced with next available positive integers
   // in afterApprovedCR hook.
-  identifier: -1,
+  identifier: 0,
   informationSources: [],
   remarks: '',
   aliases: [],
@@ -52,9 +52,7 @@ export const DEFAULTS: CommonGRItemData = {
 
 export function getInformationSourceStub(): Readonly<Citation> {
   return {
-    title: '',
-    author: '',
-    publisher: '',
+    title: "Untitled citation",
     revisionDate: null,
     publicationDate: null,
     seriesIssueID: null,
