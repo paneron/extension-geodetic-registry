@@ -514,21 +514,48 @@ export const InformationSourceEdit: React.FC<{
   citation: Citation
   onChange?: (newCitation: Citation) => void
 }> = function ({ citation, onChange }) {
+  function getChangeHandler
+  <F extends keyof Omit<Citation, 'alternateTitles'>>
+  (field: F, emptyValue?: '' | null | 'unset' | 'undefined'):
+  undefined | ((val: Citation[F]) => void) {
+    const empty = emptyValue === undefined
+      ? ''
+      : emptyValue === 'undefined'
+        ? undefined
+        : emptyValue;
+    return onChange
+      ? (val) => {
+          let newCitation: Citation;
+          if ((val as string)?.trim() === '') {
+            if (empty === 'unset') {
+              newCitation = update(citation, { $unset: [field] });
+            } else {
+              console.debug("Setting to empty", empty);
+              newCitation = update(citation, { [field]: { $set: empty } });
+            }
+          } else {
+            newCitation = update(citation, { [field]: { $set: val } });
+          }
+          return onChange!(newCitation);
+        }
+      : undefined;
+  }
+  const getOnChange = React.useCallback(getChangeHandler, [onChange, citation]);
   return (
     <>
-      <SimpleField label="Author" val={citation.author} onChange={onChange ? (author) => onChange!({ ...citation, author }) : undefined} />
-      <SimpleField label="Publisher" val={citation.publisher} onChange={onChange ? (publisher) => onChange!({ ...citation, publisher }) : undefined} />
-      <SimpleField label="Publication Date" val={citation.publicationDate} onChange={onChange ? (publicationDate) => onChange!({ ...citation, publicationDate }) : undefined} />
-      <SimpleField label="Revision Date" val={citation.revisionDate} onChange={onChange ? (revisionDate) => onChange!({ ...citation, revisionDate }) : undefined} />
-      <SimpleField label="Title" val={citation.title} onChange={onChange ? (title) => onChange!({ ...citation, title }) : undefined} />
-      <SimpleField label="Name of series/journal/periodical" val={citation.seriesName ?? ''} onChange={onChange ? (seriesName) => onChange!({ ...citation, seriesName }) : undefined} />
-      <SimpleField label="Series issue ID" val={citation.seriesIssueID ?? ''} onChange={onChange ? (seriesIssueID) => onChange!({ ...citation, seriesIssueID }) : undefined} />
-      <SimpleField label="Series page" val={citation.seriesPage ?? ''} onChange={onChange ? (seriesPage) => onChange!({ ...citation, seriesPage }) : undefined} />
-      <SimpleField label="Edition" val={citation.edition ?? ''} onChange={onChange ? (edition) => onChange!({ ...citation, edition }) : undefined} />
-      <SimpleField label="Other details" val={citation.otherDetails ?? ''} onChange={onChange ? (otherDetails) => onChange!({ ...citation, otherDetails }) : undefined} />
-      <SimpleField label="ISBN" val={citation.isbn ?? ''} onChange={onChange ? (isbn) => onChange!({ ...citation, isbn }) : undefined} />
-      <SimpleField label="ISSN" val={citation.issn ?? ''} onChange={onChange ? (issn) => onChange!({ ...citation, issn }) : undefined} />
-      <SimpleField label="URI" val={citation.uri ?? ''} onChange={onChange ? (uri) => onChange!({ ...citation, uri }) : undefined} />
+      <SimpleField label="Author" val={citation.author} onChange={getOnChange('author', 'unset')} />
+      <SimpleField label="Publisher" val={citation.publisher} onChange={getOnChange('publisher', 'unset')} />
+      <SimpleField label="Publication Date" val={citation.publicationDate} onChange={getOnChange('publicationDate', 'unset')} />
+      <SimpleField label="Revision Date" val={citation.revisionDate} onChange={getOnChange('revisionDate', 'unset')} />
+      <SimpleField label="Title" val={citation.title} onChange={getOnChange('title')} />
+      <SimpleField label="Name of series/journal/periodical" val={citation.seriesName ?? ''} onChange={getOnChange('seriesName', null)} />
+      <SimpleField label="Series issue ID" val={citation.seriesIssueID ?? ''} onChange={getOnChange('seriesIssueID', null)} />
+      <SimpleField label="Series page" val={citation.seriesPage ?? ''} onChange={getOnChange('seriesPage', null)} />
+      <SimpleField label="Edition" val={citation.edition ?? ''} onChange={getOnChange('edition', null)} />
+      <SimpleField label="Other details" val={citation.otherDetails ?? ''} onChange={getOnChange('otherDetails')} />
+      <SimpleField label="ISBN" val={citation.isbn ?? ''} onChange={getOnChange('isbn', null)} />
+      <SimpleField label="ISSN" val={citation.issn ?? ''} onChange={getOnChange('issn', null)} />
+      <SimpleField label="URI" val={citation.uri ?? ''} onChange={getOnChange('uri', 'unset')} />
     </>
   );
 };
