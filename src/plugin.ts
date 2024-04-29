@@ -131,6 +131,6 @@ export default makeRegistryExtension({
     };
   },
   getQuickSearchPredicate: function getQuickSearchPredicate(quickSearchString) {
-    return `[obj.data?.name ?? '', obj.data?.identifier?.toString()].join('').toLowerCase().indexOf("${quickSearchString.toLowerCase()}") >= 0`;
+    return `[obj.data?.name ?? '', obj.data?.identifier?.toString(), ...(obj.data?.aliases ?? [])].join('').toLowerCase().indexOf("${quickSearchString.toLowerCase()}") >= 0`;
   },
 });
