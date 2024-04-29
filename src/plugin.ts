@@ -87,7 +87,7 @@ export default makeRegistryExtension({
       const payload: Payload | null = newItemData[itemDataPath]?.data ?? null;
       const preexistingData: Payload | null = origItemData[itemDataPath]?.data ?? null;
       if (isAddition(proposal) && payload) {
-        if (payload.identifier >= 0) {
+        if (payload.identifier > 0) {
           throw new Error("Additions must have negative identifiers at approval time");
         }
         const { subregisterID, classID } = itemPathToItemRef(false, itemDataPath);
