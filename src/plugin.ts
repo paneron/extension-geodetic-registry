@@ -76,7 +76,7 @@ export default makeRegistryExtension({
   name: "ISO Geodetic Registry",
   itemClassConfiguration,
   itemClassGroups,
-  keyExpression: "obj.data.identifier || obj.id",
+  keyExpression: "new Date(obj.dateAccepted).getTime() + (obj.data.identifier || (new Date()).getTime())",
   defaultSearchCriteria: defaultSearchCriteria as any,
   alterApprovedCR: async function (crID, proposals, origItemData, newItemData, { getMapReducedData }) {
     /** Next unoccupied identifier per class ID. */
