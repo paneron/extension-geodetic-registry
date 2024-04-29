@@ -21,7 +21,7 @@
 
 
 import { makeRegistryExtension, CRITERIA_CONFIGURATION } from '@riboseinc/paneron-registry-kit';
-import { type Payload, itemPathInCR, itemPathToItemRef, incompleteItemRefToItemPathPrefix, isAddition } from '@riboseinc/paneron-registry-kit';
+import { type Payload, itemPathInCR, itemPathToItemRef, isAddition } from '@riboseinc/paneron-registry-kit';
 
 import { itemClassConfiguration } from './registryConfig';
 
@@ -90,16 +90,14 @@ export default makeRegistryExtension({
         if (payload.identifier > 0) {
           throw new Error("Additions must have negative identifiers at approval time");
         }
-        const { subregisterID, classID } = itemPathToItemRef(false, itemDataPath);
+        const { classID } = itemPathToItemRef(false, itemDataPath);
         if (!nextAvailableIDPerClass[classID]) {
           try {
-            const itemPathPrefix = incompleteItemRefToItemPathPrefix({ subregisterID, classID });
-            // FIXME: the identifier should be global?
             const newIDResult = await getMapReducedData({
               chains: {
                 maxID: {
                   mapFunc: `
-                    if (key.startsWith("${itemPathPrefix}")) { emit(value?.data?.identifier ?? 1); }
+                    if (value?.data?.identifier) { emit(value.data.identifier); }
                   `,
                   reduceFunc: `
                     return (value > accumulator) ? value : accumulator;
@@ -120,8 +118,8 @@ export default makeRegistryExtension({
         newItemData[itemDataPath]!.data.identifier = nextAvailableIDPerClass[classID];
         // Bump next available identifier
         nextAvailableIDPerClass[classID] += 1;
-      } else if (payload && payload.identifier < 0) {
-        throw new Error("Items with negative identifier cannot be amended or clarified");
+      } else if (payload && payload.identifier <= 0) {
+        throw new Error("Items with non-positive integers as identifiers cannot be amended or clarified");
       } else if (preexistingData && payload && preexistingData.identifier !== payload.identifier) {
         throw new Error("Item identifier cannot be changed after addition");
       }
