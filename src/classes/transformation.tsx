@@ -64,6 +64,8 @@ function getParameterStub(): TransformationParameter {
 
 export interface TransformationData extends CommonGRItemData {
   extent: Extent
+  /** UUID of relevant Extent item. */
+  extentRef?: string
   scope: string
   operationVersion: string
   accuracy: Accuracy
@@ -202,6 +204,20 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 value={itemData.scope ?? ''}
                 readOnly={!onChange}
                 onChange={(evt) => onChange?.({ ...itemData, scope: evt.currentTarget.value })}
+              />
+            </PropertyDetailView>
+
+            <PropertyDetailView label="Extent reference">
+              <RelatedItem
+                itemRef={itemData.extentRef ? { classID: 'extent', itemID: itemData.extentRef } : undefined}
+                mode="id"
+                classIDs={['extent']}
+                onClear={onChange
+                  ? () => onChange!({ ...itemData, extentRef: undefined })
+                  : undefined}
+                onSet={onChange
+                  ? (spec) => onChange!(update(itemData, { extentRef: spec }))
+                  : undefined}
               />
             </PropertyDetailView>
 
