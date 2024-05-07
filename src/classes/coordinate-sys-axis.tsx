@@ -6,7 +6,7 @@ import { jsx } from '@emotion/react';
 import React from 'react';
 
 import { InputGroup } from '@blueprintjs/core';
-import { type ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
+import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import {
   type CommonGRItemData,
