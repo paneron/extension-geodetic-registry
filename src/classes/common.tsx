@@ -18,14 +18,13 @@ import {
   UL,
 } from '@blueprintjs/core';
 
-import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
   Citation,
   ItemClassConfiguration,
   ItemEditViewProps,
   InternalItemReference,
 } from '@riboseinc/paneron-registry-kit/types';
-import { incompleteItemRefToItemPathPrefix, GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
+import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
 
 export interface CommonGRItemData {
@@ -116,8 +115,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
   hideRemarks?: boolean,
   hideAliases?: boolean,
 }> = function (props) {
-  const { itemData, itemRef, onChange, children } = props;
-  const { getMapReducedData, performOperation, operationKey } = React.useContext(DatasetContext);
+  const { itemData, onChange, children } = props;
 
   function textInputProps
   <F extends keyof Omit<CommonGRItemData, 'informationSource'>>
@@ -128,30 +126,6 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
         if (!onChange) { return; }
         onChange({ ...itemData, [fieldName]: evt.currentTarget.value })
       },
-    }
-  }
-
-  async function handleGetNewID() {
-    if (onChange) {
-      const { subregisterID, classID } = itemRef;
-      const itemPath = incompleteItemRefToItemPathPrefix({ subregisterID, classID });
-      const newIDResult = await getMapReducedData({
-        chains: {
-          maxID: {
-            mapFunc: `
-              if (key.startsWith("${itemPath}")) { emit(value?.data?.identifier ?? 0); }
-            `,
-            reduceFunc: `
-              return (value > accumulator) ? (value + 1) : accumulator;
-            `,
-          },
-        },
-      });
-      const newID: number = newIDResult.maxID;
-      console.debug("Want to specify new ID", newID);
-      onChange({ ...itemData, identifier: newID });
-    } else {
-      throw new Error("Dataset is read-only");
     }
   }
 
@@ -171,23 +145,11 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
               required
               value={itemData.identifier}
               css={css`.bp4-input-group { width: 6em; }`}
-              buttonPosition={!onChange ? 'none' : undefined}
-              readOnly={!onChange}
+              buttonPosition="none"
+              readOnly
               min={-Infinity}
               max={Infinity}
-              onValueChange={onChange
-                ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
-                : undefined}
             />
-            {onChange
-              ? <Button
-                  icon='reset'
-                  outlined
-                  title="Suggest latest ID"
-                  disabled={operationKey !== undefined}
-                  onClick={performOperation('obtaining new ID', handleGetNewID)}
-                />
-              : null}
           </ControlGroup>
         </PropertyDetailView>
 
