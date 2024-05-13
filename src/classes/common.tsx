@@ -2,7 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update, { type Spec } from 'immutability-helper';
-import React, { type ReactChildren, type ReactNode } from 'react';
+import React from 'react';
 import { jsx, css } from '@emotion/react';
 
 import {
@@ -12,7 +12,6 @@ import {
   ControlGroup,
   InputGroup,
   Colors,
-  Classes,
   NumericInput,
   TextArea,
   OL,
@@ -158,30 +157,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
   }
 
   return (
-    <SplitView
-        aside={<>
-
-          <ItemList
-            items={itemData.informationSources}
-            itemLabel="citation (information source)"
-            itemLabelPlural="citations"
-            subLabel="Source citation information — ISO 19115 B 3.2.1"
-            placeholderItem={getInformationSourceStub()}
-            onChangeItems={onChange
-              ? (spec) => onChange!(update(itemData, { informationSources: spec }))
-              : undefined}
-            itemRenderer={function renderCitation (item, _idx, handleChange, deleteButton) {
-              return <PropertyDetailView helperText={deleteButton}>
-                <InformationSourceEdit
-                  citation={item}
-                  onChange={handleChange
-                    ? (newSource) => handleChange({ $set: newSource })
-                    : undefined}
-                  />
-              </PropertyDetailView>
-            }}
-          />
-        </>}>
+    <div>
 
       {props.hideAliases
         ? null
@@ -233,7 +209,28 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
 
       {children}
 
-    </SplitView>
+      <ItemList
+        items={itemData.informationSources}
+        itemLabel="citation (information source)"
+        itemLabelPlural="citations"
+        subLabel="Source citation information — ISO 19115 B 3.2.1"
+        placeholderItem={getInformationSourceStub()}
+        onChangeItems={onChange
+          ? (spec) => onChange!(update(itemData, { informationSources: spec }))
+          : undefined}
+        itemRenderer={function renderCitation (item, _idx, handleChange, deleteButton) {
+          return <PropertyDetailView helperText={deleteButton}>
+            <InformationSourceEdit
+              citation={item}
+              onChange={handleChange
+                ? (newSource) => handleChange({ $set: newSource })
+                : undefined}
+              />
+          </PropertyDetailView>
+        }}
+      />
+
+    </div>
   );
 };
 
@@ -576,49 +573,6 @@ React.memo(function CommonListItemView (props) {
     p1.itemData.identifier === p2.itemData.identifier &&
     p1.itemData.name === p2.itemData.name
 ));
-
-
-const SplitView: React.FC<{
-  aside?: ReactChildren | ReactNode
-  className?: string
-}> = React.memo(function ({ children, aside, className }) {
-  return (
-    <div css={css`
-        position: absolute; inset: 0;
-
-        display: flex; flex-flow: row nowrap; overflow: hidden;
-
-        @media (max-width: 1000px) {
-          flex-flow: column nowrap;
-        }
-
-        & > * { padding: 1rem; }`} className={className}>
-
-      <div css={css`
-        overflow-y: auto; flex: 1;
-        background: ${Colors.LIGHT_GRAY5};
-        .bp4-dark & {
-          background: ${Colors.DARK_GRAY3};
-        }
-      `}>
-        {children}
-      </div>
-
-      <aside
-        className={Classes.ELEVATION_1}
-        css={css`
-          overflow-y: auto;
-          flex-basis: 45%;
-          background: ${Colors.LIGHT_GRAY4};
-          .bp4-dark & {
-            background: ${Colors.DARK_GRAY4};
-          }
-      `}>
-        {aside}
-      </aside>
-    </div>
-  );
-});
 
 
 export interface NumericValueWithUoM {
