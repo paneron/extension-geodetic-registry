@@ -158,6 +158,50 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
   return (
     <div>
 
+      <div css={css`display: flex; flex-flow: row nowrap; gap: 20px;`}>
+
+        <PropertyDetailView
+            label="GR identifier"
+            css={css`width: 16em;`}
+            helperText={onChange
+              ? "Unique across all item classes in this register. For not-yet-accepted items, must not be a positive integer."
+              : undefined}>
+          <ControlGroup>
+            <NumericInput
+              required
+              value={itemData.identifier}
+              css={css`.bp4-input-group { width: 6em; }`}
+              buttonPosition={!onChange ? 'none' : undefined}
+              readOnly={!onChange}
+              min={-Infinity}
+              max={Infinity}
+              onValueChange={onChange
+                ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
+                : undefined}
+            />
+            {onChange
+              ? <Button
+                  icon='reset'
+                  outlined
+                  title="Suggest latest ID"
+                  disabled={operationKey !== undefined}
+                  onClick={performOperation('obtaining new ID', handleGetNewID)}
+                />
+              : null}
+          </ControlGroup>
+        </PropertyDetailView>
+
+        <PropertyDetailView
+            label="Name"
+            css={css`flex-grow: 1;`}
+            helperText={onChange
+              ? "Unique name for the item in this register."
+              : undefined}>
+          <InputGroup required value={itemData.name} {...textInputProps('name')} />
+        </PropertyDetailView>
+
+      </div>
+
       {props.hideAliases
         ? null
         : <AliasesEdit
@@ -167,36 +211,6 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
               : undefined}
           />}
 
-      <PropertyDetailView
-          label="GR identifier"
-          subLabel="Globally unique, approximately sequential numerical ID assigned to the item in this register.">
-        <ControlGroup>
-          <NumericInput
-            required
-            value={itemData.identifier}
-            buttonPosition={!onChange ? 'none' : undefined}
-            readOnly={!onChange}
-            min={-Infinity}
-            max={Infinity}
-            onValueChange={onChange
-              ? (val) => (onChange ? onChange({ ...itemData, identifier: val }) : void 0)
-              : undefined}
-          />
-          {onChange
-            ? <Button
-                icon='reset'
-                outlined
-                title="Suggest latest ID"
-                disabled={operationKey !== undefined}
-                onClick={performOperation('obtaining new ID', handleGetNewID)}
-              />
-            : null}
-        </ControlGroup>
-      </PropertyDetailView>
-
-      <PropertyDetailView label="Name" subLabel="Unique name for this item.">
-        <InputGroup required value={itemData.name} {...textInputProps('name')} />
-      </PropertyDetailView>
 
       {props.hideRemarks
         ? null
