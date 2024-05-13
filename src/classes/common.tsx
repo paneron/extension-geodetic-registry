@@ -18,7 +18,6 @@ import {
   UL,
 } from '@blueprintjs/core';
 
-
 import { DatasetContext } from '@riboseinc/paneron-extension-kit/context';
 import type {
   Citation,
