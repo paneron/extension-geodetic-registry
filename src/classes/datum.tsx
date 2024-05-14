@@ -25,6 +25,10 @@ import {
 export interface DatumData extends CommonGRItemData {
   scope: string
   extent: Extent
+
+  /** UUID of relevant Extent item. */
+  extentRef?: string
+
   /** A.k.a. “anchor”. */
   originDescription: string
 
@@ -100,6 +104,20 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
             ...props.itemData,
             coordinateReferenceEpoch: evt.currentTarget.value,
           })}
+        />
+      </PropertyDetailView>
+
+      <PropertyDetailView label="Extent reference">
+        <RelatedItem
+          itemRef={props.itemData.extentRef ? { classID: 'extent', itemID: props.itemData.extentRef } : undefined}
+          mode="id"
+          classIDs={['extent']}
+          onClear={props.onChange
+            ? () => props.onChange!({ ...props.itemData, extentRef: undefined })
+            : undefined}
+          onSet={props.onChange
+            ? (spec) => props.onChange!(update(props.itemData, { extentRef: spec }))
+            : undefined}
         />
       </PropertyDetailView>
 
