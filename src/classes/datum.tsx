@@ -25,8 +25,9 @@ import {
 export interface DatumData extends CommonGRItemData {
   scope: string
   extent: Extent
-  // A.k.a. “anchor”
+  /** A.k.a. “anchor”. */
   originDescription: string
+
   coordinateReferenceEpoch: string | null
   releaseDate: string
 }
