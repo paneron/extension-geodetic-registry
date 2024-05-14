@@ -31,6 +31,8 @@ import {
 export interface CRSData extends CommonGRItemData {
   scope: string
   extent: Extent
+  /** UUID of relevant Extent item. */
+  extentRef?: string
 }
 
 export const CRS_DEFAULTS: CRSData = {
@@ -50,6 +52,20 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
           if (!props.onChange) { return; }
           props.onChange({ ...props.itemData, ...newData });
         } : undefined}>
+
+      <PropertyDetailView label="Extent reference">
+        <RelatedItem
+          itemRef={props.itemData.extentRef ? { classID: 'extent', itemID: props.itemData.extentRef } : undefined}
+          mode="id"
+          classIDs={['extent']}
+          onClear={props.onChange
+            ? () => props.onChange!({ ...props.itemData, extentRef: undefined })
+            : undefined}
+          onSet={props.onChange
+            ? (spec) => props.onChange!(update(props.itemData, { extentRef: spec }))
+            : undefined}
+        />
+      </PropertyDetailView>
 
       <ExtentEdit
         extent={props.itemData.extent ?? DEFAULT_EXTENT}
