@@ -48,6 +48,10 @@ function getParameterStub(): ConversionParameter {
 
 export interface ConversionData extends CommonGRItemData {
   extent: Extent
+
+  /** UUID of relevant Extent item. */
+  extentRef?: string
+
   // accuracy: {
   //   value: number
   //   unitOfMeasurement: string // Unit of measurement UUID
@@ -166,6 +170,20 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               value={itemData.scope ?? ''}
               readOnly={!onChange}
               onChange={(evt) => onChange?.({ ...itemData, scope: evt.currentTarget.value })}
+            />
+          </PropertyDetailView>
+
+          <PropertyDetailView label="Extent reference">
+            <RelatedItem
+              itemRef={itemData.extentRef ? { classID: 'extent', itemID: itemData.extentRef } : undefined}
+              mode="id"
+              classIDs={['extent']}
+              onClear={onChange
+                ? () => onChange!({ ...itemData, extentRef: undefined })
+                : undefined}
+              onSet={onChange
+                ? (spec) => onChange!(update(itemData, { extentRef: spec }))
+                : undefined}
             />
           </PropertyDetailView>
 
