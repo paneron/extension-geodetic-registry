@@ -156,6 +156,9 @@ const FloatWithUoM: React.FC<{
       <GenericRelatedItemView
         itemRef={val[1] ? { classID: 'unit-of-measurement', itemID: val[1] } : undefined}
         availableClassIDs={['unit-of-measurement']}
+        onClear={onChange
+          ? () => onChange!([null, null])
+          : undefined}
         onChange={onChange
           ? ref => ref.classID === 'unit-of-measurement' && onChange!([val[0], ref.itemID])
           : undefined}
