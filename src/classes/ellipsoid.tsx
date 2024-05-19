@@ -9,7 +9,7 @@ import { jsx } from '@emotion/react';
 
 import { Checkbox, ControlGroup, ControlGroupProps, InputGroup } from '@blueprintjs/core';
 
-import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
+import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import {
   type CommonGRItemData,
@@ -17,6 +17,7 @@ import {
   DEFAULTS as SHARED_DEFAULTS,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
+  RelatedItem,
 } from './common';
 
 
@@ -153,15 +154,19 @@ const FloatWithUoM: React.FC<{
         }}
         value={val[0]?.toString() || ''}
       />
-      <GenericRelatedItemView
-        itemRef={val[1] ? { classID: 'unit-of-measurement', itemID: val[1] } : undefined}
-        availableClassIDs={['unit-of-measurement']}
+      <RelatedItem
+        fill
+        itemRef={val[1]
+          ? { classID: 'unit-of-measurement', itemID: val[1] }
+          : undefined
+        }
         onClear={onChange
-          ? () => onChange!([null, null])
+          && (() => onChange([null, null]))}
+        onSet={onChange
+          ? ((spec) => onChange(update(val, { 1: spec } )))
           : undefined}
-        onChange={onChange
-          ? ref => ref.classID === 'unit-of-measurement' && onChange!([val[0], ref.itemID])
-          : undefined}
+        mode="id"
+        classIDs={['unit-of-measurement']}
       />
     </ControlGroup>
   );
