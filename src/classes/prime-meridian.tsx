@@ -70,8 +70,6 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
             />
             <GenericRelatedItemView
               itemRef={{ classID: 'unit-of-measurement', itemID: props.itemData.longitudeFromGreenwichUoM }}
-              getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
-              useRegisterItemData={props.useRegisterItemData}
               availableClassIDs={['unit-of-measurement']}
               onClear={props.onChange
                 ? () => props.onChange!(update(props.itemData, { $unset: ['longitudeFromGreenwichUoM'] }))
