@@ -36,7 +36,7 @@ export interface CommonGRItemData {
 }
 
 
-export const DEFAULTS: CommonGRItemData = {
+export const DEFAULTS: Readonly<CommonGRItemData> = Object.freeze({
   name: "Unnamed item",
   // Non-positive identifiers are replaced with next available positive integers
   // in afterApprovedCR hook.
@@ -44,7 +44,7 @@ export const DEFAULTS: CommonGRItemData = {
   informationSources: [],
   remarks: '',
   aliases: [],
-} as const;
+});
 
 
 export function getInformationSourceStub(): Readonly<Citation> {
