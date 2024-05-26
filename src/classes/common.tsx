@@ -536,7 +536,9 @@ React.memo(function CommonListItemView (props) {
   return (
     <span className={props.className}>
       <span css={css`color: ${Colors.GRAY4}; font-family: monospace; font-size: 90%`}>
-        {props.itemData.identifier}
+        {props.itemData.identifier === 0
+          ? 'NEW'
+          : props.itemData.identifier}
       </span>
       &emsp;
       {props.itemData.name}
