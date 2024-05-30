@@ -381,7 +381,7 @@ export const extent: ItemClassConfiguration<ExtentItemData> = {
   ...COMMON_PROPERTIES,
   meta: {
     title: "Extent",
-    description: "Extent",
+    description: "Geographic area or region. Also known as “domain of validity”.",
     id: 'extent',
     alternativeNames: [],
   },
