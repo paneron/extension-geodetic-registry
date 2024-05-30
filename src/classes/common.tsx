@@ -11,7 +11,6 @@ import {
   Callout,
   ControlGroup,
   InputGroup,
-  Colors,
   NumericInput,
   TextArea,
   OL,
@@ -535,7 +534,7 @@ export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["li
 React.memo(function CommonListItemView (props) {
   return (
     <span className={props.className}>
-      <span css={css`color: ${Colors.GRAY4}; font-family: monospace; font-size: 90%`}>
+      <span css={css`font-family: monospace; font-size: 90%`}>
         {props.itemData.identifier === 0
           ? 'NEW'
           : props.itemData.identifier}
