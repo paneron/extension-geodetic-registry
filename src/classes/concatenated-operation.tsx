@@ -41,6 +41,7 @@ export interface ConcatenatedOperationData extends CommonGRItemData {
   operations: Readonly<InternalItemReference[]>
   scope: string
   extent: Extent
+  extentRef?: string
   operationVersion: string
   accuracy: Accuracy
 
@@ -178,12 +179,28 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
               />
             </PropertyDetailView>
 
-            <ExtentEdit
-              extent={itemData.extent}
-              onChange={onChange
-                ? ((extent) => onChange(update(itemData, { extent: { $set: extent } } )))
-                : undefined}
-            />
+            <PropertyDetailView label="Extent reference">
+              <RelatedItem
+                itemRef={itemData.extentRef ? { classID: 'extent', itemID: itemData.extentRef } : undefined}
+                mode="id"
+                classIDs={['extent']}
+                onClear={onChange
+                  ? () => onChange!({ ...itemData, extentRef: undefined })
+                  : undefined}
+                onSet={onChange
+                  ? (spec) => onChange!(update(itemData, { extentRef: spec }))
+                  : undefined}
+              />
+            </PropertyDetailView>
+
+            <PropertyDetailView label="Extent (legacy)">
+              <ExtentEdit
+                extent={itemData.extent}
+                onChange={onChange
+                  ? ((extent) => onChange(update(itemData, { extent: { $set: extent } } )))
+                  : undefined}
+              />
+            </PropertyDetailView>
 
             <AccuracyEdit
               accuracy={itemData.accuracy}
