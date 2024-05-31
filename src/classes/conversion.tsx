@@ -11,7 +11,7 @@ import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/panero
 
 import {
   type Extent,
-  ExtentEdit,
+  CombinedExtentWidget,
   DEFAULT_EXTENT,
 } from './extent';
 import {
@@ -173,24 +173,11 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
             />
           </PropertyDetailView>
 
-          <PropertyDetailView label="Extent reference">
-            <RelatedItem
-              itemRef={itemData.extentRef ? { classID: 'extent', itemID: itemData.extentRef } : undefined}
-              mode="id"
-              classIDs={['extent']}
-              onClear={onChange
-                ? () => onChange!({ ...itemData, extentRef: undefined })
-                : undefined}
-              onSet={onChange
-                ? (spec) => onChange!(update(itemData, { extentRef: spec }))
-                : undefined}
-            />
-          </PropertyDetailView>
-
-          <ExtentEdit
-            extent={itemData.extent ?? DEFAULT_EXTENT}
-            onChange={onChange
-              ? (extent) => onChange!(update(itemData, { extent: { $set: extent } }))
+          <CombinedExtentWidget
+            extent={itemData.extent}
+            extentRef={itemData.extentRef}
+            onRefChange={onChange
+              ? (ref) => onChange!(update(itemData, { extentRef: { $set: ref } }))
               : undefined}
           />
 

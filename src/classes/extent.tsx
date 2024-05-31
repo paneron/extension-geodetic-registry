@@ -12,6 +12,7 @@ import update from 'immutability-helper';
 import { jsx, css, ClassNames } from '@emotion/react';
 import React from 'react';
 import {
+  Callout,
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
   MenuItem, Tag, ProgressBar,
   Colors,
@@ -32,6 +33,7 @@ import {
   COMMON_PROPERTIES,
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
+  RelatedItem,
 } from './common';
 
 
@@ -153,68 +155,70 @@ function ({ extent, onChange }) {
   }
 
   return (
-    <PropertyDetailView
-        title="Extent"
-        subLabel="Geographic area, region, or time frame. Also known as “domain of validity”.">
-      <ClassNames>
-        {({ css, cx }) => (
-          <ControlGroup
-              fill
-              css={css`
-                align-items: flex-end;
-                /* Avoid stretching the load button; align it with inputs */
-              `}>
-            {extentInput('n')}
-            {extentInput('e')}
-            {extentInput('s')}
-            {extentInput('w')}
-            {onChange
-              ? isStub
-                ? <Select<SuggestedExtentListItem>
-                      items={allImportableExtents ?? []}
-                      itemPredicate={extentMatchesQuery}
-                      itemRenderer={renderSuggestedExtent}
-                      noResults={<MenuItem
-                        disabled
-                        text={extentsAreLoading ? <ProgressBar /> : "No extents to show."}
-                      />}
-                      filterable={allImportableExtents && allImportableExtents.length > 7}
-                      onItemSelect={handleImportSuggestedExtent}
-                      popoverProps={{
-                        minimal: true,
-                        popoverClassName: `${css`.bp4-menu { max-height: 40vh; overflow-y: auto; }`}`,
-                      }}>
-                    <Button
-                      title="Load extent data from a pre-existing item"
+    <>
+      <PropertyDetailView label="Description">
+        <TextArea
+          readOnly={!onChange}
+          onChange={(evt) => onChange!({ ...extent, name: evt.currentTarget.value })}
+          placeholder={onChange ? "Extent description goes here" : undefined}
+          value={extent.name ?? ''}
+          css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
+        />
+      </PropertyDetailView>
+      <PropertyDetailView title="Bounding box">
+        <ClassNames>
+          {({ css, cx }) => (
+            <ControlGroup
+                fill
+                css={css`
+                  align-items: flex-end;
+                  /* Avoid stretching the load button; align it with inputs */
+                `}>
+              {extentInput('n')}
+              {extentInput('e')}
+              {extentInput('s')}
+              {extentInput('w')}
+              {onChange
+                ? isStub
+                  ? <Select<SuggestedExtentListItem>
+                        items={allImportableExtents ?? []}
+                        itemPredicate={extentMatchesQuery}
+                        itemRenderer={renderSuggestedExtent}
+                        noResults={<MenuItem
+                          disabled
+                          text={extentsAreLoading ? <ProgressBar /> : "No extents to show."}
+                        />}
+                        filterable={allImportableExtents && allImportableExtents.length > 7}
+                        onItemSelect={handleImportSuggestedExtent}
+                        popoverProps={{
+                          minimal: true,
+                          popoverClassName: `${css`.bp4-menu { max-height: 40vh; overflow-y: auto; }`}`,
+                        }}>
+                      <Button
+                        title="Load extent data from a pre-existing item"
+                        outlined
+                        css={css`
+                          padding: 0 20px;
+                          /* Otherwise it gets compressed (due to fill presumably) */
+                        `}
+                        icon='folder-open'
+                      />
+                    </Select>
+                  : <Button
+                      title="Clear extent data. If you want to import another extent, use this first"
+                      onClick={() => onChange(DEFAULT_EXTENT)}
                       outlined
                       css={css`
                         padding: 0 20px;
                         /* Otherwise it gets compressed (due to fill presumably) */
                       `}
-                      icon='folder-open'
-                    />
-                  </Select>
-                : <Button
-                    title="Clear extent data. If you want to import another extent, use this first"
-                    onClick={() => onChange(DEFAULT_EXTENT)}
-                    outlined
-                    css={css`
-                      padding: 0 20px;
-                      /* Otherwise it gets compressed (due to fill presumably) */
-                    `}
-                    icon="reset" />
-              : null}
-          </ControlGroup>
-        )}
-      </ClassNames>
-      <TextArea
-        readOnly={!onChange}
-        onChange={(evt) => onChange!({ ...extent, name: evt.currentTarget.value })}
-        placeholder={onChange ? "Extent description goes here" : undefined}
-        value={extent.name ?? ''}
-        css={css`margin-top: .5em; font-size: 90%; width: 100%;`}
-      />
-    </PropertyDetailView>
+                      icon="reset" />
+                : null}
+            </ControlGroup>
+          )}
+        </ClassNames>
+      </PropertyDetailView>
+    </>
   );
 };
 
@@ -417,4 +421,55 @@ export const extent: ItemClassConfiguration<ExtentItemData> = {
   },
   validatePayload: async () => true,
   sanitizePayload: async (t) => t,
+};
+
+/**
+ * A widget combining two widgets,
+ * one for legacy extent data and one for extent reference.
+ *
+ * Legacy extent data is read-only regardless of `onChange` prop.
+ */
+export const CombinedExtentWidget: React.VoidFunctionComponent<{
+  /**
+   * Legacy extent information.
+   * If undefined, legacy extent widget is not shown.
+   */
+  extent?: Extent
+
+  /** Extent item reference. */
+  extentRef?: string
+
+  /**
+   * If provided, editing extent reference can be changed,
+   * upon which this callback is invoked.
+   */
+  onRefChange?: (ref: string | undefined) => void
+}> = function ({ extent, extentRef, onRefChange }) {
+  return (
+    <>
+
+      <PropertyDetailView
+          label="Extent"
+          labelInfo="(new)">
+        <RelatedItem
+          itemRef={extentRef ? { classID: 'extent', itemID: extentRef } : undefined}
+          mode="id"
+          classIDs={['extent']}
+          onClear={onRefChange ? () => onRefChange!(undefined) : undefined}
+          onSet={onRefChange ? (spec) => onRefChange!(spec.$set) : undefined}
+        />
+      </PropertyDetailView>
+
+      {extent !== undefined
+        ? <Callout css={css`padding-bottom: 0;`}>
+            <PropertyDetailView
+                label="Extent"
+                labelInfo="(legacy)">
+              <ExtentEdit extent={extent} />
+            </PropertyDetailView>
+          </Callout>
+        : null}
+
+    </>
+  );
 };

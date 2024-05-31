@@ -12,7 +12,7 @@ import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
 import {
   type Extent,
-  ExtentEdit,
+  CombinedExtentWidget,
   DEFAULT_EXTENT,
 } from './extent';
 import {
@@ -53,24 +53,11 @@ const CRSEditView: ItemEditView<CRSData> = function (props) {
           props.onChange({ ...props.itemData, ...newData });
         } : undefined}>
 
-      <PropertyDetailView label="Extent reference">
-        <RelatedItem
-          itemRef={props.itemData.extentRef ? { classID: 'extent', itemID: props.itemData.extentRef } : undefined}
-          mode="id"
-          classIDs={['extent']}
-          onClear={props.onChange
-            ? () => props.onChange!({ ...props.itemData, extentRef: undefined })
-            : undefined}
-          onSet={props.onChange
-            ? (spec) => props.onChange!(update(props.itemData, { extentRef: spec }))
-            : undefined}
-        />
-      </PropertyDetailView>
-
-      <ExtentEdit
-        extent={props.itemData.extent ?? DEFAULT_EXTENT}
-        onChange={props.onChange
-          ? (extent) => props.onChange!(update(props.itemData, { extent: { $set: extent } }))
+      <CombinedExtentWidget
+        extent={props.itemData.extent}
+        extentRef={props.itemData.extentRef}
+        onRefChange={props.onChange
+          ? (ref) => props.onChange!(update(props.itemData, { extentRef: { $set: ref } }))
           : undefined}
       />
 
