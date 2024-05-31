@@ -87,7 +87,6 @@ export const EXTENT_DEFAULTS: ExtentItemData = {
 
 /**
  * A widget for editing extent data.
- * There is no “detail” extent widget; simply use this one without `onChange()`.
  */
 export const ExtentEdit: React.FC<{ extent: Extent, onChange?: (ext: Extent) => void }> =
 function ({ extent, onChange }) {
