@@ -380,6 +380,9 @@ const EXTENT_REDUCE_FUNC = `
   }
 `;
 
+
+// Item class definition
+
 export const extent: ItemClassConfiguration<ExtentItemData> = {
   ...COMMON_PROPERTIES,
   meta: {
