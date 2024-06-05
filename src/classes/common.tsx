@@ -113,6 +113,7 @@ export const COMMON_PROPERTIES: Pick<ItemClassConfiguration<CommonGRItemData>, '
 export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
   hideRemarks?: boolean,
   hideAliases?: boolean,
+  hideInfoSources?: boolean,
 }> = function (props) {
   const { itemData, onChange, children } = props;
 
@@ -183,26 +184,28 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
 
       {children}
 
-      <ItemList
-        items={itemData.informationSources}
-        itemLabel="citation (information source)"
-        itemLabelPlural="citations"
-        subLabel="Source citation information — ISO 19115 B 3.2.1"
-        placeholderItem={getInformationSourceStub()}
-        onChangeItems={onChange
-          ? (spec) => onChange!(update(itemData, { informationSources: spec }))
-          : undefined}
-        itemRenderer={function renderCitation (item, _idx, handleChange, deleteButton) {
-          return <PropertyDetailView helperText={deleteButton}>
-            <InformationSourceEdit
-              citation={item}
-              onChange={handleChange
-                ? (newSource) => handleChange({ $set: newSource })
-                : undefined}
-              />
-          </PropertyDetailView>
-        }}
-      />
+      {props.hideAliases
+        ? null
+        : <ItemList
+            items={itemData.informationSources}
+            itemLabel="citation (information source)"
+            itemLabelPlural="citations"
+            subLabel="Source citation information — ISO 19115 B 3.2.1"
+            placeholderItem={getInformationSourceStub()}
+            onChangeItems={onChange
+              ? (spec) => onChange!(update(itemData, { informationSources: spec }))
+              : undefined}
+            itemRenderer={function renderCitation (item, _idx, handleChange, deleteButton) {
+              return <PropertyDetailView helperText={deleteButton}>
+                <InformationSourceEdit
+                  citation={item}
+                  onChange={handleChange
+                    ? (newSource) => handleChange({ $set: newSource })
+                    : undefined}
+                  />
+              </PropertyDetailView>
+            }}
+          />}
 
     </div>
   );
