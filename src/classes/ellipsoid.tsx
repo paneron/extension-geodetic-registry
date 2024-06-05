@@ -153,7 +153,6 @@ const FloatWithUoM: React.FC<{
         value={val[0]?.toString() || ''}
       />
       <RelatedItem
-        fill
         itemRef={val[1]
           ? { classID: 'unit-of-measurement', itemID: val[1] }
           : undefined
