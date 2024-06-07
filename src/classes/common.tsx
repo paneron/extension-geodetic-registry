@@ -84,7 +84,6 @@ const AliasesEdit: React.FC<{
       simpleItems
       itemLabel="alias"
       itemLabelPlural="aliases"
-      subLabel="Alternative names for this item."
       onChangeItems={onChange
         ? (spec) => onChange!(update(aliases, spec))
         : undefined}
@@ -176,9 +175,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
 
       {props.hideRemarks
         ? null
-        : <PropertyDetailView
-              title="Remarks"
-              subLabel="Comments on or information about this item.">
+        : <PropertyDetailView title="Remarks">
             <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
           </PropertyDetailView>}
 
