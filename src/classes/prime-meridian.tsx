@@ -4,7 +4,7 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 
 import type { ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
@@ -52,7 +52,7 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
           } : undefined} >
 
         <PropertyDetailView title="Longitude from Greenwich">
-          <ControlGroup fill>
+          <ControlGroup>
             <InputGroup
               value={props.itemData.longitudeFromGreenwich.toString()}
               readOnly={!props.onChange}
@@ -69,6 +69,7 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
               }}
             />
             <GenericRelatedItemView
+              css={css`flex-shrink: 1;`}
               itemRef={{ classID: 'unit-of-measurement', itemID: props.itemData.longitudeFromGreenwichUoM }}
               availableClassIDs={['unit-of-measurement']}
               onClear={props.onChange
