@@ -229,6 +229,8 @@ interface RelatedItemWidgetProps<M extends 'generic' | 'id', S> {
   fill?: boolean
 
   validity?: string
+
+  className?: string
 }
 
 /**
@@ -246,6 +248,7 @@ export function RelatedItem<
   mode,
   fill,
   validity,
+  className,
 }: RelatedItemWidgetProps<M, S>) {
 
   const defaultClass: string | undefined = classIDs?.[0] ?? itemRef?.classID;
@@ -295,6 +298,8 @@ export function RelatedItem<
       onClear={onClear}
       onChange={canSet ? handleSet : undefined}
       itemSorter={COMMON_PROPERTIES.itemSorter}
+
+      className={className}
     />
   );
 }
