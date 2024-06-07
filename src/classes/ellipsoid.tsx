@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 
-import { jsx } from '@emotion/react';
+import { jsx, css } from '@emotion/react';
 
 import { Checkbox, ControlGroup, ControlGroupProps, InputGroup } from '@blueprintjs/core';
 
@@ -151,6 +151,7 @@ const FloatWithUoM: React.FC<{
         value={val[0]?.toString() || ''}
       />
       <RelatedItem
+        css={css`flex-shrink: 1;`}
         itemRef={val[1]
           ? { classID: 'unit-of-measurement', itemID: val[1] }
           : undefined
