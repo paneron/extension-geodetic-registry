@@ -70,7 +70,6 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
 
         <PropertyDetailView title="Semi-major axis">
           <FloatWithUoM
-            fill
             val={[
               itemData.semiMajorAxis,
               itemData.semiMajorAxisUoM,
@@ -106,7 +105,6 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
 
               <PropertyDetailView title="Semi-minor axis">
                 <FloatWithUoM
-                  fill
                   val={[
                     itemData.semiMinorAxis,
                     itemData.semiMinorAxisUoM,
