@@ -137,7 +137,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
             label="GR identifier"
             css={css`width: 16em;`}
             helperText={onChange
-              ? "Unique across all item classes in this register. For not-yet-accepted items, must not be a positive integer."
+              ? "Unique across all item classes in this register. For not-yet-accepted items, must not be left zero."
               : undefined}>
           <ControlGroup>
             <NumericInput
@@ -185,9 +185,8 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
         ? null
         : <ItemList
             items={itemData.informationSources}
-            itemLabel="citation (information source)"
-            itemLabelPlural="citations"
-            subLabel="Source citation information — ISO 19115 B 3.2.1"
+            itemLabel="information source"
+            itemLabelPlural="information sources"
             placeholderItem={getInformationSourceStub()}
             onChangeItems={onChange
               ? (spec) => onChange!(update(itemData, { informationSources: spec }))

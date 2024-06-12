@@ -2,6 +2,7 @@
 /** @jsxFrag React.Fragment */
 
 import update from 'immutability-helper';
+import React from 'react';
 import { jsx } from '@emotion/react';
 import { TextArea, InputGroup } from '@blueprintjs/core';
 import type { ItemClassConfiguration, ItemEditView, ItemListView } from '@riboseinc/paneron-registry-kit/types';
@@ -62,7 +63,7 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       <PropertyDetailView
           title="Scope"
-          subLabel="Description of usage, or limitations of usage, for which this item is.">
+          subLabel="Description of usage, or limitations of usage.">
         <InputGroup
           fill
           required
@@ -77,7 +78,9 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       <PropertyDetailView
           title="Publication Date"
-          helperText={<code>yyyy-mm-dd</code>}
+          helperText={props.onChange
+            ? <><code>yyyy</code> or <code>yyyy-mm-dd</code></>
+            : undefined}
           subLabel="The date that the datum was released to the public. The date may be precise or merely a year if not well-defined.">
         <InputGroup
           fill
