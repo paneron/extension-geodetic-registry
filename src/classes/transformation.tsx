@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 import { jsx, css } from '@emotion/react';
-import { Button, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
+import { Drawer, Button, ButtonGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
 
 import type { Payload, Citation, ItemClassConfiguration, InternalItemReference, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
@@ -21,13 +21,14 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   InformationSourceEdit,
-  ItemList,
+  getInformationSourceStub,
   RelatedItem,
   type Accuracy,
   AccuracyEdit,
   ACCURACY_STUB,
-  getInformationSourceStub,
 } from './common';
+
+import ItemTable, { type ColumnInfo } from '../helpers/ItemTable';
 
 
 export const ParameterType = {
@@ -133,8 +134,29 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
           : null,
         [onChange, missingParameters]);
 
+      const [paramWithOpenCitation, setParamWithOpenCitation] =
+        React.useState<null | number>(null);
+
+      const fileCitationBeingEdited = paramWithOpenCitation !== null
+        ? itemData.parameters[paramWithOpenCitation].fileCitation ?? null
+        : null;
+
       return (
         <>
+          <Drawer
+              isOpen={fileCitationBeingEdited !== null}
+              usePortal
+              css={css`padding: 10px; overflow-y: auto;`}
+              onClose={React.useCallback(() => setParamWithOpenCitation(null), [])}>
+            {fileCitationBeingEdited !== null
+              ? <InformationSourceEdit
+                  citation={fileCitationBeingEdited}
+                  onChange={onChange
+                    ? (citation) => onChange!(update(itemData, { parameters: { [paramWithOpenCitation as number]: { fileCitation: { $set: citation } } } } ))
+                    : undefined}
+                />
+              : null}
+          </Drawer>
           <CommonEditView
               useRegisterItemData={props.useRegisterItemData}
               getRelatedItemClassConfiguration={props.getRelatedItemClassConfiguration}
@@ -234,7 +256,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 : undefined}
             />
 
-            <ItemList
+            <ItemTable
               items={itemData.parameters}
               itemLabel="parameter with value"
               itemLabelPlural="operation parameters with values"
@@ -242,106 +264,115 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 ? (spec) => onChange!(update(itemData, { parameters: spec }))
                 : undefined}
               placeholderItem={createParameterValueStub}
-              itemRenderer={(param, _idx, handleChange, deleteButton) =>
-                <>
-                  <PropertyDetailView title="Parameter">
-                    <RelatedItem
-                      itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
+              columnInfo={React.useMemo(() => ({
+                parameter: {
+                  title: "Coordinate operation parameter",
+                  width: 320,
+                  CellRenderer: function renderTransformationParameterParameter ({ val, onChange }) {
+                    return <RelatedItem
+                      itemRef={{ classID: 'coordinate-op-parameter', itemID: val ?? '' }}
                       mode="id"
                       classIDs={['coordinate-op-parameter']}
                       onClear={onChange
-                        ? () => handleChange!({ parameter: { $set: '' } })
+                        ? () => onChange!({ $set: '' })
                         : undefined}
-                      onSet={handleChange
-                        ? (spec) => handleChange!({ parameter: spec })
-                        : undefined}
+                      onSet={onChange}
                     />
-                  </PropertyDetailView>
-
-                  {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
-
-                  <PropertyDetailView label="Value type">
-                    {handleChange
+                  }
+                },
+                type: {
+                  title: "Value Type",
+                  width: 160,
+                  CellRenderer: function renderTransformationParameterValueType ({ val, onChange }) {
+                    return (onChange
                       ? <HTMLSelect
-                          value={param.type}
+                          value={val}
                           options={parameterTypes.map(param => ({ value: param, label: param }))}
+                          disabled={!onChange}
                           onChange={(evt) =>
-                            handleChange!({ type: { $set: evt.currentTarget.value as typeof parameterTypes[number] } })
+                            onChange!({ $set: evt.currentTarget.value as typeof parameterTypes[number] })
                           }
                         />
-                      : <InputGroup readOnly value={param.type} />}
-                  </PropertyDetailView>
-
-                  <PropertyDetailView
-                      helperText={<>
-                        Depending on value type, the value can be either
-                        1) a&nbsp;numerical&nbsp;value with&nbsp;unit&nbsp;of&nbsp;measurement,
-                        or 2) a&nbsp;filename.
-                      </>}
-                      label="Value">
-                    {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
-                    <ControlGroup fill>
-                      <InputGroup
-                        readOnly={!onChange}
-                        value={param.value?.toString() ?? ''}
-                        onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                          handleChange!({ value: { $set: evt.currentTarget.value } } )}
-                      />
-
-                      {param.unitOfMeasurement || param.type === ParameterType.MEASURE
-                        ? <RelatedItem
-                            itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
-                            fill
-                            mode="id"
-                            classIDs={['unit-of-measurement']}
-                            onClear={handleChange
-                              ? () => handleChange!({ unitOfMeasurement: { $set: null } })
-                              : undefined}
-                            onSet={handleChange
-                              ? (spec) => handleChange!({ unitOfMeasurement: spec })
-                              : undefined}
-                          />
-                        : null}
-                    </ControlGroup>
-                  </PropertyDetailView>
-
-                  {param.type === ParameterType.FILE || param.fileCitation !== null
-                    ? <PropertyDetailView
-                          helperText={param.fileCitation && handleChange
-                            ? <Button
-                                  onClick={() => handleChange!({ $unset: ['fileCitation'] })}
-                                  icon="remove"
-                                  outlined
-                                  intent="danger">
-                                Clear file citation only
-                              </Button>
-                            : handleChange
-                              ? <Button
-                                    onClick={() => handleChange({ fileCitation: { $set: getInformationSourceStub() } })}
-                                    intent="primary"
-                                    outlined
-                                    title="Add file citation"
-                                    icon="add">
-                                  Add
-                                </Button>
-                              : null}
-                          label="File citation">
-                        {param.fileCitation
-                          ? <InformationSourceEdit
-                              citation={param.fileCitation}
-                              onChange={handleChange
-                                ? (citation) => handleChange!({ fileCitation: { $set: citation } })
-                                : undefined}
+                      : <InputGroup readOnly value={val} />
+                    );
+                  },
+                },
+                value: {
+                  title: "Value",
+                  width: 128,
+                  CellRenderer: function renderTransformationParameterValue ({ val, onChange }) {
+                    return <InputGroup
+                      readOnly={!onChange}
+                      fill
+                      value={val?.toString() ?? ''}
+                      onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+                        onChange!({ $set: evt.currentTarget.value })}
+                    />;
+                  },
+                },
+                unitOfMeasurement: {
+                  title: "Unit of Measurement",
+                  width: 256,
+                  CellRenderer: function renderTransformationParameterUoM ({ val, onChange, item }) {
+                    return (val || item.type === ParameterType.MEASURE
+                      ? <RelatedItem
+                          itemRef={{ classID: 'unit-of-measurement', itemID: val ?? '' }}
+                          fill
+                          mode="id"
+                          classIDs={['unit-of-measurement']}
+                          onClear={onChange
+                            ? () => onChange!({ $set: '' })
+                            : undefined}
+                          onSet={onChange}
+                        />
+                      : null
+                    );
+                  },
+                },
+                fileCitation: {
+                  title: "Information Source",
+                  width: 192,
+                  CellRenderer: function renderTransformationParameterFileCitation ({ val, onChange, itemIndex }) {
+                    const hasVal = val !== null && val !== undefined;
+                    return <>
+                      <ButtonGroup>
+                        {val && onChange
+                          ? <Button
+                              onClick={() => onChange({ $set: null })}
+                              icon='remove'
+                              title="Remove information source"
                             />
-                          : "N/A"}
-                      </PropertyDetailView>
-                    : null}
-                  {deleteButton
-                    ? <div css={css`margin: 10px 0 15px 0;`}>{deleteButton}</div>
-                    : null}
-                </>
-              }
+                          : null}
+                        <Button
+                            disabled={!onChange && !hasVal}
+                            icon={onChange
+                              ? hasVal
+                                ? 'edit'
+                                : 'add'
+                              : hasVal
+                                ? 'eye-open'
+                                : undefined}
+                            onClick={() => {
+                              if (onChange && !hasVal) {
+                                onChange({ $set: getInformationSourceStub() });
+                              }
+                              setParamWithOpenCitation(itemIndex);
+                            }}>
+                          {onChange
+                            ? hasVal
+                              ? val.title.trim() ?? "Untitled source"
+                              : "Add"
+                            : hasVal
+                              ? val.title.trim() ?? "Untitled source"
+                              : "N/A"}
+                        </Button>
+                      </ButtonGroup>
+                    </>;
+                  },
+                },
+              }), []) as ColumnInfo<TransformationParameter>}
             />
+
           </CommonEditView>
         </>
       )

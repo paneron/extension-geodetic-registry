@@ -4,8 +4,8 @@
 import update from 'immutability-helper';
 
 import React from 'react';
-import { Button, ControlGroup, InputGroup } from '@blueprintjs/core';
-import { jsx, css } from '@emotion/react';
+import { Button, InputGroup } from '@blueprintjs/core';
+import { jsx } from '@emotion/react';
 import type { Payload, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
 
@@ -20,9 +20,10 @@ import {
   EditView as CommonEditView,
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
-  ItemList,
   RelatedItem,
 } from './common';
+
+import ItemTable, { type ColumnInfo } from '../helpers/ItemTable';
 
 
 /**
@@ -216,7 +217,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
           </FormGroup>
           */}
 
-          <ItemList
+          <ItemTable
             items={itemData.parameters}
             itemLabel="parameter with value"
             itemLabelPlural="operation parameters with values"
@@ -224,53 +225,52 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               ? (spec) => onChange!(update(itemData, { parameters: spec }))
               : undefined}
             placeholderItem={createParameterValueStub}
-            itemRenderer={(param, _idx, handleChange, deleteButton) =>
-              <>
-                <PropertyDetailView title="Parameter">
-                  <RelatedItem
-                    itemRef={{ classID: 'coordinate-op-parameter', itemID: param.parameter }}
+            columnInfo={React.useMemo(() => ({
+              parameter: {
+                title: "Coordinate operation parameter",
+                width: 320,
+                CellRenderer: function renderConversionParameterParameter ({ val, onChange }) {
+                  return <RelatedItem
+                    itemRef={{ classID: 'coordinate-op-parameter', itemID: val ?? '' }}
                     mode="id"
                     classIDs={['coordinate-op-parameter']}
                     onClear={onChange
-                      ? () => handleChange!({ parameter: { $set: '' } })
+                      ? () => onChange!({ $set: '' })
                       : undefined}
-                    onSet={handleChange
-                      ? (spec) => handleChange!({ parameter: spec })
-                      : undefined}
+                    onSet={onChange}
                   />
-                </PropertyDetailView>
-
-                {/* <PropertyDetailView inline title="Name">{param.name}</PropertyDetailView> */}
-
-                <PropertyDetailView title="Value">
-                  {/* NOTE: `fill`s are critical within this widget, to avoid weird clipping. */}
-                  <ControlGroup fill>
-                    <InputGroup
-                      readOnly={!onChange}
-                      fill
-                      value={param.value?.toString() ?? ''}
-                      onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                        handleChange!({ value: { $set: evt.currentTarget.value } } )}
-                    />
-                    <RelatedItem
-                      itemRef={{ classID: 'unit-of-measurement', itemID: param.unitOfMeasurement ?? '' }}
-                      fill
-                      mode="id"
-                      classIDs={['unit-of-measurement']}
-                      onClear={handleChange
-                        ? () => handleChange!({ unitOfMeasurement: { $set: null } })
-                        : undefined}
-                      onSet={handleChange
-                        ? (spec) => handleChange!({ unitOfMeasurement: spec })
-                        : undefined}
-                    />
-                  </ControlGroup>
-                </PropertyDetailView>
-                {deleteButton
-                  ? <div css={css`margin: 10px 0 15px 0;`}>{deleteButton}</div>
-                  : null}
-              </>
-            }
+                }
+              },
+              value: {
+                title: "Value",
+                width: 128,
+                CellRenderer: function renderConversionParameterValue ({ val, onChange }) {
+                  return <InputGroup
+                    readOnly={!onChange}
+                    fill
+                    value={val?.toString() ?? ''}
+                    onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+                      onChange!({ $set: evt.currentTarget.value })}
+                  />;
+                },
+              },
+              unitOfMeasurement: {
+                title: "Unit of Measurement",
+                width: 256,
+                CellRenderer: function renderConversionParameterUoM ({ val, onChange }) {
+                  return <RelatedItem
+                    itemRef={{ classID: 'unit-of-measurement', itemID: val ?? '' }}
+                    fill
+                    mode="id"
+                    classIDs={['unit-of-measurement']}
+                    onClear={onChange
+                      ? () => onChange!({ $set: '' })
+                      : undefined}
+                    onSet={onChange}
+                  />
+                },
+              },
+            }), []) as ColumnInfo<ConversionParameter>}
           />
         </CommonEditView>
       );
