@@ -51,7 +51,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@riboseinc/paneron-extension-kit": "2.2.24",
-    "@riboseinc/paneron-registry-kit": "2.2.34",
+    "@riboseinc/paneron-registry-kit": "2.2.50",
     "@types/react": "17.0.53",
     "esbuild": "~0.19.4",
     "immutability-helper": "^3.1.1",
