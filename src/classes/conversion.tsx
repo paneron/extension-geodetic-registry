@@ -32,7 +32,7 @@ import {
 export interface ConversionParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
-  name: string // Dependent on type? filename?
+  //name: string // Dependent on type? filename? TODO: Doesn’t exist
   value: string | number | null
 }
 
@@ -41,7 +41,7 @@ function getParameterStub(): ConversionParameter {
   return {
     parameter: '',
     unitOfMeasurement: null,
-    name: '',
+    //name: '',
     value: null,
   };
 }

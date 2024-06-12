@@ -43,7 +43,7 @@ const parameterTypes = [
 export interface TransformationParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
-  name: string // Dependent on type? filename?
+  //name: string // Dependent on type? filename? TODO: Doesn’t exist?
   type: typeof parameterTypes[number]
   value: string | number | null
   fileCitation: null | Citation
@@ -54,7 +54,7 @@ function getParameterStub(): TransformationParameter {
   return {
     parameter: '',
     unitOfMeasurement: null,
-    name: '',
+    //name: '',
     type: parameterTypes[0],
     value: null,
     fileCitation: null,
