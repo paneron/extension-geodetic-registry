@@ -289,6 +289,8 @@ export function RelatedItem<
       inputRef={inputRef}
       itemRef={itemRef}
 
+      hideItemClassTitle={mode === 'id'}
+
       // Memo these?
       availableClassIDs={availableClassIDs}
 
