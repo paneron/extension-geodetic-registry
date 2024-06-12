@@ -46,7 +46,7 @@ export const DEFAULTS: Readonly<CommonGRItemData> = Object.freeze({
 
 export function getInformationSourceStub(): Readonly<Citation> {
   return {
-    title: "Untitled citation",
+    title: "Untitled source",
     revisionDate: null,
     publicationDate: null,
     seriesIssueID: null,
