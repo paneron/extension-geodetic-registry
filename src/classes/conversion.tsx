@@ -21,9 +21,9 @@ import {
   ListItemView as CommonListItemView,
   COMMON_PROPERTIES,
   RelatedItem,
+  ItemTable,
+  type ColumnInfo,
 } from './common';
-
-import ItemTable, { type ColumnInfo } from '../helpers/ItemTable';
 
 
 /**

@@ -23,12 +23,12 @@ import {
   InformationSourceEdit,
   getInformationSourceStub,
   RelatedItem,
+  ItemTable,
+  type ColumnInfo,
   type Accuracy,
   AccuracyEdit,
   ACCURACY_STUB,
 } from './common';
-
-import ItemTable, { type ColumnInfo } from '../helpers/ItemTable';
 
 
 export const ParameterType = {

@@ -23,6 +23,10 @@ import { GenericRelatedItemView, PropertyDetailView } from '@riboseinc/paneron-r
 import ItemList from '../helpers/ItemList';
 export { ItemList };
 
+import ItemTable from '../helpers/ItemTable';
+import { type ColumnInfo } from '../helpers/ItemTable';
+export { ItemTable, type ColumnInfo };
+
 
 export interface CommonGRItemData {
   name: string
