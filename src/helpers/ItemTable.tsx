@@ -213,6 +213,7 @@ export function ItemTable<T> ({
               justify-content: center;
             }
             .bp4-table-header {
+              display: flex;
               flex-flow: column nowrap;
               justify-content: center;
               align-items: center;
