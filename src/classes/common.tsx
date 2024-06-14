@@ -174,7 +174,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
               : undefined}
           />}
 
-      {props.hideRemarks
+      {props.hideRemarks || (!onChange && !itemData.remarks?.trim())
         ? null
         : <PropertyDetailView title="Remarks">
             <TextArea fill required value={itemData.remarks ?? ''} {...textInputProps('remarks')} />
