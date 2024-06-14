@@ -111,7 +111,11 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
           />
         </PropertyDetailView>
 
-        <PropertyDetailView label="Formula" subLabel="Mutually exclusive with formula citation.">
+        <PropertyDetailView
+            label="Formula"
+            subLabel={onChange
+              ? "Mutually exclusive with formula information source."
+              : undefined}>
           <TextArea
             fill
             value={itemData.formula ?? ''}
