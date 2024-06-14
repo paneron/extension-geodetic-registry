@@ -174,7 +174,6 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
               : undefined}
           />}
 
-
       {props.hideRemarks
         ? null
         : <PropertyDetailView title="Remarks">
