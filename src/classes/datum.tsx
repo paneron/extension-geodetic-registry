@@ -67,11 +67,11 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
         <InputGroup
           fill
           required
-          value={props.itemData.originDescription ?? ''}
+          value={props.itemData.scope ?? ''}
           readOnly={!props.onChange}
           onChange={evt => props.onChange!({
             ...props.itemData,
-            originDescription: evt.currentTarget.value,
+            scope: evt.currentTarget.value,
           })}
         />
       </PropertyDetailView>
