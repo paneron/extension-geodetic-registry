@@ -342,7 +342,7 @@ export const InformationSourceEdit: React.FC<{
             if (empty === 'unset') {
               newCitation = update(citation, { $unset: [field] });
             } else {
-              console.debug("Setting to empty", empty);
+              //console.debug("Setting to empty", empty);
               newCitation = update(citation, { [field]: { $set: empty } });
             }
           } else {
