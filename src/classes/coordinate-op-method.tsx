@@ -126,14 +126,14 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
         </PropertyDetailView>
 
         <PropertyDetailView
-            subLabel="Mutually exclusive with formula."
+            subLabel={onChange ? "Mutually exclusive with formula." : undefined}
             helperText={itemData.formulaCitation && onChange
               ? <Button
                     onClick={() => onChange(update(itemData, { $unset: ['formulaCitation'] }))}
                     icon="remove"
                     outlined
                     intent="danger">
-                  Remove formula citation
+                  Remove formula source
                 </Button>
               : onChange
                 ? <Button
@@ -141,12 +141,12 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
                       intent="primary"
                       outlined
                       disabled={(itemData.formula ?? '') !== ''}
-                      title="Add file citation"
+                      title="Add information source"
                       icon="add">
                     Add
                   </Button>
                 : null}
-            label="Formula citation">
+            label="Formula information source">
           {itemData.formulaCitation
             ? <InformationSourceEdit
                 citation={itemData.formulaCitation}
