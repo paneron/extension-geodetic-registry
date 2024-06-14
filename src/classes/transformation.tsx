@@ -360,10 +360,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                             }}>
                           {onChange
                             ? hasVal
-                              ? val.title.trim() ?? "Untitled source"
+                              ? val.title?.trim() ?? "Untitled source"
                               : "Add"
                             : hasVal
-                              ? val.title.trim() ?? "Untitled source"
+                              ? val.title?.trim() ?? "Untitled source"
                               : "N/A"}
                         </Button>
                       </ButtonGroup>
