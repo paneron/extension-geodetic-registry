@@ -376,7 +376,7 @@ export const InformationSourceEdit: React.FC<{
 export const ListItemView: ItemClassConfiguration<CommonGRItemData>["views"]["listItemView"] =
 React.memo(function CommonListItemView (props) {
   return (
-    <span className={props.className}>
+    <span css={css`overflow: hidden; text-overflow: ellipsis;`} className={props.className}>
       <span css={css`font-family: monospace; font-size: 90%`}>
         {props.itemData.identifier === 0
           ? 'NEW'
