@@ -89,7 +89,9 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
           }
         />
 
-        <PropertyDetailView label="Source CRS dimension count" subLabel="Minimum is 1.">
+        <PropertyDetailView
+            label="Source CRS dimension count"
+            subLabel={onChange ? "Minimum is 1." : undefined}>
           <NumericInput
             readOnly={!onChange}
             buttonPosition={onChange ? undefined : 'none'}
@@ -100,7 +102,9 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
           />
         </PropertyDetailView>
 
-        <PropertyDetailView label="Target CRS dimension count" subLabel="Minimum is 1.">
+        <PropertyDetailView
+            label="Target CRS dimension count"
+            subLabel={onChange ? "Minimum is 1." : undefined}>
           <NumericInput
             readOnly={!onChange}
             buttonPosition={onChange ? undefined : 'none'}

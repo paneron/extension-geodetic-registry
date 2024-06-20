@@ -80,8 +80,7 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
           title="Publication Date"
           helperText={props.onChange
             ? <><code>yyyy</code> or <code>yyyy-mm-dd</code></>
-            : undefined}
-          subLabel="The date that the datum was released to the public. The date may be precise or merely a year if not well-defined.">
+            : undefined}>
         <InputGroup
           fill
           required
@@ -96,7 +95,7 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       <PropertyDetailView
           title="Coordinate reference epoch"
-          helperText={<code>yyyy.y</code>}
+          helperText={props.onChange ? <code>yyyy.y</code> : undefined}
           subLabel="The epoch applying to defining coordinates.">
         <InputGroup
           fill
@@ -120,7 +119,7 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       <PropertyDetailView
           title="Anchor definition"
-          subLabel="A description, possibly including coordinates of an identified point. A.k.a. “origin description”.">
+          subLabel="A description, possibly including coordinates of an identified point. Also known as “origin description”.">
         <TextArea
           fill
           required
@@ -163,7 +162,7 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
       const EditView = DatumEditView as ItemEditView<GeodeticDatumData>;
       return (
         <EditView {...props}>
-          <PropertyDetailView title="Ellipsoid" subLabel="Relevant ellipsoid from the registry.">
+          <PropertyDetailView title="Ellipsoid">
             <RelatedItem
               itemRef={props.itemData.ellipsoid
                 ? { classID: 'ellipsoid', itemID: props.itemData.ellipsoid }

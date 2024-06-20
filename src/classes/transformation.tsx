@@ -194,7 +194,6 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
             </PropertyDetailView>
 
             <PropertyDetailView
-                subLabel="The coordinate operation method to be used for this operation."
                 helperText={createStubsForMissingOperationMethodParameters
                   ? <Button
                         small
@@ -237,7 +236,9 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 : undefined}
             />
 
-            <PropertyDetailView label="Operation version" helperText={<>For example, <code>GA v2</code></>}>
+            <PropertyDetailView
+                label="Operation version"
+                helperText={onChange ? <>For example, <code>GA v2</code></> : undefined}>
               <InputGroup
                 value={itemData.operationVersion ?? ''}
                 readOnly={!onChange}

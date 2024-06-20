@@ -139,7 +139,6 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
               } : undefined}>
 
           <PropertyDetailView
-              subLabel="The coordinate operation method to be used for this operation."
               helperText={createStubsForMissingOperationMethodParameters
                 ? <Button
                       small
