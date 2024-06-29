@@ -294,7 +294,7 @@ export function RelatedItem<
 
       hideItemClassTitle={mode === 'id'}
 
-      // Memo these?
+      // Widget memoes this prop for reference equality purposes internally
       availableClassIDs={availableClassIDs}
 
       onClear={onClear}
