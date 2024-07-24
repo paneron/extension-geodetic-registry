@@ -156,10 +156,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
 
         <PropertyDetailView
             label="Name"
-            css={css`flex-grow: 1;`}
-            helperText={onChange
-              ? "Unique name for the item in this register."
-              : undefined}>
+            css={css`flex-grow: 1;`}>
           <InputGroup required value={itemData.name} {...textInputProps('name')} />
         </PropertyDetailView>
 
