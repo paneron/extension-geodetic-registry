@@ -90,32 +90,6 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
         />
 
         <PropertyDetailView
-            label="Source CRS dimension count"
-            subLabel={onChange ? "Minimum is 1." : undefined}>
-          <NumericInput
-            readOnly={!onChange}
-            buttonPosition={onChange ? undefined : 'none'}
-            onValueChange={onChange
-              ? (valueAsNumber) => onChange(update(itemData, { sourceCRSDimensionCount: { $set: valueAsNumber } }))
-              : undefined}
-            value={itemData.sourceCRSDimensionCount ?? 0}
-          />
-        </PropertyDetailView>
-
-        <PropertyDetailView
-            label="Target CRS dimension count"
-            subLabel={onChange ? "Minimum is 1." : undefined}>
-          <NumericInput
-            readOnly={!onChange}
-            buttonPosition={onChange ? undefined : 'none'}
-            onValueChange={onChange
-              ? (valueAsNumber) => onChange(update(itemData, { targetCRSDimensionCount: { $set: valueAsNumber } }))
-              : undefined}
-            value={itemData.targetCRSDimensionCount ?? 0}
-          />
-        </PropertyDetailView>
-
-        <PropertyDetailView
             label="Formula"
             subLabel={onChange
               ? "Mutually exclusive with formula information source."
