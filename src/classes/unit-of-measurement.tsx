@@ -123,7 +123,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
           />
         </PropertyDetailView>
 
-        <PropertyDetailView title="Numerator (factor C)">
+        <PropertyDetailView title="Numerator (factor B)">
           <NumericInput
             required
             buttonPosition={props.onChange ? undefined : 'none'}
@@ -140,7 +140,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
           />
         </PropertyDetailView>
 
-        <PropertyDetailView title="Denominator (factor A)">
+        <PropertyDetailView title="Denominator (factor C)">
           <NumericInput
             required
             buttonPosition={props.onChange ? undefined : 'none'}
