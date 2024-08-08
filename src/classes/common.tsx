@@ -369,8 +369,6 @@ export const InformationSourceEdit: React.FC<{
       <SimpleField label="Series page" val={citation.seriesPage ?? ''} onChange={getOnChange('seriesPage', null)} />
       <SimpleField label="Edition" val={citation.edition ?? ''} onChange={getOnChange('edition', null)} />
       <SimpleField label="Other details" val={citation.otherDetails ?? ''} onChange={getOnChange('otherDetails')} />
-      <SimpleField label="ISBN" val={citation.isbn ?? ''} onChange={getOnChange('isbn', null)} />
-      <SimpleField label="ISSN" val={citation.issn ?? ''} onChange={getOnChange('issn', null)} />
       <SimpleField label="URI" val={citation.uri ?? ''} onChange={getOnChange('uri', 'unset')} />
     </>
   );
