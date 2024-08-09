@@ -2,7 +2,7 @@
 
 import update from 'immutability-helper';
 import { jsx } from '@emotion/react';
-import { Button, TextArea, ControlGroup, NumericInput } from '@blueprintjs/core';
+import { Button, TextArea, ControlGroup } from '@blueprintjs/core';
 import type { Citation, ItemClassConfiguration, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { PropertyDetailView } from '@riboseinc/paneron-registry-kit/views/util';
 
