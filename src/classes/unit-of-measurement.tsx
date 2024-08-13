@@ -48,7 +48,7 @@ export interface UoMData extends CommonGRItemData {
    * “Unit of measurement Standard Target unit of measurement identifier”
    * “used to define this unit”.
    */
-  baseUnit?: string
+  standardUnit?: string
 }
 
 export const DEFAULTS: UoMData = {
@@ -107,15 +107,15 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
 
         <PropertyDetailView title="Standard Target base unit">
           <RelatedItem
-            itemRef={props.itemData.baseUnit
-              ? { classID: 'unit-of-measurement', itemID: props.itemData.baseUnit }
+            itemRef={props.itemData.standardUnit
+              ? { classID: 'unit-of-measurement', itemID: props.itemData.standardUnit }
               : undefined
             }
             mode="id"
             onClear={props.onChange
-              && (() => props.onChange!(update(props.itemData, { $unset: ['baseUnit'] })))}
+              && (() => props.onChange!(update(props.itemData, { $unset: ['standardUnit'] })))}
             onSet={props.onChange
-              ? ((spec) => props.onChange!(update(props.itemData, { baseUnit: spec })))
+              ? ((spec) => props.onChange!(update(props.itemData, { standardUnit: spec })))
               : undefined}
             classIDs={[
               'unit-of-measurement',
