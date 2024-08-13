@@ -63,8 +63,8 @@ export const DEFAULTS: UoMData = {
 export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
   ...COMMON_PROPERTIES,
   meta: {
-    title: "Unit",
     description: "Unit of Measurement",
+    title: "Unit of Measurement",
     id: 'unit-of-measurement',
     alternativeNames: [],
   },
