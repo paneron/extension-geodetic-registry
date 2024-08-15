@@ -47,6 +47,7 @@ export interface UoMData extends CommonGRItemData {
    * Per sheet:
    * “Unit of measurement Standard Target unit of measurement identifier”
    * “used to define this unit”.
+   * A.k.a. “base unit”.
    */
   standardUnit?: string
 }
