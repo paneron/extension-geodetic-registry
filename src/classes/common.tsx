@@ -359,11 +359,11 @@ export const InformationSourceEdit: React.FC<{
   const getOnChange = React.useCallback(getChangeHandler, [onChange, citation]);
   return (
     <>
+      <SimpleField label="Title" val={citation.title} onChange={getOnChange('title')} />
       <SimpleField label="Author" val={citation.author} onChange={getOnChange('author', 'unset')} />
       <SimpleField label="Publisher" val={citation.publisher} onChange={getOnChange('publisher', 'unset')} />
       <SimpleField label="Publication Date" val={citation.publicationDate} onChange={getOnChange('publicationDate', 'unset')} />
       <SimpleField label="Revision Date" val={citation.revisionDate} onChange={getOnChange('revisionDate', 'unset')} />
-      <SimpleField label="Title" val={citation.title} onChange={getOnChange('title')} />
       <SimpleField label="Name of Series/Journal/Periodical" val={citation.seriesName ?? ''} onChange={getOnChange('seriesName', null)} />
       <SimpleField label="Series Issue ID" val={citation.seriesIssueID ?? ''} onChange={getOnChange('seriesIssueID', null)} />
       <SimpleField label="Series Page" val={citation.seriesPage ?? ''} onChange={getOnChange('seriesPage', null)} />
