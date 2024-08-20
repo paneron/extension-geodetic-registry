@@ -61,6 +61,23 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
 
       {props.children}
 
+      {/* TODO: We need to move anchor definition before remarks */}
+
+      <PropertyDetailView
+          title="Anchor definition"
+          subLabel="A description, possibly including coordinates of an identified point. Also known as “origin description”.">
+        <TextArea
+          fill
+          required
+          value={props.itemData.originDescription ?? ''}
+          readOnly={!props.onChange}
+          onChange={evt => props.onChange!({
+            ...props.itemData,
+            originDescription: evt.currentTarget.value,
+          })}
+        />
+      </PropertyDetailView>
+
       <PropertyDetailView
           title="Scope"
           subLabel="Description of usage, or limitations of usage.">
@@ -116,21 +133,6 @@ const DatumEditView: ItemEditView<DatumData> = function (props) {
           ? (ref) => props.onChange!(update(props.itemData, { extentRef: { $set: ref } }))
           : undefined}
       />
-
-      <PropertyDetailView
-          title="Anchor definition"
-          subLabel="A description, possibly including coordinates of an identified point. Also known as “origin description”.">
-        <TextArea
-          fill
-          required
-          value={props.itemData.originDescription ?? ''}
-          readOnly={!props.onChange}
-          onChange={evt => props.onChange!({
-            ...props.itemData,
-            originDescription: evt.currentTarget.value,
-          })}
-        />
-      </PropertyDetailView>
 
     </CommonEditView>
   );
