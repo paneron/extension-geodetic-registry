@@ -364,11 +364,11 @@ export const InformationSourceEdit: React.FC<{
       <SimpleField label="Publication Date" val={citation.publicationDate} onChange={getOnChange('publicationDate', 'unset')} />
       <SimpleField label="Revision Date" val={citation.revisionDate} onChange={getOnChange('revisionDate', 'unset')} />
       <SimpleField label="Title" val={citation.title} onChange={getOnChange('title')} />
-      <SimpleField label="Name of series/journal/periodical" val={citation.seriesName ?? ''} onChange={getOnChange('seriesName', null)} />
-      <SimpleField label="Series issue ID" val={citation.seriesIssueID ?? ''} onChange={getOnChange('seriesIssueID', null)} />
-      <SimpleField label="Series page" val={citation.seriesPage ?? ''} onChange={getOnChange('seriesPage', null)} />
+      <SimpleField label="Name of Series/Journal/Periodical" val={citation.seriesName ?? ''} onChange={getOnChange('seriesName', null)} />
+      <SimpleField label="Series Issue ID" val={citation.seriesIssueID ?? ''} onChange={getOnChange('seriesIssueID', null)} />
+      <SimpleField label="Series Page" val={citation.seriesPage ?? ''} onChange={getOnChange('seriesPage', null)} />
       <SimpleField label="Edition" val={citation.edition ?? ''} onChange={getOnChange('edition', null)} />
-      <SimpleField label="Other details" val={citation.otherDetails ?? ''} onChange={getOnChange('otherDetails')} />
+      <SimpleField label="Other Details" val={citation.otherDetails ?? ''} onChange={getOnChange('otherDetails')} />
       <SimpleField label="URI" val={citation.uri ?? ''} onChange={getOnChange('uri', 'unset')} />
       <SimpleField label="DOI" val={citation.doi ?? ''} onChange={getOnChange('doi', 'unset')} />
     </>
