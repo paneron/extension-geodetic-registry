@@ -45,10 +45,10 @@ interface ExtentBoundingPolygonPoint {
 }
 
 export interface Extent {
-  n: number
-  e: number
-  s: number
-  w: number
+  n: string
+  e: string
+  s: string
+  w: string
   name: string
   polygonPoints?: ExtentBoundingPolygonPoint[]
 
@@ -77,7 +77,7 @@ function isExtent(val: any): val is Extent {
 }
 
 /** Placeholder/stub extent value. */
-export const DEFAULT_EXTENT: Extent = { name: '', n: 0, e: 0, s: 0, w: 0 } as const;
+export const DEFAULT_EXTENT: Extent = { name: '', n: '0', e: '0', s: '0', w: '0' } as const;
 
 export const EXTENT_DEFAULTS: ExtentItemData = {
   ...SHARED_DEFAULTS,
@@ -230,7 +230,7 @@ function ({ extent, onChange }) {
  *   and extra icon.
  */
 const CoordInput: React.FC<{
-  value: number
+  value: string
   onChange?: (newVal: number) => void
   label?: JSX.Element
 }> =
@@ -274,7 +274,7 @@ function ({ value, label, onChange }) {
             .bp4-dark & { background: ${Colors.RED2}; }
           }
         `}
-        value={editedVal ?? value.toLocaleString()}
+        value={editedVal ?? value}
       />
     </FormGroup>
   );
