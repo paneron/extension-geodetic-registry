@@ -85,7 +85,7 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
     title: "Conversion",
     description: "Coordinate Operations — Conversion",
     id: 'coordinate-ops--conversion',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

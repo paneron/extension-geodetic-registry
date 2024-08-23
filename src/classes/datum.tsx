@@ -151,7 +151,7 @@ export const geodeticDatum: ItemClassConfiguration<GeodeticDatumData> = {
     title: "Geodetic Datum",
     description: "Geodetic Reference Frame",
     id: 'datums--geodetic',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DATUM_DEFAULTS,
@@ -209,7 +209,7 @@ export const verticalDatum: ItemClassConfiguration<DatumData> = {
     title: "Vertical Datum",
     description: "Vertical Reference Frame",
     id: 'datums--vertical',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DATUM_DEFAULTS,
@@ -229,7 +229,7 @@ export const engineeringDatum: ItemClassConfiguration<DatumData> = {
     title: "Engineering Datum",
     description: "Engineering Reference Frame",
     id: 'datums--engineering',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DATUM_DEFAULTS,

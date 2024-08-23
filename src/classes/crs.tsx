@@ -201,7 +201,7 @@ export const compoundCRS: ItemClassConfiguration<CompoundCRSData> = {
     title: "Compound CRS",
     description: "Compound Coordinate Reference System",
     id: 'crs--compound',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...CRS_DEFAULTS,
@@ -265,7 +265,7 @@ export const projectedCRS: ItemClassConfiguration<ProjectedCRSData> = {
     title: "Projected CRS",
     description: "Projected Coordinate Reference System",
     id: 'crs--projected',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...CRS_DEFAULTS,
@@ -294,7 +294,7 @@ export const verticalCRS: ItemClassConfiguration<VerticalCRSData> = {
     title: "Vertical CRS",
     description: "Vertical Coordinate Reference System",
     id: 'crs--vertical',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...CRS_DEFAULTS,
@@ -342,7 +342,7 @@ export const geodeticCRS: ItemClassConfiguration<GeodeticCRSData> = {
     title: "Geodetic CRS",
     description: "Geodetic Coordinate Reference System",
     id: 'crs--geodetic',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...CRS_DEFAULTS,
@@ -389,7 +389,7 @@ export const engineeringCRS: ItemClassConfiguration<EngineeringCRSData> = {
     title: "Engineering CRS",
     description: "Engineering Coordinate Reference System",
     id: 'crs--engineering',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...CRS_DEFAULTS,

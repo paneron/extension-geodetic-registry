@@ -69,7 +69,7 @@ export const cartesianCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
     title: "Cartesian Coordinate System",
     description: "Cartesian Coordinate System",
     id: 'coordinate-sys--cartesian',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DEFAULTS,
@@ -90,7 +90,7 @@ export const ellipsoidalCoordinateSystem: ItemClassConfiguration<CoordinateSyste
     title: "Ellipsoidal Coordinate System",
     description: "Ellipsoidal Coordinate System",
     id: 'coordinate-sys--ellipsoidal',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DEFAULTS,
@@ -111,7 +111,7 @@ export const verticalCoordinateSystem: ItemClassConfiguration<CoordinateSystemDa
     title: "Vertical Coordinate System",
     description: "Vertical Coordinate System",
     id: 'coordinate-sys--vertical',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DEFAULTS,
@@ -132,7 +132,7 @@ export const sphericalCoordinateSystem: ItemClassConfiguration<CoordinateSystemD
     title: "Spherical Coordinate System",
     description: "Spherical Coordinate System",
     id: 'coordinate-sys--spherical',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...DEFAULTS,

@@ -30,7 +30,7 @@ export const coordinateOpParameter: ItemClassConfiguration<CoordinateParameterDa
     title: "Coordinate Operation Parameter",
     description: "Coordinate Operation Parameter",
     id: 'coordinate-op-parameter',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

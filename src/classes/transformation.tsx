@@ -84,7 +84,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
     title: "Transformation",
     description: "Coordinate Operations — Transformation",
     id: 'coordinate-ops--transformation',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

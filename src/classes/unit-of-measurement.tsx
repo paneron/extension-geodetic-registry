@@ -67,7 +67,7 @@ export const unitOfMeasurement: ItemClassConfiguration<UoMData> = {
     title: "Unit of Measurement",
     description: "Unit of measurement",
     id: 'unit-of-measurement',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: DEFAULTS,
   views: {

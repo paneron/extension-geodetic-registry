@@ -34,7 +34,7 @@ export const coordinateSystemAxis: ItemClassConfiguration<CoordinateSystemAxisDa
     title: "Coordinate System Axis",
     description: "Coordinate System Axis",
     id: 'coordinate-sys-axis',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

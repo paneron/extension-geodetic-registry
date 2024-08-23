@@ -43,7 +43,7 @@ export const coordinateOpMethod: ItemClassConfiguration<CoordinateOpMethod> = {
     title: "Coordinate Operation Method",
     description: "Coordinate Operation Method",
     id: 'coordinate-op-method',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

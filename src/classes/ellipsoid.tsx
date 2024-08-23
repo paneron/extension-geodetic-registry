@@ -42,7 +42,7 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
     title: "Ellipsoid",
     description: "Ellipsoid",
     id: 'ellipsoid',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

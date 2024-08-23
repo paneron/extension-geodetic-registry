@@ -59,7 +59,7 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
     title: "Concatenated Operation",
     description: "Coordinate Operations — Concatenated Operation",
     id: 'coordinate-ops--concatenated',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,

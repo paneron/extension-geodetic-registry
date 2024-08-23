@@ -30,7 +30,7 @@ export const primeMeridian: ItemClassConfiguration<PrimeMeridianData> = {
     title: "Prime Meridian",
     description: "Prime Meridian",
     id: 'prime-meridian',
-    alternativeNames: [],
+    alternativeNames: [] as const,
   },
   defaults: {
     ...SHARED_DEFAULTS,
