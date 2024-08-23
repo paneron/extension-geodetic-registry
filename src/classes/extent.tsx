@@ -70,7 +70,8 @@ function isExtent(val: any): val is Extent {
   return (
     val
     && EXTENT_COORDS.every(c => val.hasOwnProperty(c))
-    && EXTENT_COORDS.every(c => typeof val[c] === 'number')
+    && (EXTENT_COORDS.every(c => typeof val[c] === 'string')
+      || EXTENT_COORDS.every(c => typeof val[c] === 'number')) // for backwards compatibility
     && val.hasOwnProperty('name')
     && typeof val.name === 'string'
   );
