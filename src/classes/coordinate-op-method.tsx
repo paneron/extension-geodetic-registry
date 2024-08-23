@@ -21,8 +21,8 @@ import {
 
 export interface CoordinateOpMethod extends CommonGRItemData {
   parameters: Readonly<string[]>
-  sourceCRSDimensionCount: number
-  targetCRSDimensionCount: number
+  sourceCRSDimensionCount?: number
+  targetCRSDimensionCount?: number
 
   /** Mutually exclusive with formulaCitation. */
   formula?: string | null
@@ -34,8 +34,6 @@ export interface CoordinateOpMethod extends CommonGRItemData {
 export const DEFAULTS: CoordinateOpMethod = {
   ...SHARED_DEFAULTS,
   parameters: [],
-  sourceCRSDimensionCount: 1,
-  targetCRSDimensionCount: 1,
 } as const;
 
 
