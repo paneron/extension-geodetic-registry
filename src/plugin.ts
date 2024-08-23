@@ -21,7 +21,7 @@
 
 
 import { makeRegistryExtension, CRITERIA_CONFIGURATION } from '@riboseinc/paneron-registry-kit';
-import { type Payload, itemPathInCR, itemPathToItemRef, isAddition } from '@riboseinc/paneron-registry-kit';
+import { type Payload, itemPathInCR, isAddition } from '@riboseinc/paneron-registry-kit';
 
 import { itemClassConfiguration } from './registryConfig';
 
