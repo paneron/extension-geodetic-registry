@@ -79,9 +79,28 @@ export default makeRegistryExtension({
   keyExpression: "new Date(obj.dateAccepted).getTime() + (obj.data.identifier || (new Date()).getTime())",
   defaultSearchCriteria: defaultSearchCriteria as any,
   alterApprovedCR: async function (crID, proposals, origItemData, newItemData, { getMapReducedData }) {
-    /** Next unoccupied identifier per class ID. */
-    const nextAvailableIDPerClass: Record<string, number> = {};
 
+    // Pick next available identifier, globally
+    const maxIDResult = await getMapReducedData({
+      chains: {
+        maxID: {
+          mapFunc: `
+            if (value?.data?.identifier) { emit(value.data.identifier); }
+          `,
+          reduceFunc: `
+            return (value > accumulator) ? value : accumulator;
+          `,
+        },
+      },
+    });
+
+    /* Currently maximum identifier, globally. */
+    let currentMaxID = parseInt(maxIDResult.maxID, 10);
+    if (!Number.isInteger(currentMaxID)) {
+      throw new Error("Couldn’t determine next identifier: obtained maximum identifier is not an integer");
+    }
+
+    // Check additions
     for (const [itemPath, proposal] of Object.entries(proposals)) {
       const itemDataPath = itemPathInCR(itemPath, crID);
       const payload: Payload | null = newItemData[itemDataPath]?.data ?? null;
@@ -90,34 +109,10 @@ export default makeRegistryExtension({
         if (payload.identifier > 0) {
           throw new Error("Additions must have negative identifiers at approval time");
         }
-        const { classID } = itemPathToItemRef(false, itemDataPath);
-        if (!nextAvailableIDPerClass[classID]) {
-          try {
-            const newIDResult = await getMapReducedData({
-              chains: {
-                maxID: {
-                  mapFunc: `
-                    if (value?.data?.identifier) { emit(value.data.identifier); }
-                  `,
-                  reduceFunc: `
-                    return (value > accumulator) ? value : accumulator;
-                  `,
-                },
-              },
-            });
-            const maybeNum = parseInt(newIDResult.maxID, 10);
-            if (!Number.isInteger(maybeNum)) {
-              throw new Error("Obtained identifier is not an integer");
-            }
-            nextAvailableIDPerClass[classID] = maybeNum + 1;
-          } catch (e) {
-            throw new Error(`Failed to get current maximum identifier for ${classID} (${String(e)})`);
-          }
-        }
+        // Increment current identifier
+        currentMaxID += 1;
         // Overwrite identifier with next available for this class
-        newItemData[itemDataPath]!.data.identifier = nextAvailableIDPerClass[classID];
-        // Bump next available identifier
-        nextAvailableIDPerClass[classID] += 1;
+        newItemData[itemDataPath]!.data.identifier = currentMaxID;
       } else if (payload && payload.identifier <= 0) {
         throw new Error("Items with non-positive integers as identifiers cannot be amended or clarified");
       } else if (preexistingData && payload && preexistingData.identifier !== payload.identifier) {
