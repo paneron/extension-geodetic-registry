@@ -12,7 +12,6 @@ import update from 'immutability-helper';
 import { jsx, css, ClassNames } from '@emotion/react';
 import React from 'react';
 import {
-  Callout,
   InputGroup, ControlGroup, FormGroup, Button, TextArea,
   MenuItem, Tag, ProgressBar,
   Colors,
