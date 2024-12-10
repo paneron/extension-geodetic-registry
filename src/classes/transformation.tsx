@@ -31,21 +31,21 @@ import {
 } from './common';
 
 
-export const ParameterType = {
+export const ParameterValueType = {
   FILE: 'parameter file name',
   MEASURE: 'measure (w/ UoM)',
 } as const;
 
-const parameterTypes = [
-  ParameterType.FILE,
-  ParameterType.MEASURE,
+const parameterValueTypes = [
+  ParameterValueType.FILE,
+  ParameterValueType.MEASURE,
 ] as const;
 
 export interface TransformationParameter {
   parameter: string // Coordinate operation parameter UUID
   unitOfMeasurement: string | null // Unit of measurement UUID
   //name: string // Dependent on type? filename? TODO: Doesn’t exist?
-  type: typeof parameterTypes[number]
+  type: typeof parameterValueTypes[number]
   value: string | number | null
   fileCitation: null | Citation
 }
@@ -56,7 +56,7 @@ function getParameterStub(): TransformationParameter {
     parameter: '',
     unitOfMeasurement: null,
     //name: '',
-    type: parameterTypes[0],
+    type: parameterValueTypes[0],
     value: null,
     fileCitation: null,
   };
@@ -288,10 +288,10 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                     return (onChange
                       ? <HTMLSelect
                           value={val}
-                          options={parameterTypes.map(param => ({ value: param, label: param }))}
+                          options={parameterValueTypes.map(param => ({ value: param, label: param }))}
                           disabled={!onChange}
                           onChange={(evt) =>
-                            onChange!({ $set: evt.currentTarget.value as typeof parameterTypes[number] })
+                            onChange!({ $set: evt.currentTarget.value as typeof parameterValueTypes[number] })
                           }
                         />
                       : <InputGroup readOnly value={val} />
@@ -315,7 +315,7 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                   title: "Unit of Measurement",
                   width: 256,
                   CellRenderer: function renderTransformationParameterUoM ({ val, onChange, item }) {
-                    return (val || item.type === ParameterType.MEASURE
+                    return (val || item.type === ParameterValueType.MEASURE
                       ? <RelatedItem
                           itemRef={{ classID: 'unit-of-measurement', itemID: val ?? '' }}
                           fill
