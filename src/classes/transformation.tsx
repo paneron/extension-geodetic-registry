@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import React from 'react';
 import { jsx, css } from '@emotion/react';
-import { Drawer, Button, ButtonGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
+import { Drawer, Button, ButtonGroup, HTMLSelect, NumericInput, InputGroup } from '@blueprintjs/core';
 
 import type { Payload, Citation, ItemClassConfiguration, InternalItemReference, ItemListView } from '@riboseinc/paneron-registry-kit/types';
 import { useSingleRegisterItemData, PropertyDetailView } from '@riboseinc/paneron-registry-kit';
@@ -33,11 +33,13 @@ import {
 
 export const ParameterValueType = {
   FILE: 'parameter file name',
+  INTEGER_VALUE: 'integer value',
   MEASURE: 'measure (w/ UoM)',
 } as const;
 
 const parameterValueTypes = [
   ParameterValueType.FILE,
+  ParameterValueType.INTEGER_VALUE,
   ParameterValueType.MEASURE,
 ] as const;
 
@@ -301,14 +303,25 @@ export const transformation: ItemClassConfiguration<TransformationData> = {
                 value: {
                   title: "Value",
                   width: 128,
-                  CellRenderer: function renderTransformationParameterValue ({ val, onChange }) {
-                    return <InputGroup
-                      readOnly={!onChange}
-                      fill
-                      value={val?.toString() ?? ''}
-                      onChange={(evt: React.FormEvent<HTMLInputElement>) =>
-                        onChange!({ $set: evt.currentTarget.value })}
-                    />;
+                  CellRenderer: function renderTransformationParameterValue ({ val, onChange, item }) {
+                    switch (item.type) {
+                      case ParameterValueType.INTEGER_VALUE:
+                        return <NumericInput
+                          readOnly={!onChange}
+                          fill
+                          value={val?.toString() ?? ''}
+                          onValueChange={val =>
+                            onChange!({ $set: val })}
+                        />;
+                      default:
+                        return <InputGroup
+                          readOnly={!onChange}
+                          fill
+                          value={val?.toString() ?? ''}
+                          onChange={(evt: React.FormEvent<HTMLInputElement>) =>
+                            onChange!({ $set: evt.currentTarget.value })}
+                        />;
+                    }
                   },
                 },
                 unitOfMeasurement: {
