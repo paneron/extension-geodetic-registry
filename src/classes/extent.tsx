@@ -451,9 +451,7 @@ export const CombinedExtentWidget: React.VoidFunctionComponent<{
   return (
     <>
 
-      <PropertyDetailView
-          label="Extent"
-          labelInfo="(new)">
+      <PropertyDetailView label="Extent">
         <RelatedItem
           itemRef={extentRef ? { classID: 'extent', itemID: extentRef } : undefined}
           mode="id"
@@ -463,6 +461,7 @@ export const CombinedExtentWidget: React.VoidFunctionComponent<{
         />
       </PropertyDetailView>
 
+      {/*
       {extent !== undefined
         ? <Callout css={css`padding-bottom: 0;`}>
             <PropertyDetailView
@@ -472,6 +471,7 @@ export const CombinedExtentWidget: React.VoidFunctionComponent<{
             </PropertyDetailView>
           </Callout>
         : null}
+      */}
 
     </>
   );
