@@ -307,14 +307,7 @@ export function RelatedItem<
 const SimpleField: React.FC<{ val: string | undefined | null, label: string, onChange?: (newVal: string) => void }> =
 function ({ val, label, onChange }) {
   return (
-    <PropertyDetailView
-      title={label}
-      css={css`
-        margin-bottom: 5px;
-        label.bp4-label {
-          font-weight: normal;
-        }
-      `}>
+    <PropertyDetailView title={label}>
       <InputGroup
         title={val ?? `No ${label}`}
         readOnly={!onChange}
