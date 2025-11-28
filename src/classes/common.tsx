@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragment */
 
-import update from 'immutability-helper';
+import update, { type Spec } from 'immutability-helper';
 import React from 'react';
 import { jsx, css } from '@emotion/react';
 
@@ -353,6 +353,40 @@ export const InformationSourceEdit: React.FC<{
   return (
     <>
       <SimpleField label="Title" val={citation.title} onChange={getOnChange('title')} />
+      <ItemList<string>
+        items={citation.alternateTitles ?? []}
+        hideOrdinals
+        simpleItems
+        itemLabel="alternate title"
+        itemLabelPlural="alternate titles"
+        onChangeItems={onChange
+          ? (spec) => {
+
+              // Ensure alternateTitles is a list
+              // (schema allows it to be undefined, which may cause
+              // update() to silently fail without even an error)
+              citation.alternateTitles ??= [];
+
+              return onChange!(update(
+                citation,
+                { alternateTitles: spec as Spec<string[] | undefined, never> }
+              ));
+
+            }
+          : undefined}
+        placeholderItem=""
+        itemRenderer={(title, idx, handleChange, deleteButton) =>
+          <InputGroup
+            key={idx}
+            fill
+            required
+            value={title}
+            readOnly={!handleChange}
+            rightElement={deleteButton}
+            onChange={(evt) => handleChange!({ $set: evt.currentTarget.value })}
+          />
+        }
+      />
       <SimpleField label="Author" val={citation.author} onChange={getOnChange('author', 'unset')} />
       <SimpleField label="Publisher" val={citation.publisher} onChange={getOnChange('publisher', 'unset')} />
       <SimpleField label="Publication Date" val={citation.publicationDate} onChange={getOnChange('publicationDate', 'unset')} />
