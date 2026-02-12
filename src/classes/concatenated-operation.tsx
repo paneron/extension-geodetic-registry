@@ -194,6 +194,18 @@ export const concatenatedOperation: ItemClassConfiguration<ConcatenatedOperation
                 : undefined}
             />
 
+            <PropertyDetailView label="Scope" helperText={''/* TODO: needs an example */}>
+              <InputGroup
+                value={itemData.scope ?? ''}
+                readOnly={!onChange}
+                onChange={(evt: React.FormEvent<HTMLInputElement>) => {
+                  onChange
+                    ? onChange(update(itemData, { scope: { $set: evt.currentTarget.value } }))
+                    : void 0;
+                }}
+              />
+            </PropertyDetailView>
+
             <PropertyDetailView label="Operation version" helperText={<>For example, <code>GA v2</code></>}>
               <InputGroup
                 value={itemData.operationVersion ?? ''}
