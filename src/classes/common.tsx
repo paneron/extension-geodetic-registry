@@ -4,6 +4,7 @@
 import update, { type Spec } from 'immutability-helper';
 import React from 'react';
 import { jsx, css } from '@emotion/react';
+import { useDebounce } from '@riboseinc/paneron-extension-kit';
 
 import {
   ControlGroup,
@@ -271,16 +272,20 @@ export function RelatedItem<
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
+  const validityReportDeps = useDebounce([validity, inputRef, handleSet || onClear], 400);
   React.useEffect(() => {
+    function reportValidity() {
+      if (validity) {
+        inputRef?.current?.reportValidity();
+      }
+    }
     // TODO: We want to show validity even if items are not being edited (read-only)
     // during review
     if (inputRef.current && (handleSet || onClear)) {
       inputRef.current.setCustomValidity(validity ?? '');
-      if (validity) {
-        inputRef.current.reportValidity();
-      }
+      reportValidity();
     }
-  }, [validity, inputRef, handleSet || onClear]);
+  }, validityReportDeps);
 
   return (
     <GenericRelatedItemView
