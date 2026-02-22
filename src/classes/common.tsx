@@ -34,6 +34,7 @@ export interface CommonGRItemData {
   identifier: number
   remarks: string
   informationSources: Readonly<Citation[]>
+  informationSourceRefs: Readonly<string[]>
   aliases: Readonly<string[]>
 }
 
@@ -44,6 +45,7 @@ export const DEFAULTS: Readonly<CommonGRItemData> = Object.freeze({
   // in afterApprovedCR hook.
   identifier: 0,
   informationSources: [],
+  informationSourceRefs: [],
   remarks: '',
   aliases: [],
 });
