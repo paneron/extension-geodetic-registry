@@ -2,10 +2,6 @@
 /** @jsxFrag React.Fragment */
 /**
  * Items pertaining to extent data.
- *
- * Currently, extent is a common structure, but is not expressed
- * as a separate register item class.
- * Still, users may want to import an extent from another item.
  */
 
 import update from 'immutability-helper';
