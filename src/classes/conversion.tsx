@@ -61,8 +61,8 @@ export interface ConversionData extends CommonGRItemData {
 
   parameters: Readonly<ConversionParameter[]>
 
-  // uuid
-  coordinateOperationMethod?: string
+  // Coordinate operation method’s uuid
+  method_uuid?: string
   scope: string
 }
 
@@ -75,7 +75,7 @@ export const DEFAULTS: ConversionData = {
   parameters: [],
   extent: DEFAULT_EXTENT,
   scope: '',
-  coordinateOperationMethod: ''
+  method_uuid: ''
 };
 
 
@@ -101,8 +101,8 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
       // but ideally until users have the ability to specify this logic themselves.
       // Refactoring it here 
       const coordMethodParamUUIDs: string[] = (useSingleRegisterItemData(
-          itemData.coordinateOperationMethod
-          ? { classID: 'coordinate-op-method', itemID: itemData.coordinateOperationMethod }
+          itemData.method_uuid
+          ? { classID: 'coordinate-op-method', itemID: itemData.method_uuid }
           : null
       // Cast to Payload is necessary due to RegistryKit wrongly typing useSingleRegisterItemData value
       ).value as Payload)?.parameters ?? [];
@@ -151,14 +151,14 @@ export const conversion: ItemClassConfiguration<ConversionData> = {
                 : undefined}
               title="Coordinate operation method">
             <RelatedItem
-              itemRef={itemData.coordinateOperationMethod
-                ? { classID: 'coordinate-op-method', itemID: itemData.coordinateOperationMethod }
+              itemRef={itemData.method_uuid
+                ? { classID: 'coordinate-op-method', itemID: itemData.method_uuid }
                 : undefined}
               mode="id"
               onClear={onChange
-                && (() => onChange!(update(itemData, { $unset: ['coordinateOperationMethod'] })))}
+                && (() => onChange!(update(itemData, { $unset: ['method_uuid'] })))}
               onSet={onChange
-                ? ((spec) => onChange!(update(itemData, { coordinateOperationMethod: spec })))
+                ? ((spec) => onChange!(update(itemData, { method_uuid: spec })))
                 : undefined}
               classIDs={['coordinate-op-method']}
             />
