@@ -182,7 +182,6 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
 
       {children}
 
-      {/* This seems to be done on purpose. */}
       {props.hideInfoSources
         ? null
         : <ItemList
