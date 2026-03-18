@@ -183,7 +183,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
       {children}
 
       {/* This seems to be done on purpose. */}
-      {props.hideAliases
+      {props.hideInfoSources
         ? null
         : <ItemList
             items={itemData.informationSources}
