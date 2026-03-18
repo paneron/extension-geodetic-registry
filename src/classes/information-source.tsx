@@ -176,7 +176,7 @@ export function getInformationSourceStub(): Readonly<Citation> {
 export const informationSource: ItemClassConfiguration<InformationSourceItemData> = {
   ...COMMON_PROPERTIES,
   meta: {
-    title: "Information Source",
+    title: "Information Source (test)",
     description: "A citation.",
     id: 'information-source',
     alternativeNames: [] as const,
