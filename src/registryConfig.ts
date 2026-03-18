@@ -9,6 +9,7 @@ import { primeMeridian } from './classes/prime-meridian';
 import { coordinateSystemAxis } from './classes/coordinate-sys-axis';
 import { coordinateOpMethod } from './classes/coordinate-op-method';
 import { coordinateOpParameter } from './classes/coordinate-op-parameter';
+import { informationSource } from './classes/information-source';
 import { extent } from './classes/extent';
 
 import {
@@ -42,4 +43,5 @@ export const itemClassConfiguration = {
   'coordinate-sys--ellipsoidal': ellipsoidalCoordinateSystem,
   'coordinate-sys--spherical': sphericalCoordinateSystem,
   'extent': extent,
+  'information-source': informationSource,
 } as const;

@@ -118,6 +118,7 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
   hideRemarks?: boolean,
   hideAliases?: boolean,
   hideInfoSources?: boolean,
+  showInfoSourceRefs?: boolean,
 }> = function (props) {
   const { itemData, onChange, children } = props;
 
@@ -181,6 +182,43 @@ export const EditView: React.FC<ItemEditViewProps<CommonGRItemData> & {
           </PropertyDetailView>}
 
       {children}
+
+      {props.showInfoSourceRefs
+        ? null
+        : <ItemList
+            items={itemData.informationSourceRefs ?? []}
+            itemLabel="information source reference"
+            itemLabelPlural="information source references"
+            placeholderItem={''}
+            onChangeItems={onChange
+              ? (spec) => {
+
+                  // Ensure informationSourceRefs is a list
+                  // (schema allows it to be undefined, since it was
+                  // added later, which may cause
+                  // update() to silently fail without even an error)
+                  itemData.informationSourceRefs ??= [];
+
+                  onChange!(update(itemData, { informationSourceRefs: spec }))
+                }
+              : undefined}
+            itemRenderer={function renderCitation (item, _idx, handleChange, deleteButton) {
+              return <PropertyDetailView helperText={deleteButton}>
+                <RelatedItem
+                  itemRef={{ classID: 'information-source', itemID: item }}
+                  mode="id"
+                  fill
+                  classIDs={['information-source']}
+                  onClear={onChange
+                    ? () => handleChange!({ $set: '' })
+                    : undefined}
+                  onSet={handleChange
+                    ? (spec) => handleChange!(spec)
+                    : undefined}
+                />
+              </PropertyDetailView>
+            }}
+          />}
 
       {props.hideInfoSources
         ? null
