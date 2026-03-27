@@ -108,7 +108,7 @@ export default makeRegistryExtension({
       const preexistingData: Payload | null = origItemData[itemDataPath]?.data ?? null;
       if (isAddition(proposal) && payload) {
         if (payload.identifier > 0) {
-          throw new Error("Additions must have negative identifiers at approval time");
+          throw new Error("Additions must not have positive integer identifiers at approval time");
         }
         // Increment current identifier
         currentMaxID += 1;
