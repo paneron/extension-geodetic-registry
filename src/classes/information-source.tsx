@@ -160,16 +160,28 @@ export const DEFAULTS: Readonly<InformationSourceItemData> = Object.freeze({
 export function getInformationSourceStub(): Readonly<Citation> {
   return {
     title: "Untitled source",
-    revisionDate: null,
+
+    author: null,
+    publisher: null,
     publicationDate: null,
+    revisionDate: null,
+
     seriesIssueID: null,
     seriesName: null,
     seriesPage: null,
+
     edition: null,
     editionDate: null,
+
     otherDetails: '',
+
     isbn: null,
     issn: null,
+
+    alternateTitles: [],
+
+    uri: null,
+    doi: null,
   } as const;
 }
 
