@@ -140,7 +140,7 @@ export const CitationEdit: React.FC<{
 
 
 export const DEFAULTS: Readonly<InformationSourceItemData> = Object.freeze({
-  name: "Untitled information source",
+  name: "Unnamed information source",
 
   // Non-positive identifiers are replaced with next available positive integers
   // in afterApprovedCR hook.
@@ -159,7 +159,7 @@ export const DEFAULTS: Readonly<InformationSourceItemData> = Object.freeze({
 
 export function getInformationSourceStub(): Readonly<Citation> {
   return {
-    title: "Untitled source",
+    title: "Untitled publication",
 
     author: null,
     publisher: null,
