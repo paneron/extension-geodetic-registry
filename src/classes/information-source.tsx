@@ -180,9 +180,9 @@ export function getInformationSourceStub(): Readonly<Citation> {
 
     alternateTitles: [],
 
-    uri: null,
-    doi: null,
-  } as const;
+    uri: '',
+    doi: '',
+  } as Readonly<Citation>;
 }
 
 export const informationSource: ItemClassConfiguration<InformationSourceItemData> = {
