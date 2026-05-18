@@ -227,7 +227,7 @@ function ({ extent, onChange }) {
  */
 const CoordInput: React.FC<{
   value: string
-  onChange?: (newVal: number) => void
+  onChange?: (newVal: string) => void
   label?: JSX.Element
 }> =
 function ({ value, label, onChange }) {
@@ -240,7 +240,7 @@ function ({ value, label, onChange }) {
       return;
     }
     try {
-      onChange(parseCoordinate(val));
+      onChange(`${parseCoordinate(val)}`);
       editVal(null);
       inputRef.current?.setCustomValidity("");
       inputRef.current?.reportValidity();
