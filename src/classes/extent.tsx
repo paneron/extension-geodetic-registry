@@ -130,7 +130,13 @@ function ({ extent, onChange }) {
 
   function handleImportSuggestedExtent(item: SuggestedExtentListItem) {
     if (onChange && isExtent(item.extentData)) {
-      onChange(item.extentData);
+      onChange({
+        ...item.extentData,
+        n: `${item.extentData.n}`,
+        e: `${item.extentData.e}`,
+        s: `${item.extentData.s}`,
+        w: `${item.extentData.w}`,
+      });
     }
   }
 
