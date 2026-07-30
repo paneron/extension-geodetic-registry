@@ -90,16 +90,17 @@ export const ellipsoid: ItemClassConfiguration<EllipsoidData> = {
             || itemData.inverseFlatteningUoM
           ? <>
               <PropertyDetailView title="Inverse flattening">
-                <InputGroup
-                  readOnly={!onChange}
-                  onChange={evt => {
-                    try {
-                      onChange!(update(itemData, {
-                        inverseFlattening: { $set: parseInt(evt.currentTarget.value as string, 10) },
+                <FloatWithUoM
+                  onChange={onChange
+                    ? ([num, uom]) => onChange!(update(itemData, {
+                        inverseFlattening: { $set: num },
+                        inverseFlatteningUoM: { $set: uom },
                       }))
-                    } catch (e) {}
-                  }}
-                  value={itemData.inverseFlattening?.toString() || ''}
+                    : undefined}
+                  val={[
+                    itemData.inverseFlattening,
+                    itemData.inverseFlatteningUoM,
+                  ]}
                 />
               </PropertyDetailView>
 
